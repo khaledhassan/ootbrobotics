@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# AvrStudio Solution File, Format Version 11.00
+Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "Epiphany_DIY_v1", "Epiphany_DIY_v1\Epiphany_DIY_v1.avrgccproj", "{62E55714-61CC-40F8-A174-8407DE43204E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62E55714-61CC-40F8-A174-8407DE43204E}.Debug|AVR.ActiveCfg = Debug|AVR
+		{62E55714-61CC-40F8-A174-8407DE43204E}.Debug|AVR.Build.0 = Debug|AVR
+		{62E55714-61CC-40F8-A174-8407DE43204E}.Release|AVR.ActiveCfg = Release|AVR
+		{62E55714-61CC-40F8-A174-8407DE43204E}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
