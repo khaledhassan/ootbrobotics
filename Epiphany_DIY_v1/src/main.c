@@ -21,10 +21,16 @@
 #include "RTC.h"
 #include "picServo.h"
 #include "ADC.h"
+#include "sonar.h"
 
 #define DbLedOn()		(PORTR.OUTCLR = 0x02)		//Turns the debug led on.  The led is connected with inverted logic
 #define DbLedOff()		(PORTR.OUTSET = 0x02)		//Turns the debug led off.  The led is connected with inverted logic
 #define DbLedToggle()	(PORTR.OUTTGL = 0x02)		//Toggles the debug led off.  The led is connected with inverted logic
+
+
+
+
+	
 
 int main (void)
 {	
@@ -40,18 +46,15 @@ int main (void)
 	ADCsInits();//this function initializes the ADCs inside the Xmega		 
 	
 	//you should add any further initializations here
-			 
+
+
+	
+
 	while (1){
-	
-		//this is the main loop.  Add your state machine code here.
-	
+	asm("nop");
+		//This is the main loop.  Add your state machine code here.
 	}
 }
-
-
-
-
-
 
 
 

@@ -65,6 +65,7 @@ C_SRCS +=  \
 ../motor.c \
 ../picServo.c \
 ../RTC.c \
+../sonar.c \
 ../src/asf/common/boards/user_board/init.c \
 ../src/main.c \
 ../uart.c
@@ -82,6 +83,7 @@ lcd.o \
 motor.o \
 picServo.o \
 RTC.o \
+sonar.o \
 src/asf/common/boards/user_board/init.o \
 src/main.o \
 uart.o
@@ -93,6 +95,7 @@ lcd.o \
 motor.o \
 picServo.o \
 RTC.o \
+sonar.o \
 src/asf/common/boards/user_board/init.o \
 src/main.o \
 uart.o
@@ -104,6 +107,7 @@ lcd.d \
 motor.d \
 picServo.d \
 RTC.d \
+sonar.d \
 src/asf/common/boards/user_board/init.d \
 src/main.d \
 uart.d
@@ -115,6 +119,7 @@ lcd.d \
 motor.d \
 picServo.d \
 RTC.d \
+sonar.d \
 src/asf/common/boards/user_board/init.d \
 src/main.d \
 uart.d
@@ -147,6 +152,8 @@ ADDITIONAL_DEPENDENCIES:= $(HEX_FLASH_FILE_PATH) size
 OUTPUT_FILE_DEP:= ./makedep.mk
 
 # AVR/GNU C Compiler
+
+
 
 
 
