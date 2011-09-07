@@ -12,6 +12,8 @@ picServo.c
 
 RTC.c
 
+sonar.c
+
 src\asf\common\boards\user_board\init.c
 
 src\main.c
