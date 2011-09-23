@@ -31,7 +31,7 @@
 /*define the mode of motor control here. simply uncomment the mode you wish to use and comment all you do not want to use the module*/
 
 //#define motorCtrlMode	dualModeDoubleChip
-//#define motorCtrlMode	quadMode
+#define motorCtrlMode	quadMode
 //#define motorCtrlMode	dualModeSingleChip
 
 #ifndef motorCtrlMode
