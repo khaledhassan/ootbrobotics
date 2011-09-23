@@ -27,7 +27,7 @@ void servoControlInit(){
 	sei();
 	//This for loop initializes all the servos to 90 degrees at startup.  If this is not preferable
 	//just set the angle to something different for all the servos, or individuals for that matter.	
-	for(i=0;i<24;i++)angles[i] = i*7;
+	for(i=0;i<24;i++)angles[i] = 90;
 	
 	/*  DMA.CH0.CTRLA = DMA_CH_ENABLE_bm | DMA_CH_SINGLE_bm;//| DMA_CH_REPEAT_bm;
 		DMA.CH0.ADDRCTRL = DMA_CH_SRCRELOAD_BURST_gc | DMA_CH_SRCDIR_INC_gc; //set the params for source reload and fix the destination 

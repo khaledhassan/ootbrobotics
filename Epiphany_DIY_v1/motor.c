@@ -41,6 +41,7 @@ void motorInit(void){
 
 void setMotorDuty(uint8_t motorNumber, uint16_t duty,uint8_t direction){
 	
+	motorNumber--;//this fixes the error of the silkscreen vs code numbering
 	if (duty>MOTOR_PERIOD_gc) duty = MOTOR_PERIOD_gc;
 	
 	switch (motorNumber)
