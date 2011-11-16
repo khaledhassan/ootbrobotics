@@ -32,7 +32,7 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/ctype.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdio.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/include/stdarg.h \
- ../uart.h ../RTC.h ../picServo.h ../uart.h ../ADC.h ../sonar.h
+ ../uart.h ../RTC.h ../ATtinyServo.h ../uart.h ../ADC.h ../sonar.h
 
 ../src/asf.h:
 
@@ -114,7 +114,7 @@ c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/av
 
 ../RTC.h:
 
-../picServo.h:
+../ATtinyServo.h:
 
 ../uart.h:
 
