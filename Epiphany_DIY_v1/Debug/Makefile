@@ -61,11 +61,11 @@ SUBDIRS :=  \
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../ADC.c \
+../DMA.c \
 ../lcd.c \
 ../motor.c \
-../picServo.c \
 ../RTC.c \
-../sonar.c \
+../src/adcInt.c \
 ../src/asf/common/boards/user_board/init.c \
 ../src/main.c \
 ../uart.c
@@ -79,11 +79,11 @@ ASM_SRCS +=
 
 OBJS +=  \
 ADC.o \
+DMA.o \
 lcd.o \
 motor.o \
-picServo.o \
 RTC.o \
-sonar.o \
+src/adcInt.o \
 src/asf/common/boards/user_board/init.o \
 src/main.o \
 uart.o
@@ -91,11 +91,11 @@ uart.o
 
 OBJS_AS_ARGS +=  \
 ADC.o \
+DMA.o \
 lcd.o \
 motor.o \
-picServo.o \
 RTC.o \
-sonar.o \
+src/adcInt.o \
 src/asf/common/boards/user_board/init.o \
 src/main.o \
 uart.o
@@ -103,11 +103,11 @@ uart.o
 
 C_DEPS +=  \
 ADC.d \
+DMA.d \
 lcd.d \
 motor.d \
-picServo.d \
 RTC.d \
-sonar.d \
+src/adcInt.d \
 src/asf/common/boards/user_board/init.d \
 src/main.d \
 uart.d
@@ -115,11 +115,11 @@ uart.d
 
 C_DEPS_AS_ARGS +=  \
 ADC.d \
+DMA.d \
 lcd.d \
 motor.d \
-picServo.d \
 RTC.d \
-sonar.d \
+src/adcInt.d \
 src/asf/common/boards/user_board/init.d \
 src/main.d \
 uart.d
@@ -177,13 +177,13 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -DBOARD=USER_BOARD -DF_CPU=32000000  -I"../src" -I"../src/asf/common/applications/user_application/user_board" -I"../src/asf/common/boards" -I"../src/asf/common/boards/user_board" -I"../src/asf/common/utils" -I"../src/asf/xmega/utils" -I"../src/asf/xmega/utils/preprocessor" -I"../src/config" -I".."  -Os -fdata-sections -ffunction-sections -g3 -Wall -c -std=gnu99 -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax  -mmcu=atxmega64a1   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
 	@echo Finished building: $<
 
-src/asf/common/boards/user_board/%.o: ../src/asf/common/boards/user_board/%.c
+src/%.o: ../src/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler
 	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -DBOARD=USER_BOARD -DF_CPU=32000000  -I"../src" -I"../src/asf/common/applications/user_application/user_board" -I"../src/asf/common/boards" -I"../src/asf/common/boards/user_board" -I"../src/asf/common/utils" -I"../src/asf/xmega/utils" -I"../src/asf/xmega/utils/preprocessor" -I"../src/config" -I".."  -Os -fdata-sections -ffunction-sections -g3 -Wall -c -std=gnu99 -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax  -mmcu=atxmega64a1   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
 	@echo Finished building: $<
 
-src/%.o: ../src/%.c
+src/asf/common/boards/user_board/%.o: ../src/asf/common/boards/user_board/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler
 	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -DBOARD=USER_BOARD -DF_CPU=32000000  -I"../src" -I"../src/asf/common/applications/user_application/user_board" -I"../src/asf/common/boards" -I"../src/asf/common/boards/user_board" -I"../src/asf/common/utils" -I"../src/asf/xmega/utils" -I"../src/asf/xmega/utils/preprocessor" -I"../src/config" -I".."  -Os -fdata-sections -ffunction-sections -g3 -Wall -c -std=gnu99 -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax  -mmcu=atxmega64a1   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"

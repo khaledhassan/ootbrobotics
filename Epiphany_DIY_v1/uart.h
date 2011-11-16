@@ -5,7 +5,6 @@
  *  Author: Tim
  */ 
 
-
 #ifndef UART_H_
 #define UART_H_
 
@@ -13,7 +12,16 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <asf.h>
+
+#define enableUartC1
+#define enableUartD0
+#define enableUartD1
+#define enableUartE0
+#define enableUartE1
+#define enableUartF0
+#define enableUartF1
 
 //1200
 #define BAUD1200	3331				
@@ -98,6 +106,39 @@ void uartC0_putchar(char c,FILE *unused);//uart output function
 void uartC1_putchar(char c,FILE *unused);//uart output function
 
 
+int uartC0_getchar(FILE *stream);
+uint8_t dataInBufC0(void);
+void storeC0(char c);
+
+int uartC1_getchar(FILE *stream);
+uint8_t dataInBufC1(void);
+void storeC1(char c);
+
+int uartD0_getchar(FILE *stream);
+uint8_t dataInBufD0(void);
+void storeD0(char c);
+
+int uartD1_getchar(FILE *stream);
+uint8_t dataInBufD1(void);
+void storeD1(char c);
+
+
+int uartE0_getchar(FILE *stream);
+uint8_t dataInBufE0(void);
+void storeE0(char c);
+
+int uartE1_getchar(FILE *stream);
+uint8_t dataInBufE1(void);
+void storeE1(char c);
+
+int uartF0_getchar(FILE *stream);
+uint8_t dataInBufF0(void);
+void storeF0(char c);
+
+int uartF1_getchar(FILE *stream);
+uint8_t dataInBufF1(void);
+void storeF1(char c);
+
 FILE uartC0_str;
 FILE uartC1_str;
 
@@ -111,6 +152,7 @@ FILE uartF0_str;
 FILE uartF1_str;
 
 #define USB_str		uartC0_str
-#define Xbee_str	uartE0_str
+#define Xbee_str	uartE1_str
+#define Servo_str	uartE0_str
 
 #endif /* UART_H_ */

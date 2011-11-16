@@ -18,7 +18,7 @@
     <GlobalToolchainPath>C:\Program Files (x86)\Atmel\AVR Studio 5.0\AVR ToolChain\bin</GlobalToolchainPath>
     <ToolchainDirPath />
     <MakeDirPath />
-    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
     <com_atmel_avrdbg_tool_simulator>
       <ToolType>com.atmel.avrdbg.tool.simulator</ToolType>
       <ToolName>AVR Simulator</ToolName>
@@ -26,25 +26,24 @@
       </ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
-        <port>62136</port>
+        <port>49612</port>
         <ssl>False</ssl>
       </Channel>
     </com_atmel_avrdbg_tool_simulator>
-    <avrtoolinterface>
-    </avrtoolinterface>
+    <avrtoolinterface>JTAG</avrtoolinterface>
     <com_atmel_avrdbg_tool_avrdragon>
       <ToolType>com.atmel.avrdbg.tool.avrdragon</ToolType>
       <ToolName>AVR Dragon</ToolName>
       <ToolNumber>00A200008731</ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
-        <port>50007</port>
+        <port>49612</port>
         <ssl>False</ssl>
       </Channel>
       <ToolOptions>
         <InterfaceName>JTAG</InterfaceName>
         <InterfaceProperties>
-          <JtagDbgClock>0</JtagDbgClock>
+          <JtagDbgClock>1000000</JtagDbgClock>
           <JtagProgClock>1000000</JtagProgClock>
           <IspClock>150000</IspClock>
           <JtagInChain>false</JtagInChain>
@@ -167,6 +166,12 @@
     <Compile Include="ADC.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DMA.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DMA.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="lcd.c">
       <SubType>compile</SubType>
     </Compile>
@@ -179,22 +184,13 @@
     <Compile Include="motor.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="picServo.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="picServo.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="RTC.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="RTC.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="sonar.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="sonar.h">
+    <Compile Include="src\adcInt.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\asf.h">

@@ -23,7 +23,7 @@ struct Sonar
 
 
 void sonarAssignment(PORT_t *port, uint8_t pin, uint8_t sonarNumber);
-void sonarInit();
+void sonarInit(void);
 void sonarEnable(struct Sonar *_sonar);
 void disableAllSonar(void);
 

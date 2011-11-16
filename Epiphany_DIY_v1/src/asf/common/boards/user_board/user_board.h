@@ -16,11 +16,12 @@
 #include "motor.h"
 #include "lcd.h"
 
-
 #ifndef F_CPU
 #define F_CPU 2000000
 #endif
 
+#define sVersion	"1.3"
+#define date		"Nov 2011"
 
 #define disconnected			0
 #define dualModeDoubleChip		1

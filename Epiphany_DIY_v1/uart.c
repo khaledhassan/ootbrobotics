@@ -6,19 +6,52 @@
  */ 
 #include "uart.h"
 
+#define bufferSize	64
+
+struct Buffer{
+	const uint8_t *bufferBegin;
+	const uint8_t *bufferEnd;
+	uint8_t *head;
+	uint8_t *tail;
+	uint8_t data[bufferSize];
+}bufC0
+//#ifdef enableUartC1
+,bufC1
+//#endif
+//#ifdef enableUartD0
+,bufD0
+//#endif
+//#ifdef enableUartD1
+,bufD1
+//#endif
+//#ifdef enableUartE0
+,bufE0
+//#endif
+//#ifdef enableUartE1
+,bufE1
+//#endif
+//#ifdef enableUartF0
+,bufF0
+//#endif
+//#ifdef enableUartF1
+,bufF1
+//#endif
+;
+
 //sets up all of the streams
 
-FILE uartC0_str = FDEV_SETUP_STREAM(uartC0_putchar, NULL, _FDEV_SETUP_WRITE);
-FILE uartC1_str = FDEV_SETUP_STREAM(uartC1_putchar, NULL, _FDEV_SETUP_WRITE);
+FILE uartC0_str = FDEV_SETUP_STREAM(uartC0_putchar, uartC0_getchar, _FDEV_SETUP_RW);
+FILE uartC1_str = FDEV_SETUP_STREAM(uartC1_putchar, uartC1_getchar, _FDEV_SETUP_RW);
 
-FILE uartD0_str = FDEV_SETUP_STREAM(uartD0_putchar, NULL, _FDEV_SETUP_WRITE);
-FILE uartD1_str = FDEV_SETUP_STREAM(uartD1_putchar, NULL, _FDEV_SETUP_WRITE);
+FILE uartD0_str = FDEV_SETUP_STREAM(uartD0_putchar, uartD0_getchar, _FDEV_SETUP_RW);
+FILE uartD1_str = FDEV_SETUP_STREAM(uartD1_putchar, uartD1_getchar, _FDEV_SETUP_RW);
 
-FILE uartE0_str = FDEV_SETUP_STREAM(uartE0_putchar, NULL, _FDEV_SETUP_WRITE);
-FILE uartE1_str = FDEV_SETUP_STREAM(uartE1_putchar, NULL, _FDEV_SETUP_WRITE);
+FILE uartE0_str = FDEV_SETUP_STREAM(uartE0_putchar, uartE0_getchar, _FDEV_SETUP_RW);
+FILE uartE1_str = FDEV_SETUP_STREAM(uartE1_putchar, uartE1_getchar, _FDEV_SETUP_RW);
 
-FILE uartF0_str = FDEV_SETUP_STREAM(uartF0_putchar, NULL, _FDEV_SETUP_WRITE);
-FILE uartF1_str = FDEV_SETUP_STREAM(uartF1_putchar, NULL, _FDEV_SETUP_WRITE);
+FILE uartF0_str = FDEV_SETUP_STREAM(uartF0_putchar, uartF0_getchar, _FDEV_SETUP_RW);
+FILE uartF1_str = FDEV_SETUP_STREAM(uartF1_putchar, uartF1_getchar, _FDEV_SETUP_RW);
+
 
 //these functions are used for outputing data from the uarts
 
@@ -63,10 +96,254 @@ void uartC1_putchar(char c,FILE *unused)
 	USARTC1.DATA = c;
 }
 
+int uartC0_getchar(FILE *stream){
+	
+	if (bufC0.tail == bufC0.bufferEnd){
+		uint8_t temp = *bufC0.tail;
+		bufC0.tail = bufC0.bufferBegin;
+		return temp;
+	}
+	else return *bufC0.tail++;
+}
+
+void storeC0(char c){
+	if(bufC0.head == bufC0.bufferEnd){
+		*bufC0.head = c;
+		bufC0.head = bufC0.bufferBegin;	
+	}		
+	else *bufC0.head++ = c;
+}
+
+uint8_t dataInBufC0(void){
+	if(bufC0.head == bufC0.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTC0_RXC_vect){
+	storeC0(USARTC0.DATA);
+}
+
+#ifdef enableUartC1
+
+int uartC1_getchar(FILE *stream){
+	
+	if (bufC1.tail == bufC1.bufferEnd){
+		uint8_t temp = *bufC1.tail;
+		bufC1.tail = bufC1.bufferBegin;
+		return temp;
+	}
+	else return *bufC1.tail++;
+}
+
+void storeC1(char c){
+	if(bufC1.head == bufC1.bufferEnd){
+		*bufC1.head = c;
+		bufC1.head = bufC1.bufferBegin;	
+	}		
+	else *bufC1.head++ = c;
+}
+
+uint8_t dataInBufC1(void){
+	if(bufC1.head == bufC1.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTC1_RXC_vect){
+	storeC1(USARTC1.DATA);
+}
+
+#endif
+
+#ifdef enableUartD0
+
+int uartD0_getchar(FILE *stream){
+	
+	if (bufD0.tail == bufD0.bufferEnd){
+		uint8_t temp = *bufD0.tail;
+		bufD0.tail = bufD0.bufferBegin;
+		return temp;
+	}
+	else return *bufD0.tail++;
+}
+
+void storeD0(char c){
+	if(bufD0.head == bufD0.bufferEnd){
+		*bufD0.head = c;
+		bufD0.head = bufD0.bufferBegin;	
+	}		
+	else *bufD0.head++ = c;
+}
+
+uint8_t dataInBufD0(void){
+	if(bufD0.head == bufD0.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTD0_RXC_vect){
+	storeD0(USARTD0.DATA);
+}
+
+#endif
+
+#ifdef enableUartD1
+
+int uartD1_getchar(FILE *stream){
+	
+	if (bufD1.tail == bufD1.bufferEnd){
+		uint8_t temp = *bufD1.tail;
+		bufD1.tail = bufD1.bufferBegin;
+		return temp;
+	}
+	else return *bufD1.tail++;
+}
+
+void storeD1(char c){
+	if(bufD1.head == bufD1.bufferEnd){
+		*bufD1.head = c;
+		bufD1.head = bufD1.bufferBegin;	
+	}		
+	else *bufD1.head++ = c;
+}
+
+uint8_t dataInBufD1(void){
+	if(bufD1.head == bufD1.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTD1_RXC_vect){
+	storeD1(USARTD1.DATA);
+}
+
+#endif
+
+#ifdef enableUartE0
+
+int uartE0_getchar(FILE *stream){
+	
+	if (bufE0.tail == bufE0.bufferEnd){
+		uint8_t temp = *bufE0.tail;
+		bufE0.tail = bufE0.bufferBegin;
+		return temp;
+	}
+	else return *bufE0.tail++;
+}
+
+void storeE0(char c){
+	if(bufE0.head == bufE0.bufferEnd){
+		*bufE0.head = c;
+		bufE0.head = bufE0.bufferBegin;	
+	}		
+	else *bufE0.head++ = c;
+}
+
+uint8_t dataInBufE0(void){
+	if(bufE0.head == bufE0.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTE0_RXC_vect){
+	storeE0(USARTE0.DATA);
+}
+
+#endif
+
+#ifdef enableUartE1
+
+int uartE1_getchar(FILE *stream){
+	
+	if (bufE1.tail == bufE1.bufferEnd){
+		uint8_t temp = *bufE1.tail;
+		bufE1.tail = bufE1.bufferBegin;
+		return temp;
+	}
+	else return *bufE1.tail++;
+}
+
+void storeE1(char c){
+	if(bufE1.head == bufE1.bufferEnd){
+		*bufE1.head = c;
+		bufE1.head = bufE1.bufferBegin;	
+	}		
+	else *bufE1.head++ = c;
+}
+
+uint8_t dataInBufE1(void){
+	if(bufE1.head == bufE1.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTE1_RXC_vect){
+	storeE1(USARTE1.DATA);
+}
+
+#endif
+
+#ifdef enableUartF0
+
+int uartF0_getchar(FILE *stream){
+	
+	if (bufF0.tail == bufF0.bufferEnd){
+		uint8_t temp = *bufF0.tail;
+		bufF0.tail = bufF0.bufferBegin;
+		return temp;
+	}
+	else return *bufF0.tail++;
+}
+
+void storeF0(char c){
+	if(bufF0.head == bufF0.bufferEnd){
+		*bufF0.head = c;
+		bufF0.head = bufF0.bufferBegin;	
+	}		
+	else *bufF0.head++ = c;
+}
+
+uint8_t dataInBufF0(void){
+	if(bufF0.head == bufF0.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTF0_RXC_vect){
+	storeF0(USARTF0.DATA);
+}
+
+#endif
+
+#ifdef enableUartF0
+
+int uartF1_getchar(FILE *stream){
+	
+	if (bufF1.tail == bufF1.bufferEnd){
+		uint8_t temp = *bufF1.tail;
+		bufF1.tail = bufF1.bufferBegin;
+		return temp;
+	}
+	else return *bufF1.tail++;
+}
+
+void storeF1(char c){
+	if(bufF1.head == bufF1.bufferEnd){
+		*bufF1.head = c;
+		bufF1.head = bufF1.bufferBegin;	
+	}		
+	else *bufF1.head++ = c;
+}
+
+uint8_t dataInBufF1(void){
+	if(bufF1.head == bufF1.tail) return 0;	//no data to be read
+	else return 1;							//data to be read
+}
+ISR(USARTF1_RXC_vect){
+	storeF1(USARTF1.DATA);
+}
+
+#endif
+
 //initialization functions for the uarts
 void uartInit(USART_t *uart, long baud)
 {
-	if (uart == &USARTC0) PORTC.DIRSET = 0x8;	
+	PMIC.CTRL |= PMIC_MEDLVLEX_bm;
+	if (uart == &USARTC0) {
+		PORTC.DIRSET = 0x8;
+		bufC0.bufferEnd = &bufC0.data[bufferSize-1];	
+		bufC0.bufferBegin = &bufC0.data[0];
+		bufC0.head = bufC0.bufferBegin;
+		bufC0.tail = bufC0.bufferBegin;
+		asm("nop");
+	}
 	else if (uart == &USARTC1) PORTC.DIRSET = 0x80;	
 	else if (uart == &USARTD0) PORTD.DIRSET = 0x8;	
 	else if (uart == &USARTD1) PORTD.DIRSET = 0x80;	
