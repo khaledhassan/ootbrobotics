@@ -46,7 +46,9 @@ FILE uartC1_str = FDEV_SETUP_STREAM(uartC1_putchar, uartC1_getchar, _FDEV_SETUP_
 FILE uartD0_str = FDEV_SETUP_STREAM(uartD0_putchar, uartD0_getchar, _FDEV_SETUP_RW);
 FILE uartD1_str = FDEV_SETUP_STREAM(uartD1_putchar, uartD1_getchar, _FDEV_SETUP_RW);
 
-FILE uartE0_str = FDEV_SETUP_STREAM(uartE0_putchar, uartE0_getchar, _FDEV_SETUP_RW);
+//FILE uartE0_str = FDEV_SETUP_STREAM(uartE0_putchar, uartE0_getchar, _FDEV_SETUP_RW);
+FILE uartE0_str = FDEV_SETUP_STREAM(uartE0_putchar, NULL, _FDEV_SETUP_WRITE);
+
 FILE uartE1_str = FDEV_SETUP_STREAM(uartE1_putchar, uartE1_getchar, _FDEV_SETUP_RW);
 
 FILE uartF0_str = FDEV_SETUP_STREAM(uartF0_putchar, uartF0_getchar, _FDEV_SETUP_RW);
@@ -236,10 +238,11 @@ uint8_t dataInBufE0(void){
 	if(bufE0.head == bufE0.tail) return 0;	//no data to be read
 	else return 1;							//data to be read
 }
+/*
 ISR(USARTE0_RXC_vect){
 	storeE0(USARTE0.DATA);
 }
-
+*/
 #endif
 
 #ifdef enableUartE1
@@ -344,15 +347,64 @@ void uartInit(USART_t *uart, long baud)
 		bufC0.tail = bufC0.bufferBegin;
 		asm("nop");
 	}
-	else if (uart == &USARTC1) PORTC.DIRSET = 0x80;	
-	else if (uart == &USARTD0) PORTD.DIRSET = 0x8;	
-	else if (uart == &USARTD1) PORTD.DIRSET = 0x80;	
-	else if (uart == &USARTE0) PORTE.DIRSET = 0x8;	
-	else if (uart == &USARTE1) PORTE.DIRSET = 0x80;	
-	else if (uart == &USARTF0) PORTF.DIRSET = 0x8;	
-	else if (uart == &USARTF1) PORTF.DIRSET = 0x80;	
-	
+	else if (uart == &USARTC1){
+		PORTC.DIRSET = 0x80;
+		PORTC.DIRSET = 0x8;
+		bufC1.bufferEnd = &bufC1.data[bufferSize-1];	
+		bufC1.bufferBegin = &bufC1.data[0];
+		bufC1.head = bufC1.bufferBegin;
+		bufC1.tail = bufC1.bufferBegin;
+	}			
+	else if (uart == &USARTD0) {
+		PORTD.DIRSET = 0x8;	
+		PORTC.DIRSET = 0x8;
+		bufD0.bufferEnd = &bufD0.data[bufferSize-1];	
+		bufD0.bufferBegin = &bufD0.data[0];
+		bufD0.head = bufD0.bufferBegin;
+		bufD0.tail = bufD0.bufferBegin;
+	}		
+	else if (uart == &USARTD1) {
+		PORTD.DIRSET = 0x80;
+		PORTC.DIRSET = 0x8;
+		bufD1.bufferEnd = &bufD1.data[bufferSize-1];	
+		bufD1.bufferBegin = &bufD1.data[0];
+		bufD1.head = bufD1.bufferBegin;
+		bufD1.tail = bufD1.bufferBegin;	
+	}		
+	else if (uart == &USARTE0) {
+		PORTE.DIRSET = 0x8;
+		PORTC.DIRSET = 0x8;
+		bufE0.bufferEnd = &bufE0.data[bufferSize-1];	
+		bufE0.bufferBegin = &bufE0.data[0];
+		bufE0.head = bufE0.bufferBegin;
+		bufE0.tail = bufE0.bufferBegin;
+	}			
+	else if (uart == &USARTE1) {
+		PORTE.DIRSET = 0x80;	
+		bufE1.bufferEnd = &bufE1.data[bufferSize-1];	
+		bufE1.bufferBegin = &bufE1.data[0];
+		bufE1.head = bufE1.bufferBegin;
+		bufE1.tail = bufE1.bufferBegin;
+		asm("nop");
 
+	}	
+	else if (uart == &USARTF0) {
+		PORTF.DIRSET = 0x8;
+		PORTC.DIRSET = 0x8;
+		bufF0.bufferEnd = &bufF0.data[bufferSize-1];	
+		bufF0.bufferBegin = &bufF0.data[0];
+		bufF0.head = bufF0.bufferBegin;
+		bufF0.tail = bufF0.bufferBegin;	
+	}		
+	else if (uart == &USARTF1) {
+		PORTF.DIRSET = 0x80;
+		PORTC.DIRSET = 0x8;
+		bufF1.bufferEnd = &bufF1.data[bufferSize-1];	
+		bufF1.bufferBegin = &bufF1.data[0];
+		bufF1.head = bufF1.bufferBegin;
+		bufF1.tail = bufF1.bufferBegin;	
+	}		
+	
 		uart->CTRLA |= USART_RXCINTLVL_MED_gc;
 	switch(baud){
 		case (1200):

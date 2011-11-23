@@ -10,6 +10,8 @@ lcd.c
 
 motor.c
 
+picServo.c
+
 RTC.c
 
 src\adcInt.c
