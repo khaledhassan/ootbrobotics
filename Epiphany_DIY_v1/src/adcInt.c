@@ -4,41 +4,7 @@
  * Created: 10/29/2011 9:25:47 PM
  *  Author: bfc
  */ 
-
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
-
-
-enum ADC_INTERNAL_SOURCES{
-		 TEMP		= 0x00,
-		 DANDGAP	= 0x01,	
-		 SCALEDVCC	= 0x02,
-		 DAC		= 0x03
-	};//for external just use the pin number s0-7
-
-#define maxFilterSize	16
-#define runningFilterSize	10
-
-#if (runningFilterSize > maxFilterSize)
-runningFilterSize = maxFilterSize;
-#endif
-
-struct ADC_DATA{
-	struct PIN 
-	{
-		//protected don't mess with these unless you have a good reason
-		union DATA{
-			uint16_t	rawData;
-			uint16_t	dataArray[runningFilterSize];
-		};
-		//public
-		uint16_t dataFiltered;
-	}inputPin[8],internalSource[4];
-	struct CHANNEL{
-		uint8_t source;	// This is used to determine what pin the ADC channel is pointing to
-	}CH0,CH1,CH2,CH3;
-}ADC_A,ADC_B;
+#include "adcInt.h"		
 
 
 void adcAInit(){
@@ -58,14 +24,11 @@ void adcAInit(){
 	
 	PMIC.CTRL |= PMIC_LOLVLEN_bm;				//make sure low level interrupts are enabled
 	
-	ADC_A.CH0.source = 0;
-	ADC_A.CH1.source = 1;
-	ADC_A.CH2.source = 2;
-	ADC_A.CH3.source = 3;
-	 
+	ADCA.CH0.MUXCTRL = 
 }
 
 ISR(ADCA_CH0_vect){	
+	switch()
 }
 ISR(ADCA_CH1_vect){
 }
