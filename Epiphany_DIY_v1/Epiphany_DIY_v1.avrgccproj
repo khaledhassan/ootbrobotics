@@ -166,6 +166,9 @@
     <Compile Include="ADC.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="adcInt.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="adcInt.h">
       <SubType>compile</SubType>
     </Compile>
@@ -197,9 +200,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="RTC.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\adcInt.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\asf.h">

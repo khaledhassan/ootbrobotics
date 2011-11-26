@@ -4,6 +4,8 @@
 
 ADC.c
 
+adcInt.c
+
 DMA.c
 
 lcd.c
@@ -13,8 +15,6 @@ motor.c
 picServo.c
 
 RTC.c
-
-src\adcInt.c
 
 src\asf\common\boards\user_board\init.c
 
