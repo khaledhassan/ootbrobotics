@@ -118,7 +118,7 @@ uint16_t ADCA_getVal(uint8_t ADCChannel){
 		case(0):
 			while(!ADCA_CH0_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCA_CH0_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCA_CH0RES;
@@ -126,7 +126,7 @@ uint16_t ADCA_getVal(uint8_t ADCChannel){
 		case(1):
 			while(!ADCA_CH1_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCA_CH1_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCA_CH1RES;
@@ -134,7 +134,7 @@ uint16_t ADCA_getVal(uint8_t ADCChannel){
 		case(2):
 			while(!ADCA_CH2_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCA_CH2_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCA_CH2RES;
@@ -142,7 +142,7 @@ uint16_t ADCA_getVal(uint8_t ADCChannel){
 		case(3):
 			while(!ADCA_CH3_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCA_CH3_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCA_CH3RES;
@@ -159,7 +159,7 @@ uint16_t ADCB_getVal(uint8_t ADCChannel){
 		case(0):
 			while(!ADCB_CH0_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCB_CH0_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCB_CH0RES;
@@ -167,7 +167,7 @@ uint16_t ADCB_getVal(uint8_t ADCChannel){
 		case(1):
 			while(!ADCB_CH1_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCB_CH1_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCB_CH1RES;
@@ -175,7 +175,7 @@ uint16_t ADCB_getVal(uint8_t ADCChannel){
 		case(2):
 			while(!ADCB_CH2_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCB_CH2_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCB_CH2RES;
@@ -183,7 +183,7 @@ uint16_t ADCB_getVal(uint8_t ADCChannel){
 		case(3):
 			while(!ADCB_CH3_ConvComplete){
 				attempts++;
-				if(attempts > 4)return 0xFFFF;
+				if(attempts > maxAttempts)return 0xFFFF;
 			}
 			ADCB_CH3_INTFLAGS = ADC_CH_CHIF_bm;//clear bit by writing a one to it
 			return ADCB_CH3RES;

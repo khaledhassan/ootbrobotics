@@ -19,27 +19,27 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-enum ADC_SOURCE{
+enum _ADC_SOURCE{
 		INTERNAL_gc = 0,
 		EXTERNAL_gc = 1
 };
 
-enum ADC_EXTERNAL_SOURCES{
-		CHANNEL_0	= 0,
-		CHANNEL_1	= 1,
-		CHANNEL_2	= 2,
-		CHANNEL_3	= 3,
-		CHANNEL_4	= 4,
-		CHANNEL_5	= 5,
-		CHANNEL_6	= 6,
-		CHANNEL_7	= 7		
+enum _ADC_EXTERNAL_SOURCES{
+		CHANNEL_0	= 0<<3,
+		CHANNEL_1	= 1<<3,
+		CHANNEL_2	= 2<<3,
+		CHANNEL_3	= 3<<3,
+		CHANNEL_4	= 4<<3,
+		CHANNEL_5	= 5<<3,
+		CHANNEL_6	= 6<<3,
+		CHANNEL_7	= 7<<3	
 };
 
-enum ADC_INTERNAL_SOURCES{
-		TEMP		= 0,
-		BANDGAP		= 1,	
-		SCALEDVCC	= 2,
-		DAC			= 3
+enum _ADC_INTERNAL_SOURCES{
+		TEMP		= 0<<3,
+		BANDGAP		= 1<<3,	
+		SCALEDVCC	= 2<<3,
+		DAC			= 3<<3
 };
 
 #define maxFilterSize	32
@@ -60,16 +60,18 @@ struct AnalogData{
 }
 //external
 ADCA_pin[8],
-ADCB_pin[8],
+ADCB_pin[8]//,
 //Internal
-temperature,
-bandGap,	
-ScaledVcc,
-dacA,
-dacB
+//temperature,
+//bandGap,	
+//ScaledVcc,
+//dacA,
+//dacB
 ;		
 
 
 void adcAInit();
+void adcBInit();
 
 #endif /* ADCINT_H_ */
+
