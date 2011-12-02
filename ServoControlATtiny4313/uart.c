@@ -10,13 +10,6 @@
 //FILE	uart_str = FDEV_SETUP_STREAM(uart_putchar,uart_getchar,_FDEV_SETUP_RW)
 
 
-struct Buffer{
-	const uint8_t *bufferBegin;
-	const uint8_t *bufferEnd;
-	uint8_t *head;
-	uint8_t *tail;
-	uint8_t data[bufferSize];
-}buffer;
 
 void uartInit(void){
 
@@ -34,18 +27,18 @@ void uart_putchar(char c,FILE *unused)
 
 int uart_getchar(FILE *stream){
 	
-	if (buffer.tail == buffer.bufferEnd){
+	if (buffer.tail == uartBufferEnd){
 		uint8_t temp = *buffer.tail;
-		buffer.tail = buffer.bufferBegin;
+		buffer.tail = uartBufferBegin;
 		return temp;
 	}
 	else return *buffer.tail++;
 }
 
 void store(char c){
-	if(buffer.head == buffer.bufferEnd){
+	if(buffer.head == uartBufferEnd){
 		*buffer.head = c;
-		buffer.head = buffer.bufferBegin;	
+		buffer.head = uartBufferBegin;	
 	}		
 	else *buffer.head++ = c;
 }

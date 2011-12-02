@@ -10,7 +10,6 @@
 #define TIMER_H_
 
 #include <avr/io.h>
-#include "global.h"
 void timer1Init(void);
 
 
