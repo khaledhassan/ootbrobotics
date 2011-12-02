@@ -55,16 +55,14 @@ int main (void)
 //	fprintf_P(&lcd_str,PSTR("Out of the Box\nEpiphany DIY"));
 	fprintf_P(&USB_str,PSTR("Out of the Box:\rElectronics and Robotics\rPresents the\rEpiphany DIY\rSoftware Version %s\r%s"),sVersion,date);		
 	uint8_t i;
+	uint16_t j;
+	
 	while (1)
 	{
-		_delay_ms(50);
-		fprintf(&USB_str,"%c",0x0c);
-		for(i=0;i<8;i++){
-			
-			ADCA_request(0,i);
-			fprintf(&USB_str,"%d %d\r\n",i,ADCA_getVal(0));
-		}
-		
-		
+	
+		for(j=0;j<MOTOR_PERIOD_gc;j++){
+			for(i=0;i<5;i++)setMotorDuty(i,j,MOTOR_DIR_FORWARD_gc);
+			_delay_ms(3);
+		}		
 	}
 }

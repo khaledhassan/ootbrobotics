@@ -10,8 +10,6 @@
 #define OTHER_H_
 
 #include <avr/io.h>
-#include "global.h"
-
 
 enum PORTD_FUNCTIONS
 	{
@@ -33,7 +31,7 @@ void refresh(void);
 void seedValues(void);
 void sort(void);
 void seedTimerCompares(void);
-
+/*
 struct SortedServoData{
 	uint16_t	TimerVal;	//the number used for determining the servos position
 	//mask of this specific servo
@@ -45,7 +43,36 @@ struct SortedServoData{
 	
 }servo[24],temp;
 
-uint16_t servoDataBuffer[24];
+*/
+uint8_t *servoBusPtr;
+uint16_t *servoTimePtr;
+uint16_t *servoBufferPtr;
+
+struct ServoData{
+	
+	
+	struct ServoBus{
+		uint8_t masks[3];
+	}bus[24],tempBus;	
+		
+	
+		
+	struct ServoTimes{
+		uint16_t timerVal;
+	}times[24],tempTimes;
+		
+}servos;
+
+struct ServoBuffer{
+	uint16_t timerVal;
+}servoBuffer[24];
+
+#define servoBusBegin &servos.bus[0].masks[0]
+#define servoTimesBegin &servos.times[0].timerVal
+#define servoBufferBegin &ServoBuffer[0].timerVal
+
+#define servoTimesEnd &servos.times[23].timerVal
+
 
 volatile uint8_t currentServo;
 

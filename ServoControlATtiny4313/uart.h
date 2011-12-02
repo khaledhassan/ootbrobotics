@@ -12,7 +12,17 @@
 #include <avr/io.h>
 #include <stdio.h>
 
-#define bufferSize	16
+#define bufferSize	32
+
+struct Buffer{
+	uint8_t *head;
+	uint8_t *tail;
+	uint8_t data[bufferSize];
+}buffer;
+
+
+#define uartBufferBegin &buffer.data[0]
+#define uartBufferEnd	&buffer.data[bufferSize-1]
 
 void uartInit(void);
 
