@@ -11,6 +11,7 @@
 
 #include <avr/io.h>
 
+
 enum PORTD_FUNCTIONS
 	{
 		 DECODE2		= 0x40,
@@ -58,8 +59,7 @@ struct ServoBuffer{
 #define servoTimesEnd &servos.times[23].timerVal
 
 void mulitpleServoTimeFix();
-//void getServoValues();
-//void servoDataIRQ();
+void servoDataIRQ();
 
 uint8_t		servoIdentifier;
 

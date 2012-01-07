@@ -105,8 +105,8 @@ static uint8_t i;
 	}
 }	
 
-/*
+
 void servoDataIRQ()
 {
 	if(getNumBytesInBuffer() < (16 -1)) PORTD ^= _BV(PORTD1);//this will trigger a PCINT on the xmega
-}*/
+}

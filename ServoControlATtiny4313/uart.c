@@ -9,10 +9,10 @@
 
 void uartInit(void){
 
-UBRRH = 0;//set for baud of 230400... dang fast
-UBRRL = 2;
+UBRRH = 0;//set for baud of 125000... dang fast
+UBRRL = 5;
 
-UCSRB = _BV(RXCIE) | _BV(RXEN) ;//holding off on tx enable as of right now it may be better to simply receive data with the tx line as a sort of flow control 
+UCSRB	|= _BV(RXEN) ;//holding off on tx enable as of right now it may be better to simply receive data with the tx line as a sort of flow control 
 
 buffer.head = uartBufferBegin;
 buffer.tail = uartBufferBegin;
@@ -37,7 +37,7 @@ void uart_store(unsigned char c){
 		buffer.head = uartBufferBegin;	
 	}		
 	else *buffer.head++ = c;
-//	servoDataIRQ();
+	servoDataIRQ();
 }
 
 uint8_t dataInbuffer(void){
