@@ -9,19 +9,18 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 #include <util/delay.h>
+#include <stdio.h>
 
 #include "timer.h"
 #include "uart.h"
 #include "other.h"
 
-
-
-uint8_t uartGetC(void);
+static uint16_t angle = 900;
 
 
 int main(void)
 {
-	
+	bytesInBuffer = 0;
 	DDRB = 0xFF;//enable all port B pins (servo pins as Outputs)
 	DDRD = 0xFE;//enables every pin except the uart receive pin as an output
 	PORTD = 0;
@@ -31,58 +30,79 @@ int main(void)
 	seedValues();
 	sort();
 	postSortMask();
+	mulitpleServoTimeFix();
 	timer1Init();
 	sei();
 	while(1)
     {
-		
 		do 
 		{
-			if(TCNT1>(uint16_t)*servoTimePtr){
-				
-				PORTB =		*servoBusPtr++; //set the bus
-				PORTD =	    DECODE0;	    //turn on the decode0 strobe 
-				PORTD &=	0xF;
-				
-				PORTB =		*servoBusPtr++; //set the bus
-				PORTD =		DECODE1;		//turn on the decode1 strobe	
-				PORTD &=	0xF;
-				
-				PORTB =		*servoBusPtr++;	//turn on the decode2 strobe
-				asm("nop");
-				asm("nop");
-				asm("nop");
-				
-				PORTD =		DECODE2;		//set the bus		
-				PORTD &=	0xF;	
-				servoTimePtr++;		
+			if(TCNT1>(uint16_t)*servoTimePtr){		
+				if((uint16_t)*servoTimePtr != 0){
+					PORTB =	*servoBusPtr++; 
+					PORTD =	DECODE0;	     
+					PORTB =	*servoBusPtr++; 
+					PORTD +=DECODE0;			
+					PORTB =	*servoBusPtr++;		
+					PORTD +=DECODE1;		
+					PORTD =	0;
+					servoTimePtr++;
+				}				
+				else{
+					servoBusPtr += 3;
+					servoTimePtr++;
+				}
 			}					
-		} while (servoTimePtr < servoTimesEnd);
+		} while (servoTimePtr <= servoTimesEnd);
 		refresh();
 		setMasks();
-		seedValues();
 		sort();
 		postSortMask();
-		while(TCNT1>0);
+		mulitpleServoTimeFix();
+//		servoDataIRQ();
+		
+		
+		bytesInBuffer = 0;
+		uint8_t i;
+		for(i=12;i<24;i++){
+			uart_store(i);
+			uart_store((angle & 0xFF00)>>8);
+			uart_store((uint8_t)angle);
+			uart_store(i | 0x80);
+		}
+		angle+=200;
+		if(angle > 3600) angle = 900;
+		while(TCNT1>10)
+		{
+				
+			if(bytesInBuffer >= 4){
+				servoIdentifier = uart_getchar(NULL);
+				if(servoIdentifier <= 23){
+					servoTime.byte._H = uart_getchar(NULL);
+					servoTime.byte._L = uart_getchar(NULL);
+					check = uart_getchar(NULL);
+					if(check == (servoIdentifier | 0x80) ){
+						servoBuffer[servoIdentifier].timerVal = servoTime.Val;
+					}
+					else flush();
+				}					
+			}
+			else asm("nop");
+	
+		}
     }
 }
 
-
-
 ISR(BADISR_vect){}
 
-ISR(USART_RX_vect){
-	uartGetC(); //set this equal to the current buffer location	
-}
-
-inline ISR(TIMER1_COMPA_vect){
-		PORTD =	    DECODE0 | DECODE1 | DECODE2;
-		PORTB =		0xFF;
-		PORTD =	    0;
-}
-
-uint8_t uartGetC(){
-	return UDR;
+ISR(TIMER1_COMPA_vect){
+	PORTB =	mainBus[0]; 
+	PORTD =	DECODE0;	     
+	PORTB =	mainBus[1]; 
+	PORTD +=DECODE0;			
+	PORTB =	mainBus[2];		
+	PORTD +=DECODE1;		
+	PORTD =	0;
 }
 
 

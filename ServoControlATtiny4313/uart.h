@@ -10,9 +10,12 @@
 #define UART_H_
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <stdio.h>
 
-#define bufferSize	32
+
+#define bufferSize	4*12
+uint8_t bytesInBuffer;
 
 struct Buffer{
 	uint8_t *head;
@@ -20,12 +23,14 @@ struct Buffer{
 	uint8_t data[bufferSize];
 }buffer;
 
-
 #define uartBufferBegin &buffer.data[0]
 #define uartBufferEnd	&buffer.data[bufferSize-1]
 
-void uartInit(void);
 
-FILE	uart_str;
+void uartInit(void);
+int uart_getchar(FILE *stream);
+void uart_store(unsigned char c);
+uint8_t dataInbuffer(void);
+uint8_t getNumBytesInBuffer(void);
 
 #endif /* UART_H_ */

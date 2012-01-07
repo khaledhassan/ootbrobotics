@@ -1,20 +1,26 @@
 Archive member included because of file (symbol)
 
+c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_mulhi3.o)
+                              other.o (__mulhi3)
 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
                               c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o (exit)
+c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_copy_data.o)
+                              main.o (__do_copy_data)
 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
                               other.o (__do_clear_bss)
 
 Allocating common symbols
 Common symbol       size              file
 
-uart_str            0xe               main.o
+bytesInBuffer       0x1               main.o
 servoBusPtr         0x2               other.o
-currentServo        0x1               other.o
 servoBuffer         0x30              other.o
-servoBufferPtr      0x2               other.o
-buffer              0x24              main.o
+servoTime           0x2               other.o
+check               0x1               other.o
+buffer              0x34              main.o
 servos              0x7d              other.o
+servoIdentifier     0x1               other.o
+mainBus             0x3               other.o
 servoTimePtr        0x2               other.o
 
 Memory Configuration
@@ -129,7 +135,7 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x8ee
+.text           0x00000000      0x6a6
  *(.vectors)
  .vectors       0x00000000       0x2a c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
                 0x00000000                __vectors
@@ -166,8 +172,10 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x00000036       0x10 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
-                0x00000036                __do_clear_bss
+ .init4         0x00000036       0x16 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_copy_data.o)
+                0x00000036                __do_copy_data
+ .init4         0x0000004c       0x10 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
+                0x0000004c                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -178,62 +186,66 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x00000046        0x4 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
+ .init9         0x0000005c        0x4 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
  *(.init9)
  *(.text)
- .text          0x0000004a        0x2 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
-                0x0000004a                __vector_1
-                0x0000004a                __vector_12
-                0x0000004a                __bad_interrupt
-                0x0000004a                __vector_6
-                0x0000004a                __vector_3
-                0x0000004a                __vector_11
-                0x0000004a                __vector_13
-                0x0000004a                __vector_17
-                0x0000004a                __vector_19
-                0x0000004a                __vector_5
-                0x0000004a                __vector_9
-                0x0000004a                __vector_2
-                0x0000004a                __vector_15
-                0x0000004a                __vector_8
-                0x0000004a                __vector_14
-                0x0000004a                __vector_10
-                0x0000004a                __vector_16
-                0x0000004a                __vector_18
-                0x0000004a                __vector_20
- .text          0x0000004c      0x4c2 other.o
-                0x0000004c                setMasks
-                0x000001e2                refresh
-                0x00000254                seedValues
-                0x000002ae                sort
-                0x00000430                postSortMask
-                0x000004de                seedTimerCompares
- .text          0x0000050e      0x220 main.o
-                0x0000050e                main
-                0x00000656                __vector_default
-                0x00000676                __vector_7
-                0x000006c8                __vector_4
-                0x00000718                uartGetC
- .text          0x0000072e       0x46 Timer.o
-                0x0000072e                timer1Init
- .text          0x00000774      0x176 uart.o
-                0x00000774                uartInit
-                0x0000079e                uart_putchar
-                0x000007dc                uart_getchar
-                0x00000846                store
-                0x0000089e                dataInbuffer
-                0x000008c8                ISR
- .text          0x000008ea        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
- .text          0x000008ea        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
-                0x000008ea                . = ALIGN (0x2)
+ .text          0x00000060        0x2 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
+                0x00000060                __vector_1
+                0x00000060                __vector_12
+                0x00000060                __bad_interrupt
+                0x00000060                __vector_6
+                0x00000060                __vector_3
+                0x00000060                __vector_11
+                0x00000060                __vector_13
+                0x00000060                __vector_17
+                0x00000060                __vector_19
+                0x00000060                __vector_5
+                0x00000060                __vector_9
+                0x00000060                __vector_2
+                0x00000060                __vector_15
+                0x00000060                __vector_8
+                0x00000060                __vector_14
+                0x00000060                __vector_10
+                0x00000060                __vector_16
+                0x00000060                __vector_18
+                0x00000060                __vector_20
+ .text          0x00000062      0x33c other.o
+                0x00000062                setMasks
+                0x00000178                refresh
+                0x000001b4                seedValues
+                0x000001d0                sort
+                0x000002a6                postSortMask
+                0x0000031e                mulitpleServoTimeFix
+ .text          0x0000039e      0x1ce main.o
+                0x0000039e                main
+                0x0000051c                __vector_default
+                0x00000530                __vector_4
+ .text          0x0000056c       0x18 Timer.o
+                0x0000056c                timer1Init
+ .text          0x00000584       0xfa uart.o
+                0x00000584                uartInit
+                0x000005a4                uart_getchar
+                0x000005d2                uart_store
+                0x000005fe                dataInbuffer
+                0x0000061a                getNumBytesInBuffer
+                0x00000620                flush
+                0x00000636                __vector_7
+ .text          0x0000067e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_mulhi3.o)
+ .text          0x0000067e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
+ .text          0x0000067e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_copy_data.o)
+ .text          0x0000067e        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
+                0x0000067e                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x000008ea        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
- .text.libgcc   0x000008ea        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
-                0x000008ea                . = ALIGN (0x2)
+ .text.libgcc   0x0000067e       0x24 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_mulhi3.o)
+                0x0000067e                __mulhi3
+ .text.libgcc   0x000006a2        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
+ .text.libgcc   0x000006a2        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_copy_data.o)
+ .text.libgcc   0x000006a2        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
+                0x000006a2                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000008ea        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
-                0x000008ea                _exit
-                0x000008ea                exit
+ .fini9         0x000006a2        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
+                0x000006a2                _exit
+                0x000006a2                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -252,60 +264,66 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000008ea        0x4 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
+ .fini0         0x000006a2        0x4 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
  *(.fini0)
-                0x000008ee                _etext = .
+                0x000006a6                _etext = .
 
-.data           0x00800060        0x0 load address 0x000008ee
+.data           0x00800060        0x2 load address 0x000006a6
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
  .data          0x00800060        0x0 other.o
- .data          0x00800060        0x0 main.o
- .data          0x00800060        0x0 Timer.o
- .data          0x00800060        0x0 uart.o
- .data          0x00800060        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
- .data          0x00800060        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
+ .data          0x00800060        0x2 main.o
+ .data          0x00800062        0x0 Timer.o
+ .data          0x00800062        0x0 uart.o
+ .data          0x00800062        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_mulhi3.o)
+ .data          0x00800062        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
+ .data          0x00800062        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_copy_data.o)
+ .data          0x00800062        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800060                . = ALIGN (0x2)
-                0x00800060                _edata = .
-                0x00800060                PROVIDE (__data_end, .)
+                0x00800062                . = ALIGN (0x2)
+                0x00800062                _edata = .
+                0x00800062                PROVIDE (__data_end, .)
 
-.bss            0x00800060       0xe6
-                0x00800060                PROVIDE (__bss_start, .)
+.bss            0x00800062       0xee
+                0x00800062                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00800060        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
- .bss           0x00800060        0x0 other.o
- .bss           0x00800060        0x0 main.o
- .bss           0x00800060        0x0 Timer.o
- .bss           0x00800060        0x0 uart.o
- .bss           0x00800060        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
- .bss           0x00800060        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
+ .bss           0x00800062        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr25/crttn4313.o
+ .bss           0x00800062        0x1 other.o
+ .bss           0x00800063        0x0 main.o
+ .bss           0x00800063        0x0 Timer.o
+ .bss           0x00800063        0x0 uart.o
+ .bss           0x00800063        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_mulhi3.o)
+ .bss           0x00800063        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_exit.o)
+ .bss           0x00800063        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_copy_data.o)
+ .bss           0x00800063        0x0 c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr25\libgcc.a(_clear_bss.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800060       0xb4 other.o
-                0x00800060                servoBusPtr
-                0x00800062                currentServo
-                0x00800063                servoBuffer
-                0x00800093                servoBufferPtr
-                0x00800095                servos
-                0x00800112                servoTimePtr
- COMMON         0x00800114       0x32 main.o
-                0x00800114                uart_str
-                0x00800122                buffer
-                0x00800146                PROVIDE (__bss_end, .)
-                0x000008ee                __data_load_start = LOADADDR (.data)
-                0x000008ee                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800063       0xb8 other.o
+                0x00800063                servoBusPtr
+                0x00800065                servoBuffer
+                0x00800095                servoTime
+                0x00800097                check
+                0x00800098                servos
+                0x00800115                servoIdentifier
+                0x00800116                mainBus
+                0x00800119                servoTimePtr
+ COMMON         0x0080011b       0x35 main.o
+                0x0080011b                bytesInBuffer
+                0x0080011c                buffer
+                0x00800150                PROVIDE (__bss_end, .)
+                0x000006a6                __data_load_start = LOADADDR (.data)
+                0x000006a8                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800146        0x0
-                0x00800146                PROVIDE (__noinit_start, .)
+.noinit         0x00800150        0x0
+                0x00800150                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800146                PROVIDE (__noinit_end, .)
-                0x00800146                _end = .
-                0x00800146                PROVIDE (__heap_start, .)
+                0x00800150                PROVIDE (__noinit_end, .)
+                0x00800150                _end = .
+                0x00800150                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -370,80 +388,83 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
                 0x00000060       0x20 uart.o
 
 .debug_pubnames
-                0x00000000      0x23a
+                0x00000000      0x270
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000       0xca other.o
+                0x00000000       0xe1 other.o
  .debug_pubnames
-                0x000000ca       0xd3 main.o
+                0x000000e1       0xd0 main.o
  .debug_pubnames
-                0x0000019d       0x21 Timer.o
+                0x000001b1       0x21 Timer.o
  .debug_pubnames
-                0x000001be       0x7c uart.o
+                0x000001d2       0x9e uart.o
 
-.debug_info     0x00000000      0xa13
+.debug_info     0x00000000      0xa7f
  *(.debug_info)
- .debug_info    0x00000000      0x306 other.o
- .debug_info    0x00000306      0x3d6 main.o
- .debug_info    0x000006dc       0x8d Timer.o
- .debug_info    0x00000769      0x2aa uart.o
+ .debug_info    0x00000000      0x381 other.o
+ .debug_info    0x00000381      0x3d5 main.o
+ .debug_info    0x00000756       0x8d Timer.o
+ .debug_info    0x000007e3      0x29c uart.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x419
+.debug_abbrev   0x00000000      0x43c
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0xf4 other.o
- .debug_abbrev  0x000000f4      0x154 main.o
- .debug_abbrev  0x00000248       0x4e Timer.o
- .debug_abbrev  0x00000296      0x183 uart.o
+ .debug_abbrev  0x00000000      0x12c other.o
+ .debug_abbrev  0x0000012c      0x156 main.o
+ .debug_abbrev  0x00000282       0x4e Timer.o
+ .debug_abbrev  0x000002d0      0x16c uart.o
 
-.debug_line     0x00000000      0xe7b
+.debug_line     0x00000000      0xfea
  *(.debug_line)
- .debug_line    0x00000000      0x425 other.o
- .debug_line    0x00000425      0x49f main.o
- .debug_line    0x000008c4      0x26b Timer.o
- .debug_line    0x00000b2f      0x34c uart.o
+ .debug_line    0x00000000      0x4ed other.o
+ .debug_line    0x000004ed      0x52b main.o
+ .debug_line    0x00000a18      0x26b Timer.o
+ .debug_line    0x00000c83      0x367 uart.o
 
-.debug_frame    0x00000000      0x160
+.debug_frame    0x00000000      0x150
  *(.debug_frame)
  .debug_frame   0x00000000       0x70 other.o
- .debug_frame   0x00000070       0x60 main.o
- .debug_frame   0x000000d0       0x20 Timer.o
- .debug_frame   0x000000f0       0x70 uart.o
+ .debug_frame   0x00000070       0x40 main.o
+ .debug_frame   0x000000b0       0x20 Timer.o
+ .debug_frame   0x000000d0       0x80 uart.o
 
-.debug_str      0x00000000      0x2ae
+.debug_str      0x00000000      0x2d6
  *(.debug_str)
- .debug_str     0x00000000      0x194 other.o
-                                0x1c8 (size before relaxing)
- .debug_str     0x00000194       0xad main.o
-                                0x242 (size before relaxing)
- .debug_str     0x00000241       0x18 Timer.o
-                                 0xef (size before relaxing)
- .debug_str     0x00000259       0x55 uart.o
-                                0x177 (size before relaxing)
+ .debug_str     0x00000000      0x1af other.o
+                                0x1e3 (size before relaxing)
+ .debug_str     0x000001af       0x8c main.o
+                                0x22c (size before relaxing)
+ .debug_str     0x0000023b       0x18 Timer.o
+                                 0xe7 (size before relaxing)
+ .debug_str     0x00000253       0x83 uart.o
+                                0x17f (size before relaxing)
 
-.debug_loc
+.debug_loc      0x00000000      0x121
  *(.debug_loc)
+ .debug_loc     0x00000000       0xd1 other.o
+ .debug_loc     0x000000d1       0x1f main.o
+ .debug_loc     0x000000f0       0x31 uart.o
 
-.debug_macinfo  0x00000000    0x19050
+.debug_macinfo  0x00000000    0x193e7
  *(.debug_macinfo)
  .debug_macinfo
-                0x00000000     0x5f0e other.o
+                0x00000000     0x5ef7 other.o
  .debug_macinfo
-                0x00005f0e     0x6d59 main.o
+                0x00005ef7     0x6d44 main.o
  .debug_macinfo
-                0x0000cc67     0x5e63 Timer.o
+                0x0000cc3b     0x5e78 Timer.o
  .debug_macinfo
-                0x00012aca     0x6586 uart.o
+                0x00012ab3     0x6934 uart.o
 OUTPUT(ServoControlATtiny4313.elf elf32-avr)
 LOAD linker stubs
 
 .debug_pubtypes
-                0x00000000      0x153
+                0x00000000      0x176
  .debug_pubtypes
-                0x00000000       0x65 other.o
+                0x00000000       0x7c other.o
  .debug_pubtypes
-                0x00000065       0x8f main.o
+                0x0000007c       0x9b main.o
  .debug_pubtypes
-                0x000000f4       0x2b Timer.o
+                0x00000117       0x2b Timer.o
  .debug_pubtypes
-                0x0000011f       0x34 uart.o
+                0x00000142       0x34 uart.o
