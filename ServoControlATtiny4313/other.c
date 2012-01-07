@@ -10,14 +10,14 @@
 void setMasks(void){
 	uint8_t i;//simple increment 
 		for(i=0;i<8;i++){
-			servos.bus[i].masks[0] = ~(0x80>>i);
+			servos.bus[i].masks[0] = ~(1<<i);
 			servos.bus[i].masks[1] = 0xFF;
 			servos.bus[i].masks[2] = 0xFF;
 		}
 					
 		for(i=0;i<8;i++){
 			servos.bus[i+8].masks[0] = 0xFF;
-			servos.bus[i+8].masks[1] = ~(0x80>>i);
+			servos.bus[i+8].masks[1] = ~(1<<i);
 			servos.bus[i+8].masks[2] = 0xFF;
 			
 		}
@@ -25,25 +25,39 @@ void setMasks(void){
 		for(i=0;i<8;i++){
 			servos.bus[i+16].masks[0] = 0xFF;
 			servos.bus[i+16].masks[1] = 0xFF;
-			servos.bus[i+16].masks[2] = ~(0x80>>i);
+			servos.bus[i+16].masks[2] = ~(1<<i);
 		}
+		servos.tempBus.masks[0] = 0x0;
+		servos.tempBus.masks[1] = 0x0;
+		servos.tempBus.masks[2] = 0x0;
+		
+		mainBus[0] = 0xFF;
+		mainBus[1] = 0xFF;
+		mainBus[2] = 0xFF;
+		
+		for(i=0;i<24;i++){ 
+			if(servos.times[i].timerVal == 0 ) {
+				servos.bus[i] = servos.tempBus;
+				mainBus[i/8] &= (uint8_t)~(1<<i%8);
+			}
+			asm("nop");				
+		}	
+			
 }
 
 void refresh(void){
 	uint8_t i;
 	//refresh all the servos
 	for(i=0;i<24;i++)servos.times[i].timerVal = servoBuffer[i].timerVal;
-	currentServo = 0;
 	
 	//initialize all the pointers
 	servoBusPtr = &servos.bus[0].masks[0];
 	servoTimePtr = &servos.times[0].timerVal;
-	servoBufferPtr = &servoBuffer[0].timerVal;
 }
   
 void seedValues(void){
 	uint8_t i;
-	for(i=0;i<24;i++)servos.times[i].timerVal = (uint16_t)((23-i)*15 + 900);  
+	for(i=0;i<24;i++)servos.times[i].timerVal = 0;  
 }	
  
 void sort(void){
@@ -70,10 +84,29 @@ void sort(void){
 void postSortMask(void){
 	uint8_t i,j;
 	for(i=0;i<23;i++){
-		for(j=0;j<3;j++)servos.bus[i+1].masks[j] &= servos.bus[i].masks[j];
+		for(j=0;j<3;j++){
+			servos.bus[i+1].masks[j] &= servos.bus[i].masks[j];
+			//servos.bus[i+1].masks[j] &= mainBus[j];
+		}			
 	}
 }
 
-void seedTimerCompares(void){
-	OCR1A = (uint16_t)*servoTimePtr++;
-}
+
+
+//This function serves to decrease the 'unique' number of servos if there are multiple servos set to the same angle.
+void mulitpleServoTimeFix(){
+static uint8_t i;
+	servos.tempBus = servos.bus[23];
+	for(i=23;i>0;i--){
+		if(servos.times[i-1].timerVal == servos.times[i].timerVal){ //if the current servo[i] is equal to the next servo down
+			servos.times[i].timerVal = 0;							//the current servo time goes to 0
+			servos.bus[i-1] = servos.bus[i];						//the next servo then takes the bus value of the next highest servo
+		}			
+	}
+}	
+
+/*
+void servoDataIRQ()
+{
+	if(getNumBytesInBuffer() < (16 -1)) PORTD ^= _BV(PORTD1);//this will trigger a PCINT on the xmega
+}*/

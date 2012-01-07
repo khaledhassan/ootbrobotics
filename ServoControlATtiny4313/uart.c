@@ -7,26 +7,21 @@
 
 #include "uart.h"
 
-//FILE	uart_str = FDEV_SETUP_STREAM(uart_putchar,uart_getchar,_FDEV_SETUP_RW)
-
-
-
 void uartInit(void){
 
 UBRRH = 0;//set for baud of 230400... dang fast
 UBRRL = 2;
 
 UCSRB = _BV(RXCIE) | _BV(RXEN) ;//holding off on tx enable as of right now it may be better to simply receive data with the tx line as a sort of flow control 
+
+buffer.head = uartBufferBegin;
+buffer.tail = uartBufferBegin;
+
 }
 
-void uart_putchar(char c,FILE *unused)
-{
-	while(!(UCSRA & UDRE));
-	UDR = c;
-}
 
 int uart_getchar(FILE *stream){
-	
+	bytesInBuffer--;
 	if (buffer.tail == uartBufferEnd){
 		uint8_t temp = *buffer.tail;
 		buffer.tail = uartBufferBegin;
@@ -35,19 +30,31 @@ int uart_getchar(FILE *stream){
 	else return *buffer.tail++;
 }
 
-void store(char c){
+void uart_store(unsigned char c){
+	bytesInBuffer++;
 	if(buffer.head == uartBufferEnd){
 		*buffer.head = c;
 		buffer.head = uartBufferBegin;	
 	}		
 	else *buffer.head++ = c;
+//	servoDataIRQ();
 }
 
 uint8_t dataInbuffer(void){
 	if(buffer.head == buffer.tail) return 0;	//no data to be read
 	else return 1;							//data to be read
 }
+
+uint8_t getNumBytesInBuffer(void){
+return bytesInBuffer;
+}
+
+void flush(void){
+	buffer.head = buffer.tail;
+	bytesInBuffer = 0;
+}
+
 ISR(USART_RX_vect){
-	store(UDR);
+	uart_store(UDR);	
 }
 

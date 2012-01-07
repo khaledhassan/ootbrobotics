@@ -31,34 +31,19 @@ void refresh(void);
 void seedValues(void);
 void sort(void);
 void seedTimerCompares(void);
-/*
-struct SortedServoData{
-	uint16_t	TimerVal;	//the number used for determining the servos position
-	//mask of this specific servo
-	struct PORTMASKS 
-	{
-		uint8_t		portDMask;
-		uint8_t		portBMask;
-	}masks;
-	
-}servo[24],temp;
+void postSortMask(void);
 
-*/
 uint8_t *servoBusPtr;
 uint16_t *servoTimePtr;
-uint16_t *servoBufferPtr;
 
 struct ServoData{
-	
-	
+		
 	struct ServoBus{
 		uint8_t masks[3];
 	}bus[24],tempBus;	
 		
-	
-		
 	struct ServoTimes{
-		uint16_t timerVal;
+		volatile uint16_t timerVal;
 	}times[24],tempTimes;
 		
 }servos;
@@ -67,13 +52,26 @@ struct ServoBuffer{
 	uint16_t timerVal;
 }servoBuffer[24];
 
+
 #define servoBusBegin &servos.bus[0].masks[0]
 #define servoTimesBegin &servos.times[0].timerVal
-#define servoBufferBegin &ServoBuffer[0].timerVal
-
 #define servoTimesEnd &servos.times[23].timerVal
 
+void mulitpleServoTimeFix();
+//void getServoValues();
+//void servoDataIRQ();
 
-volatile uint8_t currentServo;
+uint8_t		servoIdentifier;
+
+union ServoTime{
+	uint16_t	Val;
+	struct Byte{
+	uint8_t		_L;	//apparently the attiny is bigEndien
+	uint8_t		_H;
+	}byte;
+}servoTime;
+uint8_t		check;
+
+uint8_t mainBus[3];
 
 #endif /* OTHER_H_ */
