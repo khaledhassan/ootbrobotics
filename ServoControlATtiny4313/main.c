@@ -15,7 +15,7 @@
 #include "uart.h"
 #include "other.h"
 
-static uint16_t angle = 900;
+//static uint16_t angle = 900;
 
 
 int main(void)
@@ -59,19 +59,21 @@ int main(void)
 		sort();
 		postSortMask();
 		mulitpleServoTimeFix();
-//		servoDataIRQ();
+		UCSRB |=  _BV(RXCIE);	//enable the recieve interrupt on the uart	
+		servoDataIRQ();	//sends an interrupt request to the Xmega
 		
 		
-		bytesInBuffer = 0;
+/*		bytesInBuffer = 0;
 		uint8_t i;
 		for(i=12;i<24;i++){
 			uart_store(i);
 			uart_store((angle & 0xFF00)>>8);
 			uart_store((uint8_t)angle);
 			uart_store(i | 0x80);
+			
 		}
 		angle+=200;
-		if(angle > 3600) angle = 900;
+		if(angle > 3600) angle = 900;*/
 		while(TCNT1>10)
 		{
 				
@@ -86,9 +88,7 @@ int main(void)
 					}
 					else flush();
 				}					
-			}
-			else asm("nop");
-	
+			}	
 		}
     }
 }
@@ -103,6 +103,7 @@ ISR(TIMER1_COMPA_vect){
 	PORTB =	mainBus[2];		
 	PORTD +=DECODE1;		
 	PORTD =	0;
+	UCSRB |=  _BV(RXCIE);//disable RX interrupt so there are no interruptions to the time critical servo code.
 }
 
 
