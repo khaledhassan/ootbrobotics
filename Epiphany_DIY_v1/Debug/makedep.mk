@@ -6,13 +6,13 @@ ADC.c
 
 adcInt.c
 
+ATtinyServo.c
+
 DMA.c
 
 lcd.c
 
 motor.c
-
-picServo.c
 
 RTC.c
 

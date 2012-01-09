@@ -10,20 +10,21 @@
 #include <stdlib.h>
 #include <util/delay.h>
 #include <stdio.h>
+#include <avr/wdt.h>
 
 #include "timer.h"
 #include "uart.h"
 #include "other.h"
 
-//static uint16_t angle = 900;
 
 
 int main(void)
 {
+//	wdt_enable(WDTO_1S);
 	bytesInBuffer = 0;
 	DDRB = 0xFF;//enable all port B pins (servo pins as Outputs)
 	DDRD = 0xFE;//enables every pin except the uart receive pin as an output
-	PORTD = 0;
+	PORTD &= 0x0F;
 	uartInit();
 	refresh();
 	setMasks();
@@ -40,12 +41,12 @@ int main(void)
 			if(TCNT1>(uint16_t)*servoTimePtr){		
 				if((uint16_t)*servoTimePtr != 0){
 					PORTB =	*servoBusPtr++; 
-					PORTD =	DECODE0;	     
+					PORTD +=DECODE0;	     
 					PORTB =	*servoBusPtr++; 
 					PORTD +=DECODE0;			
 					PORTB =	*servoBusPtr++;		
 					PORTD +=DECODE1;		
-					PORTD =	0;
+					PORTD &= 0x0F;
 					servoTimePtr++;
 				}				
 				else{
@@ -53,31 +54,19 @@ int main(void)
 					servoTimePtr++;
 				}
 			}					
-		} while (servoTimePtr <= servoTimesEnd);
+		} while (servoTimePtr <= servoTimesEnd); //servoTimePtr <= servoTimesEnd &&
 		refresh();
 		setMasks();
 		sort();
 		postSortMask();
 		mulitpleServoTimeFix();
 		UCSRB |=  _BV(RXCIE);	//enable the recieve interrupt on the uart	
-		servoDataIRQ();	//sends an interrupt request to the Xmega
-		
-		
-/*		bytesInBuffer = 0;
-		uint8_t i;
-		for(i=12;i<24;i++){
-			uart_store(i);
-			uart_store((angle & 0xFF00)>>8);
-			uart_store((uint8_t)angle);
-			uart_store(i | 0x80);
-			
-		}
-		angle+=200;
-		if(angle > 3600) angle = 900;*/
-		while(TCNT1>10)
-		{
+		servoDataIRQ();	//sends an interrupt request to the Xmega	
 				
-			if(bytesInBuffer >= 4){
+		
+		while(TCNT1>200)
+		{
+		/*	if(bytesInBuffer >= 4){
 				servoIdentifier = uart_getchar(NULL);
 				if(servoIdentifier <= 23){
 					servoTime.byte._H = uart_getchar(NULL);
@@ -86,24 +75,29 @@ int main(void)
 					if(check == (servoIdentifier | 0x80) ){
 						servoBuffer[servoIdentifier].timerVal = servoTime.Val;
 					}
-					else flush();
+					else flush(); //this kills stuff				
 				}					
-			}	
+			}*/
 		}
+		asm("nop");
     }
 }
 
-ISR(BADISR_vect){}
+ISR(BADISR_vect){
+	asm("nop");
+}
 
 ISR(TIMER1_COMPA_vect){
-	PORTB =	mainBus[0]; 
-	PORTD =	DECODE0;	     
-	PORTB =	mainBus[1]; 
+	cli();
+	PORTB =	0xFF;//mainBus[0]; 
+	PORTD +=DECODE0;	     
+	PORTB =	0xFF;//mainBus[1]; 
 	PORTD +=DECODE0;			
-	PORTB =	mainBus[2];		
+	PORTB =	0xFF;//mainBus[2];		
 	PORTD +=DECODE1;		
-	PORTD =	0;
-	UCSRB |=  _BV(RXCIE);//disable RX interrupt so there are no interruptions to the time critical servo code.
+	PORTD &= 0x0F;
+	UCSRB &=  ~_BV(RXCIE);//disable RX interrupt so there are no interruptions to the time critical servo code.
+	sei();
 }
 
 

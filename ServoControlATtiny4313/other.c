@@ -57,7 +57,8 @@ void refresh(void){
   
 void seedValues(void){
 	uint8_t i;
-	for(i=0;i<24;i++)servos.times[i].timerVal = 0;  
+	for(i=0;i<24;i++)servos.times[i].timerVal = 1500*1.5;  //normally 0
+	for(i=0;i<24;i++)servoBuffer[i].timerVal = 1500*1.5;  //normally 0	
 }	
  
 void sort(void){
@@ -108,5 +109,6 @@ static uint8_t i;
 
 void servoDataIRQ()
 {
-	if(getNumBytesInBuffer() < (16 -1)) PORTD ^= _BV(PORTD1);//this will trigger a PCINT on the xmega
+if(bytesInBuffer < (bufferSize -2)) PORTD ^= 0x02;//this will trigger a PCINT on the xmega
+//	wdt_reset();
 }

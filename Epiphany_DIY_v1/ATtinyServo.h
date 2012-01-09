@@ -7,36 +7,51 @@
 
 
 #ifndef ATTINYSERVO_H_
-#define ATTINYSERVO_H_
+#define ATTINYSERVO_H_ ,
 
 #include <avr/io.h>
-#include "uart.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <avr/interrupt.h>
+#include <stdbool.h>
 
 enum SERVO_TYPE{
-	Hitech,
-	FUTABA	
+	SERVO_SERVOTYPE_HITEC_bm = 0,
+	SERVO_SERVOTYPE_FUTABA_bm = 1	
 };
 
-struct SERVO{
-	uint8_t				servoNumber;
-	volatile uint16_t	timerVal;
-	volatile uint8_t	checksum;
+struct Servo{
+	uint16_t	servoTime;
+	union ConFigReg{
+		uint8_t		statusReg;
+		struct Params{
+			bool servoType;		// 1 = Futaba, 0 = Hitech 
+			bool upToDate;		// 1 = servo value is current, 0 = servo value is old
+			bool enabled;		// 1 = servo is enabled, 0 servo is disabled
+			bool idleCycles[5];	//counts idle cycles (20ms) up to 25 or so which corresponds to a 2Hz refresh rate
+								//this allows for low maintenance on idle servos  				
+		}params;
+	}configReg;		
 }servo[24];
 
-struct SERVO_PARAMS{
-	PROGMEM uint16_t offsetL;
-	PROGMEM uint16_t offsetH;
-}servoParam[24];
+
 
 void ATtinyServoInit(void);
-void DMAEnable(void);
-void DMADisable(void);
-void USARTE0DMASetup(void);
-void setServoTime(uint8_t servoNumber,uint16_t servoTime);
-uint8_t getServoAngle(uint8_t servoNumber, enum SERVO_TYPE servoType);
-uint16_t getServoTime(uint8_t servoNumber);
+void servo_putchar(char c,FILE *unused);
+int servo_getchar(FILE *stream);
+void storeServo(char c);
+uint8_t dataInServoBuffer(void);
+void disableServo(uint8_t servoNumber);
+void setServoAngle(uint8_t servoNumber,uint8_t angle);
+void setServoPosition(uint8_t servoNumber, uint16_t servoPosition);
+uint8_t getServoAngle(uint8_t servoNumber);
+uint16_t getServoPosition(uint8_t servoNumber);
 
 
 
+FILE	servoBufferFile; /*	printf will poplulate a servo buffer in memory.  
+						Scanf will feed the uart for servo control.
+						This will be triggered upon a PCINT coincidently
+						on the RX pin of the servo Uart.*/
 
-#endif /* ATTINYSERVO_H_ */
+#endif /* ATTINYSERVO_H_*/ 

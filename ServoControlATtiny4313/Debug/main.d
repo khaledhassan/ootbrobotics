@@ -17,6 +17,7 @@ main.d main.o: .././main.c \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/util/delay_basic.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdio.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/include/stdarg.h \
+ c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/wdt.h \
  .././timer.h .././uart.h .././other.h
 
 c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/io.h:
@@ -54,6 +55,8 @@ c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/av
 c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdio.h:
 
 c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/include/stdarg.h:
+
+c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/wdt.h:
 
 .././timer.h:
 

@@ -26,7 +26,7 @@
       </ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
-        <port>49612</port>
+        <port>53542</port>
         <ssl>False</ssl>
       </Channel>
     </com_atmel_avrdbg_tool_simulator>
@@ -37,7 +37,7 @@
       <ToolNumber>00A200008731</ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
-        <port>56093</port>
+        <port>51258</port>
         <ssl>False</ssl>
       </Channel>
       <ToolOptions>
@@ -52,6 +52,7 @@
           <JtagDevicesAfter>0</JtagDevicesAfter>
           <JtagInstrBitsBefore>0</JtagInstrBitsBefore>
           <JtagInstrBitsAfter>0</JtagInstrBitsAfter>
+          <DebugWireClockDiv>0</DebugWireClockDiv>
         </InterfaceProperties>
       </ToolOptions>
     </com_atmel_avrdbg_tool_avrdragon>
@@ -107,48 +108,48 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGcc>
-        <avrgcc.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>BOARD=USER_BOARD</Value>
-            <Value>F_CPU=32000000</Value>
-          </ListValues>
-        </avrgcc.compiler.symbols.DefSymbols>
-        <avrgcc.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>../src</Value>
-            <Value>../src/asf/common/applications/user_application/user_board</Value>
-            <Value>../src/asf/common/boards</Value>
-            <Value>../src/asf/common/boards/user_board</Value>
-            <Value>../src/asf/common/utils</Value>
-            <Value>../src/asf/xmega/utils</Value>
-            <Value>../src/asf/xmega/utils/preprocessor</Value>
-            <Value>../src/config</Value>
-            <Value>..</Value>
-          </ListValues>
-        </avrgcc.compiler.directories.IncludePaths>
-        <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
-        <avrgcc.compiler.optimization.OtherFlags>-fdata-sections</avrgcc.compiler.optimization.OtherFlags>
-        <avrgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</avrgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
-        <avrgcc.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcc.compiler.optimization.DebugLevel>
-        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-        <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax</avrgcc.compiler.miscellaneous.OtherFlags>
-        <avrgcc.linker.optimization.GarbageCollectUnusedSections>True</avrgcc.linker.optimization.GarbageCollectUnusedSections>
-        <avrgcc.linker.optimization.RelaxBranches>True</avrgcc.linker.optimization.RelaxBranches>
-        <avrgcc.linker.miscellaneous.LinkerFlags>-Wl,--relax</avrgcc.linker.miscellaneous.LinkerFlags>
-        <avrgcc.assembler.general.AssemblerFlags>-mrelax</avrgcc.assembler.general.AssemblerFlags>
-        <avrgcc.assembler.general.IncludePaths>
-          <ListValues>
-            <Value>../src</Value>
-            <Value>../src/asf/common/applications/user_application/user_board</Value>
-            <Value>../src/asf/common/boards</Value>
-            <Value>../src/asf/common/boards/user_board</Value>
-            <Value>../src/asf/common/utils</Value>
-            <Value>../src/asf/xmega/utils</Value>
-            <Value>../src/asf/xmega/utils/preprocessor</Value>
-            <Value>../src/config</Value>
-          </ListValues>
-        </avrgcc.assembler.general.IncludePaths>
-      </AvrGcc>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>F_CPU=32000000</Value>
+      <Value>BOARD=USER_BOARD</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>../src</Value>
+      <Value>../src/asf/common/applications/user_application/user_board</Value>
+      <Value>../src/asf/common/boards</Value>
+      <Value>../src/asf/common/boards/user_board</Value>
+      <Value>../src/asf/common/utils</Value>
+      <Value>../src/asf/xmega/utils</Value>
+      <Value>../src/asf/xmega/utils/preprocessor</Value>
+      <Value>../src/config</Value>
+      <Value>..</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.OtherFlags>-fdata-sections</avrgcc.compiler.optimization.OtherFlags>
+  <avrgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</avrgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
+  <avrgcc.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax</avrgcc.compiler.miscellaneous.OtherFlags>
+  <avrgcc.linker.optimization.GarbageCollectUnusedSections>True</avrgcc.linker.optimization.GarbageCollectUnusedSections>
+  <avrgcc.linker.optimization.RelaxBranches>True</avrgcc.linker.optimization.RelaxBranches>
+  <avrgcc.linker.miscellaneous.LinkerFlags>-Wl,--relax</avrgcc.linker.miscellaneous.LinkerFlags>
+  <avrgcc.assembler.general.AssemblerFlags>-mrelax</avrgcc.assembler.general.AssemblerFlags>
+  <avrgcc.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>../src</Value>
+      <Value>../src/asf/common/applications/user_application/user_board</Value>
+      <Value>../src/asf/common/boards</Value>
+      <Value>../src/asf/common/boards/user_board</Value>
+      <Value>../src/asf/common/utils</Value>
+      <Value>../src/asf/xmega/utils</Value>
+      <Value>../src/asf/xmega/utils/preprocessor</Value>
+      <Value>../src/config</Value>
+    </ListValues>
+  </avrgcc.assembler.general.IncludePaths>
+</AvrGcc>
     </ToolchainSettings>
     <MemorySettings>
       <MemorySegments>
@@ -172,6 +173,12 @@
     <Compile Include="adcInt.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="ATtinyServo.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ATtinyServo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="DMA.c">
       <SubType>compile</SubType>
     </Compile>
@@ -188,12 +195,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="motor.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="picServo.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="picServo.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="RTC.c">

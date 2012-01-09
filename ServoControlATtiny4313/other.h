@@ -10,7 +10,8 @@
 #define OTHER_H_
 
 #include <avr/io.h>
-
+#include <avr/wdt.h>
+#include "uart.h"
 
 enum PORTD_FUNCTIONS
 	{
