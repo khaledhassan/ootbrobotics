@@ -12,10 +12,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdio.h>
-#include "other.h"
 
 
-//#define bufferSize	4*12
 uint8_t bytesInBuffer;
 
 struct Buffer{

@@ -15,13 +15,14 @@
 #include <avr/interrupt.h>
 #include <asf.h>
 
-#define enableUartC1
-#define enableUartD0
-#define enableUartD1
-#define enableUartE0
+#define	enableUartC0	
+//#define enableUartC1
+//#define enableUartD0
+//#define enableUartD1
+//#define enableUartE0
 #define enableUartE1
-#define enableUartF0
-#define enableUartF1
+//#define enableUartF0
+//#define enableUartF1
 
 //1200
 #define BAUD1200	3331				
@@ -88,6 +89,12 @@
 #define USART_BAUDCTRLA_115200	BAUD115200
 #define USART_BAUDCTRLB_115200	0xA0 | (uint16_t)(0x0FFF & BAUD115200>>8)
 #define USART_CTRLB_115200		USART_RXEN_bm | USART_TXEN_bm | USART_CLK2X_bm
+
+//125000
+#define BAUD125000	1984		
+#define USART_BAUDCTRLA_125000	BAUD125000
+#define USART_BAUDCTRLB_125000	0xA0 | (uint16_t)(0x0FFF & BAUD125000>>8)
+#define USART_CTRLB_125000		USART_RXEN_bm | USART_TXEN_bm | USART_CLK2X_bm
 
 //230400
 #define BAUD230400	2094			

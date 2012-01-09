@@ -24,8 +24,8 @@
 #include "lcd.h"
 #include "uart.h"
 #include "RTC.h"
-#include "picServo.h"
-//#include "ATtinyServo.h"
+//#include "picServo.h"
+#include "ATtinyServo.h"
 #include "ADC.h"
 //#include "adcInt.h"
 #include "sonar.h"
@@ -33,9 +33,7 @@
 #define DbLedOn()		(PORTR.OUTCLR = 0x02)		//Turns the debug led on.  The led is connected with inverted logic
 #define DbLedOff()		(PORTR.OUTSET = 0x02)		//Turns the debug led off.  The led is connected with inverted logic
 #define DbLedToggle()	(PORTR.OUTTGL = 0x02)		//Toggles the debug led off.  The led is connected with inverted logic
-
 	
-
 int main (void)
 {	
 	board_init();	/*This function originates in the file init.c, and is used to initialize the Epiphany DIY
@@ -44,25 +42,17 @@ int main (void)
 					*/	  
 	RTC_DelayInit();//initializes the Real time clock this seems to actually take an appreciable amount of time
 	DbLedOn();	//I like to do this by default to show the board is no longer suspended in the bootloader.
-	servoControlInit();//initializes the servo module ***including enabling global interrupts*** required for the servo control module 
+	ATtinyServoInit();
 	uartInit(&USARTC0,115200);//as can be seen in the schematic.  This uart is connected to the USB port.  This function initializes this uart	
 	uartInit(&USARTE1,9600);//as can be seen in the schematic.  This uart is connected to the USB port.  This function initializes this uart	
 	ADCsInits();//this function initializes the ADCs inside the Xmega		 
-//	adcAInit();
-//	LCDInit();
-	//you should add any further initializations here
 	sei();
-//	fprintf_P(&lcd_str,PSTR("Out of the Box\nEpiphany DIY"));
-	fprintf_P(&USB_str,PSTR("Out of the Box:\rElectronics and Robotics\rPresents the\rEpiphany DIY\rSoftware Version %s\r%s"),sVersion,date);		
+//	fprintf_P(&USB_str,PSTR("Out of the Box:\rElectronics and Robotics\rPresents the\rEpiphany DIY\rSoftware Version %s\r%s"),sVersion,date);		
+	asm("nop");
 	uint8_t i;
-	uint16_t j;
-	
+	setServoAngle(1,1500*1.5);
 	while (1)
 	{
-	
-		for(j=0;j<MOTOR_PERIOD_gc;j++){
-			for(i=0;i<5;i++)setMotorDuty(i,j,MOTOR_DIR_FORWARD_gc);
-			_delay_ms(3);
-		}		
-	}
+		
+	}			
 }

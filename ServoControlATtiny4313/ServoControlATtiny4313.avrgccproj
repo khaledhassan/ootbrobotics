@@ -13,7 +13,7 @@
     <AssemblyName>ServoControlATtiny4313</AssemblyName>
     <Name>ServoControlATtiny4313</Name>
     <RootNamespace>ServoControlATtiny4313</RootNamespace>
-    <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
     <com_atmel_avrdbg_tool_simulator>
       <ToolType>com.atmel.avrdbg.tool.simulator</ToolType>
       <ToolName>AVR Simulator</ToolName>
@@ -21,11 +21,12 @@
       </ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
-        <port>49226</port>
+        <port>51258</port>
         <ssl>False</ssl>
       </Channel>
     </com_atmel_avrdbg_tool_simulator>
-    <avrtoolinterface>debugWIRE</avrtoolinterface>
+    <avrtoolinterface>
+    </avrtoolinterface>
     <OutputType>Executable</OutputType>
     <Language>C</Language>
     <UseGlobalToolchain>True</UseGlobalToolchain>
@@ -38,13 +39,13 @@
       <ToolNumber>00A200008731</ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
-        <port>49226</port>
+        <port>51258</port>
         <ssl>False</ssl>
       </Channel>
       <ToolOptions>
         <InterfaceName>debugWIRE</InterfaceName>
         <InterfaceProperties>
-          <JtagDbgClock>1000000</JtagDbgClock>
+          <JtagDbgClock>0</JtagDbgClock>
           <JtagProgClock>1000000</JtagProgClock>
           <IspClock>150000</IspClock>
           <JtagInChain>false</JtagInChain>
@@ -53,6 +54,7 @@
           <JtagDevicesAfter>0</JtagDevicesAfter>
           <JtagInstrBitsBefore>0</JtagInstrBitsBefore>
           <JtagInstrBitsAfter>0</JtagInstrBitsAfter>
+          <DebugWireClockDiv>0</DebugWireClockDiv>
         </InterfaceProperties>
       </ToolOptions>
     </com_atmel_avrdbg_tool_avrdragon>
@@ -62,7 +64,7 @@
       <ToolNumber>000200042049</ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
-        <port>61085</port>
+        <port>51258</port>
         <ssl>False</ssl>
       </Channel>
       <ToolOptions>
