@@ -13,7 +13,7 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 
-
+/*
 uint8_t bytesInBuffer;
 
 struct Buffer{
@@ -31,6 +31,6 @@ int uart_getchar(FILE *stream);
 void uart_store(unsigned char c);
 uint8_t dataInbuffer(void);
 uint8_t getNumBytesInBuffer(void);
-void flush(void);
+void flush(void);*/
 
 #endif /* UART_H_ */
