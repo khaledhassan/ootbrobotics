@@ -1,4 +1,4 @@
-/*
+ /*
  * ServoControlATtiny4313.c
  *
  * Created: 10/30/2011 1:36:20 AM
@@ -16,12 +16,60 @@
 #include "uart.h"
 #include "other.h"
 
+#define newDataExists() (UCSRA & _BV(RXC))
 
+void initializations(void);
+void servoSignalLoop(void);
+void processingForNextLoop(void);
+
+uint8_t buffer[4];
 
 int main(void)
 {
-//	wdt_enable(WDTO_1S);
-	bytesInBuffer = 0;
+
+	initializations();
+	while(1)
+    {
+		
+		servoSignalLoop();			//sends all the servo signals 
+		
+		processingForNextLoop();	//processes the current servoBuffer Values
+		
+		servoDataIRQ();				//sends an interrupt request to the Xmega	
+		
+				
+		while(TCNT1>600)
+		{		
+			testArray();
+			if(newDataExists()){
+				repopulateArray();
+				servoDataIRQ();
+			}
+			
+		}
+		asm("nop");
+    }
+}
+
+ISR(BADISR_vect){
+	asm("nop");
+}
+
+ISR(TIMER1_COMPA_vect){
+	cli();
+	PORTB =	mainBus[0]; 
+	PORTD +=DECODE0;	     
+	PORTB =	mainBus[1]; 
+	PORTD +=DECODE0;			
+	PORTB =	mainBus[2];		
+	PORTD +=DECODE1;		
+	PORTD &= 0x0F;
+//	UCSRB &=  ~_BV(RXCIE);//disable RX interrupt so there are no interruptions to the time critical servo code.
+	sei();
+}
+
+void initializations(void){
+//	bytesInBuffer = 0;
 	DDRB = 0xFF;//enable all port B pins (servo pins as Outputs)
 	DDRD = 0xFE;//enables every pin except the uart receive pin as an output
 	PORTD &= 0x0F;
@@ -34,9 +82,10 @@ int main(void)
 	mulitpleServoTimeFix();
 	timer1Init();
 	sei();
-	while(1)
-    {
-		do 
+}
+
+void servoSignalLoop(void){
+	do 
 		{
 			if(TCNT1>(uint16_t)*servoTimePtr){		
 				if((uint16_t)*servoTimePtr != 0){
@@ -54,50 +103,30 @@ int main(void)
 					servoTimePtr++;
 				}
 			}					
-		} while (servoTimePtr <= servoTimesEnd); //servoTimePtr <= servoTimesEnd &&
-		refresh();
-		setMasks();
-		sort();
-		postSortMask();
-		mulitpleServoTimeFix();
-		UCSRB |=  _BV(RXCIE);	//enable the recieve interrupt on the uart	
-		servoDataIRQ();	//sends an interrupt request to the Xmega	
-				
-		
-		while(TCNT1>200)
+		} while (servoTimePtr <= servoTimesEnd); 
+}
+
+void processingForNextLoop(void)
+{
+	refresh();
+	setMasks();
+	sort();
+	postSortMask();
+	mulitpleServoTimeFix();
+}
+
+
+inline testArray(void){
+	if(buffer[0] < 50 ){
+		if(buffer[3] == (0x80 | buffer[0]) )
 		{
-		/*	if(bytesInBuffer >= 4){
-				servoIdentifier = uart_getchar(NULL);
-				if(servoIdentifier <= 23){
-					servoTime.byte._H = uart_getchar(NULL);
-					servoTime.byte._L = uart_getchar(NULL);
-					check = uart_getchar(NULL);
-					if(check == (servoIdentifier | 0x80) ){
-						servoBuffer[servoIdentifier].timerVal = servoTime.Val;
-					}
-					else flush(); //this kills stuff				
-				}					
-			}*/
+			servoBuffer[buffer[0]].timerVal = (buffer[1])<<8 | buffer[2] ;	
 		}
-		asm("nop");
-    }
+	}
 }
 
-ISR(BADISR_vect){
-	asm("nop");
+inline repopulateArray(void){
+	uint8_t i;
+	for(i=0;i<3;i++) buffer[i] = buffer[i+1];
+	buffer[3] = UDR;
 }
-
-ISR(TIMER1_COMPA_vect){
-	cli();
-	PORTB =	0xFF;//mainBus[0]; 
-	PORTD +=DECODE0;	     
-	PORTB =	0xFF;//mainBus[1]; 
-	PORTD +=DECODE0;			
-	PORTB =	0xFF;//mainBus[2];		
-	PORTD +=DECODE1;		
-	PORTD &= 0x0F;
-	UCSRB &=  ~_BV(RXCIE);//disable RX interrupt so there are no interruptions to the time critical servo code.
-	sei();
-}
-
-

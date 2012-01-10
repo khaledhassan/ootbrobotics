@@ -14,30 +14,30 @@ UBRRL = 12;
 
 UCSRB	|= _BV(RXEN) ;//holding off on tx enable as of right now it may be better to simply receive data with the tx line as a sort of flow control 
 
-buffer.head = uartBufferBegin;
-buffer.tail = uartBufferBegin;
+//buffer.head = uartBufferBegin;
+//buffer.tail = uartBufferBegin;
 
 }
 
-
+/*
 int uart_getchar(FILE *stream){
-	/*bytesInBuffer--;
+	bytesInBuffer--;
 	if (buffer.tail == uartBufferEnd){
 		uint8_t temp = *buffer.tail;
 		buffer.tail = uartBufferBegin;
 		return temp;
 	}
-	else return *buffer.tail++;*/
+	else return *buffer.tail++;
 }
 
 void uart_store(unsigned char c){
-	/*bytesInBuffer++;
+//	bytesInBuffer++;
 	if(buffer.head == uartBufferEnd){
 		*buffer.head = c;
 		buffer.head = uartBufferBegin;	
 	}		
-	else *buffer.head++ = c;*/
-//	servoDataIRQ();
+	else *buffer.head++ = c;
+	servoDataIRQ();
 }
 
 uint8_t dataInbuffer(void){
@@ -58,5 +58,5 @@ ISR(USART_RX_vect){
 	cli();
 	uart_store(UDR);
 	sei();	
-}
+}*/
 
