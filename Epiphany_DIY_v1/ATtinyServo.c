@@ -47,17 +47,17 @@ void ATtinyServoInit(void)
 	servoBuffer.bufferBegin = &servoBuffer.data[0];
 	servoBuffer.head = servoBuffer.bufferBegin;
 	servoBuffer.tail = servoBuffer.bufferBegin;
-/*	
+	
 	USARTE0.CTRLB = USART_CTRLB_125000;
 	USARTE0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc | USART_CHSIZE_8BIT_gc;
 	USARTE0.BAUDCTRLA = USART_BAUDCTRLA_125000;
 	USARTE0.BAUDCTRLB = USART_BAUDCTRLB_125000;
-*/	
-	USARTE0.CTRLB = USART_CTRLB_57600;
+
+/*	USARTE0.CTRLB = USART_CTRLB_57600;
 	USARTE0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc | USART_CHSIZE_8BIT_gc;
 	USARTE0.BAUDCTRLA = USART_BAUDCTRLA_57600;
 	USARTE0.BAUDCTRLB = USART_BAUDCTRLB_57600;
-	
+*/	
 	
 	PORTE.PIN2CTRL = PORT_ISC_BOTHEDGES_gc | PORT_OPC_PULLDOWN_gc;
 	PORTE.INTCTRL = PORT_INT0LVL_LO_gc;
@@ -173,7 +173,7 @@ void setServoAngle(uint8_t servoNumber,uint8_t angle){
 void setServoPosition(uint8_t servoNumber, uint16_t servoPosition){
 	
 	if(servoPosition < defaultMinimumAngleTime) servoPosition = defaultMinimumAngleTime;
-	else if(servoPosition > defaultMaximumAngleTime)
+	else if(servoPosition > defaultMaximumAngleTime)servoPosition = defaultMaximumAngleTime;
 	servo[--servoNumber].servoTime = servoPosition;
 	servo[servoNumber].configReg.params.enabled = true;		//if the servo wasn't enabled it is now
 	servo[servoNumber].configReg.params.upToDate = false;	//this says that the servo should be updated immediately.

@@ -49,10 +49,19 @@ int main (void)
 	sei();
 //	fprintf_P(&USB_str,PSTR("Out of the Box:\rElectronics and Robotics\rPresents the\rEpiphany DIY\rSoftware Version %s\r%s"),sVersion,date);		
 	asm("nop");
-	uint8_t i;
-	setServoAngle(1,1500*1.5);
+	uint16_t i,j;
+	
 	while (1)
 	{
+		for(i=900;i<3600;i+=8){
+			for(j=1;j<25;j++)setServoPosition(20,i);
+			_delay_ms(20);
+		}
+
+		for(i=3600;i>900;i-=8){
+			for(j=1;j<25;j++)setServoPosition(20,i);
+			_delay_ms(20);
+		}
 		
 	}			
 }

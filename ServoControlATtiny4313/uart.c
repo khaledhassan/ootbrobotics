@@ -10,7 +10,7 @@
 void uartInit(void){
 
 UBRRH = 0;//5 = 125000, 12 = 57600
-UBRRL = 12;
+UBRRL = 5;
 
 UCSRB	|= _BV(RXEN) ;//holding off on tx enable as of right now it may be better to simply receive data with the tx line as a sort of flow control 
 
