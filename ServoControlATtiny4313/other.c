@@ -59,7 +59,7 @@ void seedValues(void){
 	uint8_t i;
 	for(i=0;i<24;i++)servos.times[i].timerVal = 0;  //normally 0
 	
-	for(i=0;i<24;i+=2)servoBuffer[i].timerVal = 2400*1.5;  //normally 0	
+	for(i=0;i<24;i+=2)servoBuffer[i].timerVal = 0;  //normally 0	
 }	
  
 void sort(void){

@@ -11,6 +11,7 @@
 #include <util/delay.h>
 #include <stdio.h>
 #include <avr/wdt.h>
+#include <stdbool.h>
 
 #include "timer.h"
 #include "uart.h"
@@ -23,11 +24,14 @@ void servoSignalLoop(void);
 void processingForNextLoop(void);
 
 uint8_t buffer[4];
+bool servosEnabled = false;
 
 int main(void)
 {
-
+	wdt_enable(WDTO_500MS);	
+	servosEnabled = false;
 	initializations();
+	PORTD &= ~DBLED;
 	while(1)
     {
 		
@@ -38,7 +42,7 @@ int main(void)
 		servoDataIRQ();				//sends an interrupt request to the Xmega	
 		
 				
-		while(TCNT1>600)
+		while(TCNT1>500)
 		{		
 			testArray();
 			if(newDataExists()){
@@ -57,21 +61,24 @@ ISR(BADISR_vect){
 
 ISR(TIMER1_COMPA_vect){
 	cli();
-	PORTB =	mainBus[0]; 
-	PORTD +=DECODE0;	     
-	PORTB =	mainBus[1]; 
-	PORTD +=DECODE0;			
-	PORTB =	mainBus[2];		
-	PORTD +=DECODE1;		
-	PORTD &= 0x0F;
-//	UCSRB &=  ~_BV(RXCIE);//disable RX interrupt so there are no interruptions to the time critical servo code.
+	if(servosEnabled){
+		PORTB =	mainBus[0]; 
+		PORTD +=DECODE0;	     
+		PORTB =	mainBus[1]; 
+		PORTD +=DECODE0;			
+		PORTB =	mainBus[2];		
+		PORTD +=DECODE1;		
+		PORTD &= 0x0F;
+	}
+	else	PORTD ^=DBLED;
 	sei();
 }
 
 void initializations(void){
-//	bytesInBuffer = 0;
-	DDRB = 0xFF;//enable all port B pins (servo pins as Outputs)
+	DDRB = 0xFF;//disable all port B pins (servo pins as Outputs) for the case of wdt resets
 	DDRD = 0xFE;//enables every pin except the uart receive pin as an output
+	PORTB = 0;
+	PORTD |= DECODE0 | DECODE1 | DECODE2;
 	PORTD &= 0x0F;
 	uartInit();
 	refresh();
@@ -88,7 +95,7 @@ void servoSignalLoop(void){
 	do 
 		{
 			if(TCNT1>(uint16_t)*servoTimePtr){		
-				if((uint16_t)*servoTimePtr != 0){
+				if((uint16_t)*servoTimePtr != 0 && servosEnabled){
 					PORTB =	*servoBusPtr++; 
 					PORTD +=DECODE0;	     
 					PORTB =	*servoBusPtr++; 
@@ -121,6 +128,9 @@ inline testArray(void){
 		if(buffer[3] == (0x80 | buffer[0]) )
 		{
 			servoBuffer[buffer[0]].timerVal = (buffer[1])<<8 | buffer[2] ;	
+				wdt_reset();
+				PORTD |= DBLED;
+				servosEnabled = true;
 		}
 	}
 }
