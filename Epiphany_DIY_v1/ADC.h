@@ -12,7 +12,7 @@
 #include <avr/io.h>
 #include <asf.h>
 
-#define maxAttempts 16
+#define maxAttempts 8
 
 #define Internal_Temp			0x80	//internal temperature sensor
 #define Internal_BandGap		0x81	//internal band gap voltage use this for calibrations
