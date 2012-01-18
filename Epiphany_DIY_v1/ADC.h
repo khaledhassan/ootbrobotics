@@ -12,7 +12,7 @@
 #include <avr/io.h>
 #include <asf.h>
 
-#define maxAttempts 8
+#define maxAttempts 32
 
 #define Internal_Temp			0x80	//internal temperature sensor
 #define Internal_BandGap		0x81	//internal band gap voltage use this for calibrations
@@ -47,5 +47,7 @@ void ADCB_request(uint8_t ADCChannel,uint8_t inputChannel);	//get data from any 
 
 uint16_t ADCA_getVal(uint8_t ADCChannel);//returns the last chn conversion. 0xFFFF means an error occurred 
 uint16_t ADCB_getVal(uint8_t ADCChannel);//returns the last chn conversion. 0xFFFF means an error occurred 
+
+uint16_t analogRead_ADCA(uint8_t channel);//Analog reading simplified for easy use channels are 0-7
 
 #endif /* ADC_H_ */

@@ -113,7 +113,7 @@ void ADCB_request(uint8_t ADCChannel,uint8_t inputChannel){
 
 
 uint16_t ADCA_getVal(uint8_t ADCChannel){
-	uint8_t attempts = 0;
+	volatile uint8_t attempts = 0;
 	switch(ADCChannel){
 		case(0):
 			while(!ADCA_CH0_ConvComplete){
@@ -154,7 +154,7 @@ uint16_t ADCA_getVal(uint8_t ADCChannel){
 }
 
 uint16_t ADCB_getVal(uint8_t ADCChannel){
-	uint8_t attempts = 0;
+	volatile uint8_t attempts = 0;
 	switch(ADCChannel){
 		case(0):
 			while(!ADCB_CH0_ConvComplete){
@@ -219,3 +219,8 @@ void ADCsInits(void){
 	PMIC.CTRL |= PMIC_LOLVLEN_bm;*/
 }
 
+uint16_t analogRead_ADCA(uint8_t channel)//Analog reading simplified for easy use channels are 0-7
+{
+	ADCA_request(0,ExternalChannel0 + channel);
+	return ADCA_getVal(0);
+}
