@@ -9,6 +9,8 @@
 
 void setMasks(void){
 	uint8_t i;//simple increment 
+	
+		//set mask as in 0 for the respective servo bit
 		for(i=0;i<8;i++){
 			servos.bus[i].masks[0] = ~(1<<i);
 			servos.bus[i].masks[1] = 0xFF;
@@ -27,18 +29,20 @@ void setMasks(void){
 			servos.bus[i+16].masks[1] = 0xFF;
 			servos.bus[i+16].masks[2] = ~(1<<i);
 		}
-		servos.tempBus.masks[0] = 0x0;
-		servos.tempBus.masks[1] = 0x0;
-		servos.tempBus.masks[2] = 0x0;
 		
+		servos.tempBus.masks[0] = 0xFF;
+		servos.tempBus.masks[1] = 0xFF;
+		servos.tempBus.masks[2] = 0xFF;
+		
+		//main bus is set to 0xFF
 		mainBus[0] = 0xFF;
 		mainBus[1] = 0xFF;
 		mainBus[2] = 0xFF;
 		
 		for(i=0;i<24;i++){ 
 			if(servos.times[i].timerVal == 0 ) {
-				servos.bus[i] = servos.tempBus;
-				mainBus[i/8] &= (uint8_t)~(1<<i%8);
+				servos.bus[i].masks[i/8] &= (uint8_t)~(1<<i%8);// servos.tempBus;//this seems fishy since before it set all servos to enabled
+				mainBus[i/8] &= (uint8_t)~(1<<i%8);//this is used to disable servos other than those being used
 			}
 			asm("nop");				
 		}	
