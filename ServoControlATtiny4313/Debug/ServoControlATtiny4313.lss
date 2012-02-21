@@ -3,33 +3,33 @@ ServoControlATtiny4313.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000005d8  00000000  00000000  00000074  2**1
+  0 .text         000005e4  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          000000be  00800060  00800060  0000064c  2**0
+  1 .bss          000000be  00800060  00800060  00000658  2**0
                   ALLOC
-  2 .stab         000006cc  00000000  00000000  0000064c  2**2
+  2 .stab         000006cc  00000000  00000000  00000658  2**2
                   CONTENTS, READONLY, DEBUGGING
-  3 .stabstr      00000085  00000000  00000000  00000d18  2**0
+  3 .stabstr      00000085  00000000  00000000  00000d24  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_aranges 00000080  00000000  00000000  00000d9d  2**0
+  4 .debug_aranges 00000080  00000000  00000000  00000da9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_pubnames 00000266  00000000  00000000  00000e1d  2**0
+  5 .debug_pubnames 00000266  00000000  00000000  00000e29  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000008c9  00000000  00000000  00001083  2**0
+  6 .debug_info   000008c9  00000000  00000000  0000108f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000363  00000000  00000000  0000194c  2**0
+  7 .debug_abbrev 00000363  00000000  00000000  00001958  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001018  00000000  00000000  00001caf  2**0
+  8 .debug_line   00001038  00000000  00000000  00001cbb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000150  00000000  00000000  00002cc8  2**2
+  9 .debug_frame  00000150  00000000  00000000  00002cf4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000002bc  00000000  00000000  00002e18  2**0
+ 10 .debug_str    000002bc  00000000  00000000  00002e44  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000109  00000000  00000000  000030d4  2**0
+ 11 .debug_loc    00000109  00000000  00000000  00003100  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_macinfo 0001a545  00000000  00000000  000031dd  2**0
+ 12 .debug_macinfo 0001a545  00000000  00000000  00003209  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_pubtypes 00000155  00000000  00000000  0001d722  2**0
+ 13 .debug_pubtypes 00000155  00000000  00000000  0001d74e  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -39,7 +39,7 @@ Disassembly of section .text:
    2:	23 c0       	rjmp	.+70     	; 0x4a <__bad_interrupt>
    4:	22 c0       	rjmp	.+68     	; 0x4a <__bad_interrupt>
    6:	21 c0       	rjmp	.+66     	; 0x4a <__bad_interrupt>
-   8:	d8 c1       	rjmp	.+944    	; 0x3ba <__vector_4>
+   8:	cb c1       	rjmp	.+918    	; 0x3a0 <__vector_4>
    a:	1f c0       	rjmp	.+62     	; 0x4a <__bad_interrupt>
    c:	1e c0       	rjmp	.+60     	; 0x4a <__bad_interrupt>
    e:	1d c0       	rjmp	.+58     	; 0x4a <__bad_interrupt>
@@ -78,11 +78,11 @@ Disassembly of section .text:
   40:	ae 31       	cpi	r26, 0x1E	; 30
   42:	b1 07       	cpc	r27, r17
   44:	e1 f7       	brne	.-8      	; 0x3e <.do_clear_bss_loop>
-  46:	86 d2       	rcall	.+1292   	; 0x554 <main>
-  48:	c5 c2       	rjmp	.+1418   	; 0x5d4 <_exit>
+  46:	81 d2       	rcall	.+1282   	; 0x54a <main>
+  48:	cb c2       	rjmp	.+1430   	; 0x5e0 <_exit>
 
 0000004a <__bad_interrupt>:
-  4a:	ac c1       	rjmp	.+856    	; 0x3a4 <__vector_default>
+  4a:	9c c2       	rjmp	.+1336   	; 0x584 <__vector_default>
 
 0000004c <setMasks>:
  *  Author: bfc
@@ -93,9 +93,9 @@ Disassembly of section .text:
 void setMasks(void){
   4c:	cf 93       	push	r28
   4e:	df 93       	push	r29
-		servos.tempBus.masks[1] = 0x0;
-		servos.tempBus.masks[2] = 0x0;
+		servos.tempBus.masks[2] = 0xFF;
 		
+		//main bus is set to 0xFF
 		mainBus[0] = 0xFF;
 		mainBus[1] = 0xFF;
 		mainBus[2] = 0xFF;
@@ -110,16 +110,18 @@ void setMasks(void){
   54:	80 e0       	ldi	r24, 0x00	; 0
   56:	90 e0       	ldi	r25, 0x00	; 0
 	uint8_t i;//simple increment 
+	
+		//set mask as in 0 for the respective servo bit
 		for(i=0;i<8;i++){
 			servos.bus[i].masks[0] = ~(1<<i);
   58:	21 e0       	ldi	r18, 0x01	; 1
   5a:	30 e0       	ldi	r19, 0x00	; 0
 			servos.bus[i].masks[1] = 0xFF;
   5c:	6f ef       	ldi	r22, 0xFF	; 255
-#include "other.h"
-
 void setMasks(void){
 	uint8_t i;//simple increment 
+	
+		//set mask as in 0 for the respective servo bit
 		for(i=0;i<8;i++){
 			servos.bus[i].masks[0] = ~(1<<i);
   5e:	a9 01       	movw	r20, r18
@@ -138,10 +140,10 @@ void setMasks(void){
   74:	01 96       	adiw	r24, 0x01	; 1
   76:	33 96       	adiw	r30, 0x03	; 3
 
-#include "other.h"
-
 void setMasks(void){
 	uint8_t i;//simple increment 
+	
+		//set mask as in 0 for the respective servo bit
 		for(i=0;i<8;i++){
   78:	88 30       	cpi	r24, 0x08	; 8
   7a:	91 05       	cpc	r25, r1
@@ -239,983 +241,999 @@ void setMasks(void){
 			servos.bus[i+16].masks[1] = 0xFF;
 			servos.bus[i+16].masks[2] = ~(1<<i);
 		}
-		servos.tempBus.masks[0] = 0x0;
-  da:	10 92 df 00 	sts	0x00DF, r1
-		servos.tempBus.masks[1] = 0x0;
-  de:	10 92 e0 00 	sts	0x00E0, r1
-		servos.tempBus.masks[2] = 0x0;
-  e2:	10 92 e1 00 	sts	0x00E1, r1
 		
+		servos.tempBus.masks[0] = 0xFF;
+  da:	60 93 df 00 	sts	0x00DF, r22
+		servos.tempBus.masks[1] = 0xFF;
+  de:	60 93 e0 00 	sts	0x00E0, r22
+		servos.tempBus.masks[2] = 0xFF;
+  e2:	60 93 e1 00 	sts	0x00E1, r22
+		
+		//main bus is set to 0xFF
 		mainBus[0] = 0xFF;
   e6:	60 93 15 01 	sts	0x0115, r22
 		mainBus[1] = 0xFF;
   ea:	60 93 16 01 	sts	0x0116, r22
 		mainBus[2] = 0xFF;
   ee:	60 93 17 01 	sts	0x0117, r22
-  f2:	27 e9       	ldi	r18, 0x97	; 151
+  f2:	20 e0       	ldi	r18, 0x00	; 0
   f4:	30 e0       	ldi	r19, 0x00	; 0
-  f6:	80 e0       	ldi	r24, 0x00	; 0
-  f8:	90 e0       	ldi	r25, 0x00	; 0
 		
 		for(i=0;i<24;i++){ 
 			if(servos.times[i].timerVal == 0 ) {
-				servos.bus[i] = servos.tempBus;
-				mainBus[i/8] &= (uint8_t)~(1<<i%8);
-  fa:	41 e0       	ldi	r20, 0x01	; 1
-  fc:	50 e0       	ldi	r21, 0x00	; 0
-		servos.tempBus.masks[1] = 0x0;
-		servos.tempBus.masks[2] = 0x0;
+				servos.bus[i].masks[i/8] &= (uint8_t)~(1<<i%8);// servos.tempBus;//this seems fishy since before it set all servos to enabled
+  f6:	a1 e0       	ldi	r26, 0x01	; 1
+  f8:	b0 e0       	ldi	r27, 0x00	; 0
+		servos.tempBus.masks[2] = 0xFF;
 		
+		//main bus is set to 0xFF
 		mainBus[0] = 0xFF;
 		mainBus[1] = 0xFF;
 		mainBus[2] = 0xFF;
-  fe:	e8 2f       	mov	r30, r24
+  fa:	e2 2f       	mov	r30, r18
 		
 		for(i=0;i<24;i++){ 
 			if(servos.times[i].timerVal == 0 ) {
- 100:	dc 01       	movw	r26, r24
- 102:	aa 0f       	add	r26, r26
- 104:	bb 1f       	adc	r27, r27
- 106:	ae 51       	subi	r26, 0x1E	; 30
- 108:	bf 4f       	sbci	r27, 0xFF	; 255
- 10a:	6d 91       	ld	r22, X+
- 10c:	7c 91       	ld	r23, X
- 10e:	11 97       	sbiw	r26, 0x01	; 1
- 110:	61 15       	cp	r22, r1
- 112:	71 05       	cpc	r23, r1
- 114:	e1 f4       	brne	.+56     	; 0x14e <setMasks+0x102>
-				servos.bus[i] = servos.tempBus;
- 116:	e9 01       	movw	r28, r18
- 118:	af ed       	ldi	r26, 0xDF	; 223
- 11a:	b0 e0       	ldi	r27, 0x00	; 0
- 11c:	63 e0       	ldi	r22, 0x03	; 3
- 11e:	0d 90       	ld	r0, X+
- 120:	09 92       	st	Y+, r0
- 122:	61 50       	subi	r22, 0x01	; 1
- 124:	e1 f7       	brne	.-8      	; 0x11e <setMasks+0xd2>
-				mainBus[i/8] &= (uint8_t)~(1<<i%8);
- 126:	e6 95       	lsr	r30
- 128:	e6 95       	lsr	r30
- 12a:	e6 95       	lsr	r30
- 12c:	f0 e0       	ldi	r31, 0x00	; 0
- 12e:	eb 5e       	subi	r30, 0xEB	; 235
- 130:	fe 4f       	sbci	r31, 0xFE	; 254
- 132:	bc 01       	movw	r22, r24
- 134:	67 70       	andi	r22, 0x07	; 7
- 136:	70 70       	andi	r23, 0x00	; 0
- 138:	da 01       	movw	r26, r20
- 13a:	02 c0       	rjmp	.+4      	; 0x140 <setMasks+0xf4>
- 13c:	aa 0f       	add	r26, r26
- 13e:	bb 1f       	adc	r27, r27
- 140:	6a 95       	dec	r22
- 142:	e2 f7       	brpl	.-8      	; 0x13c <setMasks+0xf0>
- 144:	bd 01       	movw	r22, r26
- 146:	60 95       	com	r22
- 148:	70 81       	ld	r23, Z
- 14a:	67 23       	and	r22, r23
- 14c:	60 83       	st	Z, r22
+  fc:	e9 01       	movw	r28, r18
+  fe:	cc 0f       	add	r28, r28
+ 100:	dd 1f       	adc	r29, r29
+ 102:	ce 51       	subi	r28, 0x1E	; 30
+ 104:	df 4f       	sbci	r29, 0xFF	; 255
+ 106:	88 81       	ld	r24, Y
+ 108:	99 81       	ldd	r25, Y+1	; 0x01
+ 10a:	00 97       	sbiw	r24, 0x00	; 0
+ 10c:	f9 f4       	brne	.+62     	; 0x14c <setMasks+0x100>
+				servos.bus[i].masks[i/8] &= (uint8_t)~(1<<i%8);// servos.tempBus;//this seems fishy since before it set all servos to enabled
+ 10e:	e6 95       	lsr	r30
+ 110:	e6 95       	lsr	r30
+ 112:	e6 95       	lsr	r30
+ 114:	f0 e0       	ldi	r31, 0x00	; 0
+ 116:	c9 01       	movw	r24, r18
+ 118:	87 70       	andi	r24, 0x07	; 7
+ 11a:	90 70       	andi	r25, 0x00	; 0
+ 11c:	ad 01       	movw	r20, r26
+ 11e:	02 c0       	rjmp	.+4      	; 0x124 <setMasks+0xd8>
+ 120:	44 0f       	add	r20, r20
+ 122:	55 1f       	adc	r21, r21
+ 124:	8a 95       	dec	r24
+ 126:	e2 f7       	brpl	.-8      	; 0x120 <setMasks+0xd4>
+ 128:	40 95       	com	r20
+ 12a:	c9 01       	movw	r24, r18
+ 12c:	63 e0       	ldi	r22, 0x03	; 3
+ 12e:	70 e0       	ldi	r23, 0x00	; 0
+ 130:	45 d2       	rcall	.+1162   	; 0x5bc <__mulhi3>
+ 132:	ec 01       	movw	r28, r24
+ 134:	ce 0f       	add	r28, r30
+ 136:	df 1f       	adc	r29, r31
+ 138:	c9 56       	subi	r28, 0x69	; 105
+ 13a:	df 4f       	sbci	r29, 0xFF	; 255
+ 13c:	88 81       	ld	r24, Y
+ 13e:	84 23       	and	r24, r20
+ 140:	88 83       	st	Y, r24
+				mainBus[i/8] &= (uint8_t)~(1<<i%8);//this is used to disable servos other than those being used
+ 142:	eb 5e       	subi	r30, 0xEB	; 235
+ 144:	fe 4f       	sbci	r31, 0xFE	; 254
+ 146:	80 81       	ld	r24, Z
+ 148:	84 23       	and	r24, r20
+ 14a:	80 83       	st	Z, r24
 			}
 			asm("nop");				
- 14e:	00 00       	nop
- 150:	01 96       	adiw	r24, 0x01	; 1
- 152:	2d 5f       	subi	r18, 0xFD	; 253
- 154:	3f 4f       	sbci	r19, 0xFF	; 255
-		
+ 14c:	00 00       	nop
+ 14e:	2f 5f       	subi	r18, 0xFF	; 255
+ 150:	3f 4f       	sbci	r19, 0xFF	; 255
+		//main bus is set to 0xFF
 		mainBus[0] = 0xFF;
 		mainBus[1] = 0xFF;
 		mainBus[2] = 0xFF;
 		
 		for(i=0;i<24;i++){ 
- 156:	88 31       	cpi	r24, 0x18	; 24
- 158:	91 05       	cpc	r25, r1
- 15a:	89 f6       	brne	.-94     	; 0xfe <setMasks+0xb2>
-				mainBus[i/8] &= (uint8_t)~(1<<i%8);
+ 152:	28 31       	cpi	r18, 0x18	; 24
+ 154:	31 05       	cpc	r19, r1
+ 156:	89 f6       	brne	.-94     	; 0xfa <setMasks+0xae>
+				mainBus[i/8] &= (uint8_t)~(1<<i%8);//this is used to disable servos other than those being used
 			}
 			asm("nop");				
 		}	
 			
 }
- 15c:	df 91       	pop	r29
- 15e:	cf 91       	pop	r28
- 160:	08 95       	ret
+ 158:	df 91       	pop	r29
+ 15a:	cf 91       	pop	r28
+ 15c:	08 95       	ret
 
-00000162 <refresh>:
+0000015e <refresh>:
 
 void refresh(void){
- 162:	a4 e6       	ldi	r26, 0x64	; 100
- 164:	b0 e0       	ldi	r27, 0x00	; 0
- 166:	80 e0       	ldi	r24, 0x00	; 0
- 168:	90 e0       	ldi	r25, 0x00	; 0
+ 15e:	a4 e6       	ldi	r26, 0x64	; 100
+ 160:	b0 e0       	ldi	r27, 0x00	; 0
+ 162:	80 e0       	ldi	r24, 0x00	; 0
+ 164:	90 e0       	ldi	r25, 0x00	; 0
 	uint8_t i;
 	//refresh all the servos
 	for(i=0;i<24;i++)servos.times[i].timerVal = servoBuffer[i].timerVal;
- 16a:	2d 91       	ld	r18, X+
- 16c:	3d 91       	ld	r19, X+
- 16e:	fc 01       	movw	r30, r24
- 170:	ee 0f       	add	r30, r30
- 172:	ff 1f       	adc	r31, r31
- 174:	ee 51       	subi	r30, 0x1E	; 30
- 176:	ff 4f       	sbci	r31, 0xFF	; 255
- 178:	31 83       	std	Z+1, r19	; 0x01
- 17a:	20 83       	st	Z, r18
- 17c:	01 96       	adiw	r24, 0x01	; 1
- 17e:	88 31       	cpi	r24, 0x18	; 24
- 180:	91 05       	cpc	r25, r1
- 182:	99 f7       	brne	.-26     	; 0x16a <refresh+0x8>
+ 166:	2d 91       	ld	r18, X+
+ 168:	3d 91       	ld	r19, X+
+ 16a:	fc 01       	movw	r30, r24
+ 16c:	ee 0f       	add	r30, r30
+ 16e:	ff 1f       	adc	r31, r31
+ 170:	ee 51       	subi	r30, 0x1E	; 30
+ 172:	ff 4f       	sbci	r31, 0xFF	; 255
+ 174:	31 83       	std	Z+1, r19	; 0x01
+ 176:	20 83       	st	Z, r18
+ 178:	01 96       	adiw	r24, 0x01	; 1
+ 17a:	88 31       	cpi	r24, 0x18	; 24
+ 17c:	91 05       	cpc	r25, r1
+ 17e:	99 f7       	brne	.-26     	; 0x166 <__stack+0x7>
 	
 	//initialize all the pointers
 	servoBusPtr = &servos.bus[0].masks[0];
- 184:	87 e9       	ldi	r24, 0x97	; 151
- 186:	90 e0       	ldi	r25, 0x00	; 0
- 188:	90 93 63 00 	sts	0x0063, r25
- 18c:	80 93 62 00 	sts	0x0062, r24
+ 180:	87 e9       	ldi	r24, 0x97	; 151
+ 182:	90 e0       	ldi	r25, 0x00	; 0
+ 184:	90 93 63 00 	sts	0x0063, r25
+ 188:	80 93 62 00 	sts	0x0062, r24
 	servoTimePtr = &servos.times[0].timerVal;
- 190:	82 ee       	ldi	r24, 0xE2	; 226
- 192:	90 e0       	ldi	r25, 0x00	; 0
- 194:	90 93 19 01 	sts	0x0119, r25
- 198:	80 93 18 01 	sts	0x0118, r24
+ 18c:	82 ee       	ldi	r24, 0xE2	; 226
+ 18e:	90 e0       	ldi	r25, 0x00	; 0
+ 190:	90 93 19 01 	sts	0x0119, r25
+ 194:	80 93 18 01 	sts	0x0118, r24
 }
- 19c:	08 95       	ret
+ 198:	08 95       	ret
 
-0000019e <seedValues>:
+0000019a <seedValues>:
   
 void seedValues(void){
- 19e:	80 e0       	ldi	r24, 0x00	; 0
- 1a0:	90 e0       	ldi	r25, 0x00	; 0
+ 19a:	80 e0       	ldi	r24, 0x00	; 0
+ 19c:	90 e0       	ldi	r25, 0x00	; 0
 	uint8_t i;
 	for(i=0;i<24;i++)servos.times[i].timerVal = 0;  //normally 0
- 1a2:	fc 01       	movw	r30, r24
- 1a4:	ee 0f       	add	r30, r30
- 1a6:	ff 1f       	adc	r31, r31
- 1a8:	ee 51       	subi	r30, 0x1E	; 30
- 1aa:	ff 4f       	sbci	r31, 0xFF	; 255
- 1ac:	11 82       	std	Z+1, r1	; 0x01
- 1ae:	10 82       	st	Z, r1
- 1b0:	01 96       	adiw	r24, 0x01	; 1
- 1b2:	88 31       	cpi	r24, 0x18	; 24
- 1b4:	91 05       	cpc	r25, r1
- 1b6:	a9 f7       	brne	.-22     	; 0x1a2 <seedValues+0x4>
- 1b8:	e4 e6       	ldi	r30, 0x64	; 100
- 1ba:	f0 e0       	ldi	r31, 0x00	; 0
+ 19e:	fc 01       	movw	r30, r24
+ 1a0:	ee 0f       	add	r30, r30
+ 1a2:	ff 1f       	adc	r31, r31
+ 1a4:	ee 51       	subi	r30, 0x1E	; 30
+ 1a6:	ff 4f       	sbci	r31, 0xFF	; 255
+ 1a8:	11 82       	std	Z+1, r1	; 0x01
+ 1aa:	10 82       	st	Z, r1
+ 1ac:	01 96       	adiw	r24, 0x01	; 1
+ 1ae:	88 31       	cpi	r24, 0x18	; 24
+ 1b0:	91 05       	cpc	r25, r1
+ 1b2:	a9 f7       	brne	.-22     	; 0x19e <seedValues+0x4>
+ 1b4:	e4 e6       	ldi	r30, 0x64	; 100
+ 1b6:	f0 e0       	ldi	r31, 0x00	; 0
 	
 	for(i=0;i<24;i+=2)servoBuffer[i].timerVal = 0;  //normally 0	
- 1bc:	11 82       	std	Z+1, r1	; 0x01
- 1be:	10 82       	st	Z, r1
- 1c0:	34 96       	adiw	r30, 0x04	; 4
- 1c2:	80 e0       	ldi	r24, 0x00	; 0
- 1c4:	e4 39       	cpi	r30, 0x94	; 148
- 1c6:	f8 07       	cpc	r31, r24
- 1c8:	c9 f7       	brne	.-14     	; 0x1bc <seedValues+0x1e>
+ 1b8:	11 82       	std	Z+1, r1	; 0x01
+ 1ba:	10 82       	st	Z, r1
+ 1bc:	34 96       	adiw	r30, 0x04	; 4
+ 1be:	80 e0       	ldi	r24, 0x00	; 0
+ 1c0:	e4 39       	cpi	r30, 0x94	; 148
+ 1c2:	f8 07       	cpc	r31, r24
+ 1c4:	c9 f7       	brne	.-14     	; 0x1b8 <seedValues+0x1e>
 }	
- 1ca:	08 95       	ret
+ 1c6:	08 95       	ret
 
-000001cc <sort>:
+000001c8 <sort>:
  
 void sort(void){
- 1cc:	ef 92       	push	r14
- 1ce:	ff 92       	push	r15
- 1d0:	0f 93       	push	r16
- 1d2:	1f 93       	push	r17
- 1d4:	cf 93       	push	r28
- 1d6:	df 93       	push	r29
- 1d8:	52 c0       	rjmp	.+164    	; 0x27e <sort+0xb2>
+ 1c8:	ef 92       	push	r14
+ 1ca:	ff 92       	push	r15
+ 1cc:	0f 93       	push	r16
+ 1ce:	1f 93       	push	r17
+ 1d0:	cf 93       	push	r28
+ 1d2:	df 93       	push	r29
+ 1d4:	52 c0       	rjmp	.+164    	; 0x27a <sort+0xb2>
 	uint8_t i,ErrorFound = 1;
 	while(ErrorFound){
 		ErrorFound = 0;
 		for(i=1;i<24;i++){
- 1da:	ab 01       	movw	r20, r22
+ 1d6:	ab 01       	movw	r20, r22
 	for(i=0;i<24;i++)servos.times[i].timerVal = 0;  //normally 0
 	
 	for(i=0;i<24;i+=2)servoBuffer[i].timerVal = 0;  //normally 0	
 }	
  
 void sort(void){
- 1dc:	ba 01       	movw	r22, r20
- 1de:	6f 5f       	subi	r22, 0xFF	; 255
- 1e0:	7f 4f       	sbci	r23, 0xFF	; 255
+ 1d8:	ba 01       	movw	r22, r20
+ 1da:	6f 5f       	subi	r22, 0xFF	; 255
+ 1dc:	7f 4f       	sbci	r23, 0xFF	; 255
 	uint8_t i,ErrorFound = 1;
 	while(ErrorFound){
 		ErrorFound = 0;
 		for(i=1;i<24;i++){
 			if(servos.times[i].timerVal < servos.times[i-1].timerVal){
- 1e2:	db 01       	movw	r26, r22
- 1e4:	aa 0f       	add	r26, r26
- 1e6:	bb 1f       	adc	r27, r27
- 1e8:	ae 51       	subi	r26, 0x1E	; 30
- 1ea:	bf 4f       	sbci	r27, 0xFF	; 255
- 1ec:	cd 91       	ld	r28, X+
- 1ee:	dc 91       	ld	r29, X
- 1f0:	da 01       	movw	r26, r20
- 1f2:	aa 0f       	add	r26, r26
- 1f4:	bb 1f       	adc	r27, r27
- 1f6:	ae 51       	subi	r26, 0x1E	; 30
- 1f8:	bf 4f       	sbci	r27, 0xFF	; 255
- 1fa:	4d 91       	ld	r20, X+
- 1fc:	5c 91       	ld	r21, X
- 1fe:	11 97       	sbiw	r26, 0x01	; 1
- 200:	c4 17       	cp	r28, r20
- 202:	d5 07       	cpc	r29, r21
- 204:	90 f5       	brcc	.+100    	; 0x26a <sort+0x9e>
+ 1de:	db 01       	movw	r26, r22
+ 1e0:	aa 0f       	add	r26, r26
+ 1e2:	bb 1f       	adc	r27, r27
+ 1e4:	ae 51       	subi	r26, 0x1E	; 30
+ 1e6:	bf 4f       	sbci	r27, 0xFF	; 255
+ 1e8:	cd 91       	ld	r28, X+
+ 1ea:	dc 91       	ld	r29, X
+ 1ec:	da 01       	movw	r26, r20
+ 1ee:	aa 0f       	add	r26, r26
+ 1f0:	bb 1f       	adc	r27, r27
+ 1f2:	ae 51       	subi	r26, 0x1E	; 30
+ 1f4:	bf 4f       	sbci	r27, 0xFF	; 255
+ 1f6:	4d 91       	ld	r20, X+
+ 1f8:	5c 91       	ld	r21, X
+ 1fa:	11 97       	sbiw	r26, 0x01	; 1
+ 1fc:	c4 17       	cp	r28, r20
+ 1fe:	d5 07       	cpc	r29, r21
+ 200:	90 f5       	brcc	.+100    	; 0x266 <sort+0x9e>
 	for(i=0;i<24;i++)servos.times[i].timerVal = 0;  //normally 0
 	
 	for(i=0;i<24;i+=2)servoBuffer[i].timerVal = 0;  //normally 0	
 }	
  
 void sort(void){
- 206:	7c 01       	movw	r14, r24
+ 202:	7c 01       	movw	r14, r24
 	uint8_t i,ErrorFound = 1;
 	while(ErrorFound){
 		ErrorFound = 0;
 		for(i=1;i<24;i++){
 			if(servos.times[i].timerVal < servos.times[i-1].timerVal){
 				servos.tempBus = servos.bus[i];
- 208:	cf ed       	ldi	r28, 0xDF	; 223
- 20a:	d0 e0       	ldi	r29, 0x00	; 0
- 20c:	48 2f       	mov	r20, r24
- 20e:	59 2f       	mov	r21, r25
- 210:	da 01       	movw	r26, r20
- 212:	43 e0       	ldi	r20, 0x03	; 3
- 214:	0d 90       	ld	r0, X+
- 216:	09 92       	st	Y+, r0
- 218:	41 50       	subi	r20, 0x01	; 1
- 21a:	e1 f7       	brne	.-8      	; 0x214 <sort+0x48>
+ 204:	cf ed       	ldi	r28, 0xDF	; 223
+ 206:	d0 e0       	ldi	r29, 0x00	; 0
+ 208:	48 2f       	mov	r20, r24
+ 20a:	59 2f       	mov	r21, r25
+ 20c:	da 01       	movw	r26, r20
+ 20e:	43 e0       	ldi	r20, 0x03	; 3
+ 210:	0d 90       	ld	r0, X+
+ 212:	09 92       	st	Y+, r0
+ 214:	41 50       	subi	r20, 0x01	; 1
+ 216:	e1 f7       	brne	.-8      	; 0x210 <sort+0x48>
 				servos.tempTimes = servos.times[i];
- 21c:	42 81       	ldd	r20, Z+2	; 0x02
- 21e:	53 81       	ldd	r21, Z+3	; 0x03
- 220:	50 93 13 01 	sts	0x0113, r21
- 224:	40 93 12 01 	sts	0x0112, r20
+ 218:	42 81       	ldd	r20, Z+2	; 0x02
+ 21a:	53 81       	ldd	r21, Z+3	; 0x03
+ 21c:	50 93 13 01 	sts	0x0113, r21
+ 220:	40 93 12 01 	sts	0x0112, r20
 				
 				servos.times[i] = servos.times[i-1];
- 228:	40 81       	ld	r20, Z
- 22a:	51 81       	ldd	r21, Z+1	; 0x01
- 22c:	53 83       	std	Z+3, r21	; 0x03
- 22e:	42 83       	std	Z+2, r20	; 0x02
+ 224:	40 81       	ld	r20, Z
+ 226:	51 81       	ldd	r21, Z+1	; 0x01
+ 228:	53 83       	std	Z+3, r21	; 0x03
+ 22a:	42 83       	std	Z+2, r20	; 0x02
 	for(i=0;i<24;i++)servos.times[i].timerVal = 0;  //normally 0
 	
 	for(i=0;i<24;i+=2)servoBuffer[i].timerVal = 0;  //normally 0	
 }	
  
 void sort(void){
- 230:	89 01       	movw	r16, r18
+ 22c:	89 01       	movw	r16, r18
 			if(servos.times[i].timerVal < servos.times[i-1].timerVal){
 				servos.tempBus = servos.bus[i];
 				servos.tempTimes = servos.times[i];
 				
 				servos.times[i] = servos.times[i-1];
 				servos.bus[i] = servos.bus[i-1];
- 232:	4e 2d       	mov	r20, r14
- 234:	5f 2d       	mov	r21, r15
- 236:	ea 01       	movw	r28, r20
- 238:	42 2f       	mov	r20, r18
- 23a:	53 2f       	mov	r21, r19
- 23c:	da 01       	movw	r26, r20
- 23e:	43 e0       	ldi	r20, 0x03	; 3
- 240:	0d 90       	ld	r0, X+
- 242:	09 92       	st	Y+, r0
- 244:	41 50       	subi	r20, 0x01	; 1
- 246:	e1 f7       	brne	.-8      	; 0x240 <sort+0x74>
+ 22e:	4e 2d       	mov	r20, r14
+ 230:	5f 2d       	mov	r21, r15
+ 232:	ea 01       	movw	r28, r20
+ 234:	42 2f       	mov	r20, r18
+ 236:	53 2f       	mov	r21, r19
+ 238:	da 01       	movw	r26, r20
+ 23a:	43 e0       	ldi	r20, 0x03	; 3
+ 23c:	0d 90       	ld	r0, X+
+ 23e:	09 92       	st	Y+, r0
+ 240:	41 50       	subi	r20, 0x01	; 1
+ 242:	e1 f7       	brne	.-8      	; 0x23c <sort+0x74>
 			
 				servos.times[i-1] = servos.tempTimes;
- 248:	40 91 12 01 	lds	r20, 0x0112
- 24c:	50 91 13 01 	lds	r21, 0x0113
- 250:	51 83       	std	Z+1, r21	; 0x01
- 252:	40 83       	st	Z, r20
+ 244:	40 91 12 01 	lds	r20, 0x0112
+ 248:	50 91 13 01 	lds	r21, 0x0113
+ 24c:	51 83       	std	Z+1, r21	; 0x01
+ 24e:	40 83       	st	Z, r20
 				servos.bus[i-1] = servos.tempBus;
- 254:	40 2f       	mov	r20, r16
- 256:	51 2f       	mov	r21, r17
- 258:	ea 01       	movw	r28, r20
- 25a:	af ed       	ldi	r26, 0xDF	; 223
- 25c:	b0 e0       	ldi	r27, 0x00	; 0
- 25e:	43 e0       	ldi	r20, 0x03	; 3
- 260:	0d 90       	ld	r0, X+
- 262:	09 92       	st	Y+, r0
- 264:	41 50       	subi	r20, 0x01	; 1
- 266:	e1 f7       	brne	.-8      	; 0x260 <sort+0x94>
+ 250:	40 2f       	mov	r20, r16
+ 252:	51 2f       	mov	r21, r17
+ 254:	ea 01       	movw	r28, r20
+ 256:	af ed       	ldi	r26, 0xDF	; 223
+ 258:	b0 e0       	ldi	r27, 0x00	; 0
+ 25a:	43 e0       	ldi	r20, 0x03	; 3
+ 25c:	0d 90       	ld	r0, X+
+ 25e:	09 92       	st	Y+, r0
+ 260:	41 50       	subi	r20, 0x01	; 1
+ 262:	e1 f7       	brne	.-8      	; 0x25c <sort+0x94>
 			
 				ErrorFound = 1;	
- 268:	11 e0       	ldi	r17, 0x01	; 1
+ 264:	11 e0       	ldi	r17, 0x01	; 1
 				
 				servos.times[i] = servos.times[i-1];
 				servos.bus[i] = servos.bus[i-1];
 			
 				servos.times[i-1] = servos.tempTimes;
 				servos.bus[i-1] = servos.tempBus;
- 26a:	03 96       	adiw	r24, 0x03	; 3
- 26c:	2d 5f       	subi	r18, 0xFD	; 253
- 26e:	3f 4f       	sbci	r19, 0xFF	; 255
- 270:	32 96       	adiw	r30, 0x02	; 2
+ 266:	03 96       	adiw	r24, 0x03	; 3
+ 268:	2d 5f       	subi	r18, 0xFD	; 253
+ 26a:	3f 4f       	sbci	r19, 0xFF	; 255
+ 26c:	32 96       	adiw	r30, 0x02	; 2
  
 void sort(void){
 	uint8_t i,ErrorFound = 1;
 	while(ErrorFound){
 		ErrorFound = 0;
 		for(i=1;i<24;i++){
- 272:	67 31       	cpi	r22, 0x17	; 23
- 274:	71 05       	cpc	r23, r1
- 276:	09 f0       	breq	.+2      	; 0x27a <sort+0xae>
- 278:	b0 cf       	rjmp	.-160    	; 0x1da <sort+0xe>
+ 26e:	67 31       	cpi	r22, 0x17	; 23
+ 270:	71 05       	cpc	r23, r1
+ 272:	09 f0       	breq	.+2      	; 0x276 <sort+0xae>
+ 274:	b0 cf       	rjmp	.-160    	; 0x1d6 <sort+0xe>
 	for(i=0;i<24;i+=2)servoBuffer[i].timerVal = 0;  //normally 0	
 }	
  
 void sort(void){
 	uint8_t i,ErrorFound = 1;
 	while(ErrorFound){
- 27a:	11 23       	and	r17, r17
- 27c:	59 f0       	breq	.+22     	; 0x294 <sort+0xc8>
- 27e:	8a e9       	ldi	r24, 0x9A	; 154
- 280:	90 e0       	ldi	r25, 0x00	; 0
- 282:	9c 01       	movw	r18, r24
- 284:	23 50       	subi	r18, 0x03	; 3
- 286:	30 40       	sbci	r19, 0x00	; 0
- 288:	e2 ee       	ldi	r30, 0xE2	; 226
- 28a:	f0 e0       	ldi	r31, 0x00	; 0
+ 276:	11 23       	and	r17, r17
+ 278:	59 f0       	breq	.+22     	; 0x290 <sort+0xc8>
+ 27a:	8a e9       	ldi	r24, 0x9A	; 154
+ 27c:	90 e0       	ldi	r25, 0x00	; 0
+ 27e:	9c 01       	movw	r18, r24
+ 280:	23 50       	subi	r18, 0x03	; 3
+ 282:	30 40       	sbci	r19, 0x00	; 0
+ 284:	e2 ee       	ldi	r30, 0xE2	; 226
+ 286:	f0 e0       	ldi	r31, 0x00	; 0
 		ErrorFound = 0;
 		for(i=1;i<24;i++){
- 28c:	40 e0       	ldi	r20, 0x00	; 0
- 28e:	50 e0       	ldi	r21, 0x00	; 0
- 290:	10 e0       	ldi	r17, 0x00	; 0
- 292:	a4 cf       	rjmp	.-184    	; 0x1dc <sort+0x10>
+ 288:	40 e0       	ldi	r20, 0x00	; 0
+ 28a:	50 e0       	ldi	r21, 0x00	; 0
+ 28c:	10 e0       	ldi	r17, 0x00	; 0
+ 28e:	a4 cf       	rjmp	.-184    	; 0x1d8 <sort+0x10>
 			
 				ErrorFound = 1;	
 			}				
 		}
 	}
 }
- 294:	df 91       	pop	r29
- 296:	cf 91       	pop	r28
- 298:	1f 91       	pop	r17
- 29a:	0f 91       	pop	r16
- 29c:	ff 90       	pop	r15
- 29e:	ef 90       	pop	r14
- 2a0:	08 95       	ret
+ 290:	df 91       	pop	r29
+ 292:	cf 91       	pop	r28
+ 294:	1f 91       	pop	r17
+ 296:	0f 91       	pop	r16
+ 298:	ff 90       	pop	r15
+ 29a:	ef 90       	pop	r14
+ 29c:	08 95       	ret
 
-000002a2 <postSortMask>:
+0000029e <postSortMask>:
 
 void postSortMask(void){
- 2a2:	0f 93       	push	r16
- 2a4:	1f 93       	push	r17
- 2a6:	cf 93       	push	r28
- 2a8:	df 93       	push	r29
- 2aa:	00 e0       	ldi	r16, 0x00	; 0
- 2ac:	10 e0       	ldi	r17, 0x00	; 0
- 2ae:	20 e0       	ldi	r18, 0x00	; 0
- 2b0:	30 e0       	ldi	r19, 0x00	; 0
- 2b2:	e0 e0       	ldi	r30, 0x00	; 0
- 2b4:	f0 e0       	ldi	r31, 0x00	; 0
- 2b6:	1e c0       	rjmp	.+60     	; 0x2f4 <postSortMask+0x52>
- 2b8:	ae 01       	movw	r20, r28
- 2ba:	42 0f       	add	r20, r18
- 2bc:	53 1f       	adc	r21, r19
- 2be:	40 0f       	add	r20, r16
- 2c0:	51 1f       	adc	r21, r17
+ 29e:	0f 93       	push	r16
+ 2a0:	1f 93       	push	r17
+ 2a2:	cf 93       	push	r28
+ 2a4:	df 93       	push	r29
+ 2a6:	00 e0       	ldi	r16, 0x00	; 0
+ 2a8:	10 e0       	ldi	r17, 0x00	; 0
+ 2aa:	20 e0       	ldi	r18, 0x00	; 0
+ 2ac:	30 e0       	ldi	r19, 0x00	; 0
+ 2ae:	e0 e0       	ldi	r30, 0x00	; 0
+ 2b0:	f0 e0       	ldi	r31, 0x00	; 0
+ 2b2:	1e c0       	rjmp	.+60     	; 0x2f0 <postSortMask+0x52>
+ 2b4:	ae 01       	movw	r20, r28
+ 2b6:	42 0f       	add	r20, r18
+ 2b8:	53 1f       	adc	r21, r19
+ 2ba:	40 0f       	add	r20, r16
+ 2bc:	51 1f       	adc	r21, r17
 	uint8_t i,j;
 	for(i=0;i<23;i++){
 		for(j=0;j<3;j++){
 			servos.bus[i+1].masks[j] &= servos.bus[i].masks[j];
- 2c2:	da 01       	movw	r26, r20
- 2c4:	13 96       	adiw	r26, 0x03	; 3
- 2c6:	7c 91       	ld	r23, X
- 2c8:	69 91       	ld	r22, Y+
+ 2be:	da 01       	movw	r26, r20
+ 2c0:	13 96       	adiw	r26, 0x03	; 3
+ 2c2:	7c 91       	ld	r23, X
+ 2c4:	69 91       	ld	r22, Y+
 			}				
 		}
 	}
 }
 
 void postSortMask(void){
- 2ca:	ae 01       	movw	r20, r28
- 2cc:	42 0f       	add	r20, r18
- 2ce:	53 1f       	adc	r21, r19
- 2d0:	40 0f       	add	r20, r16
- 2d2:	51 1f       	adc	r21, r17
+ 2c6:	ae 01       	movw	r20, r28
+ 2c8:	42 0f       	add	r20, r18
+ 2ca:	53 1f       	adc	r21, r19
+ 2cc:	40 0f       	add	r20, r16
+ 2ce:	51 1f       	adc	r21, r17
 	uint8_t i,j;
 	for(i=0;i<23;i++){
 		for(j=0;j<3;j++){
 			servos.bus[i+1].masks[j] &= servos.bus[i].masks[j];
- 2d4:	67 23       	and	r22, r23
- 2d6:	da 01       	movw	r26, r20
- 2d8:	12 96       	adiw	r26, 0x02	; 2
- 2da:	6c 93       	st	X, r22
- 2dc:	12 97       	sbiw	r26, 0x02	; 2
+ 2d0:	67 23       	and	r22, r23
+ 2d2:	da 01       	movw	r26, r20
+ 2d4:	12 96       	adiw	r26, 0x02	; 2
+ 2d6:	6c 93       	st	X, r22
+ 2d8:	12 97       	sbiw	r26, 0x02	; 2
 }
 
 void postSortMask(void){
 	uint8_t i,j;
 	for(i=0;i<23;i++){
 		for(j=0;j<3;j++){
- 2de:	c8 17       	cp	r28, r24
- 2e0:	d9 07       	cpc	r29, r25
- 2e2:	51 f7       	brne	.-44     	; 0x2b8 <postSortMask+0x16>
- 2e4:	31 96       	adiw	r30, 0x01	; 1
- 2e6:	23 50       	subi	r18, 0x03	; 3
- 2e8:	30 40       	sbci	r19, 0x00	; 0
- 2ea:	0d 5f       	subi	r16, 0xFD	; 253
- 2ec:	1f 4f       	sbci	r17, 0xFF	; 255
+ 2da:	c8 17       	cp	r28, r24
+ 2dc:	d9 07       	cpc	r29, r25
+ 2de:	51 f7       	brne	.-44     	; 0x2b4 <postSortMask+0x16>
+ 2e0:	31 96       	adiw	r30, 0x01	; 1
+ 2e2:	23 50       	subi	r18, 0x03	; 3
+ 2e4:	30 40       	sbci	r19, 0x00	; 0
+ 2e6:	0d 5f       	subi	r16, 0xFD	; 253
+ 2e8:	1f 4f       	sbci	r17, 0xFF	; 255
 	}
 }
 
 void postSortMask(void){
 	uint8_t i,j;
 	for(i=0;i<23;i++){
- 2ee:	e7 31       	cpi	r30, 0x17	; 23
- 2f0:	f1 05       	cpc	r31, r1
- 2f2:	71 f0       	breq	.+28     	; 0x310 <postSortMask+0x6e>
+ 2ea:	e7 31       	cpi	r30, 0x17	; 23
+ 2ec:	f1 05       	cpc	r31, r1
+ 2ee:	71 f0       	breq	.+28     	; 0x30c <postSortMask+0x6e>
 			}				
 		}
 	}
 }
 
 void postSortMask(void){
- 2f4:	cf 01       	movw	r24, r30
- 2f6:	63 e0       	ldi	r22, 0x03	; 3
- 2f8:	70 e0       	ldi	r23, 0x00	; 0
- 2fa:	5a d1       	rcall	.+692    	; 0x5b0 <__mulhi3>
- 2fc:	ec 01       	movw	r28, r24
- 2fe:	c9 56       	subi	r28, 0x69	; 105
- 300:	df 4f       	sbci	r29, 0xFF	; 255
- 302:	88 27       	eor	r24, r24
- 304:	99 27       	eor	r25, r25
- 306:	82 1b       	sub	r24, r18
- 308:	93 0b       	sbc	r25, r19
+ 2f0:	cf 01       	movw	r24, r30
+ 2f2:	63 e0       	ldi	r22, 0x03	; 3
+ 2f4:	70 e0       	ldi	r23, 0x00	; 0
+ 2f6:	62 d1       	rcall	.+708    	; 0x5bc <__mulhi3>
+ 2f8:	ec 01       	movw	r28, r24
+ 2fa:	c9 56       	subi	r28, 0x69	; 105
+ 2fc:	df 4f       	sbci	r29, 0xFF	; 255
+ 2fe:	88 27       	eor	r24, r24
+ 300:	99 27       	eor	r25, r25
+ 302:	82 1b       	sub	r24, r18
+ 304:	93 0b       	sbc	r25, r19
 	uint8_t i,j;
 	for(i=0;i<23;i++){
- 30a:	86 56       	subi	r24, 0x66	; 102
- 30c:	9f 4f       	sbci	r25, 0xFF	; 255
- 30e:	d4 cf       	rjmp	.-88     	; 0x2b8 <postSortMask+0x16>
+ 306:	86 56       	subi	r24, 0x66	; 102
+ 308:	9f 4f       	sbci	r25, 0xFF	; 255
+ 30a:	d4 cf       	rjmp	.-88     	; 0x2b4 <postSortMask+0x16>
 		for(j=0;j<3;j++){
 			servos.bus[i+1].masks[j] &= servos.bus[i].masks[j];
 			//servos.bus[i+1].masks[j] &= mainBus[j];
 		}			
 	}
 }
- 310:	df 91       	pop	r29
- 312:	cf 91       	pop	r28
- 314:	1f 91       	pop	r17
- 316:	0f 91       	pop	r16
- 318:	08 95       	ret
+ 30c:	df 91       	pop	r29
+ 30e:	cf 91       	pop	r28
+ 310:	1f 91       	pop	r17
+ 312:	0f 91       	pop	r16
+ 314:	08 95       	ret
 
-0000031a <mulitpleServoTimeFix>:
+00000316 <mulitpleServoTimeFix>:
 
 
 
 //This function serves to decrease the 'unique' number of servos if there are multiple servos set to the same angle.
 void mulitpleServoTimeFix(){
- 31a:	1f 93       	push	r17
+ 316:	1f 93       	push	r17
 static uint8_t i;
 	servos.tempBus = servos.bus[23];
- 31c:	ef ed       	ldi	r30, 0xDF	; 223
- 31e:	f0 e0       	ldi	r31, 0x00	; 0
- 320:	df 01       	movw	r26, r30
- 322:	13 97       	sbiw	r26, 0x03	; 3
- 324:	83 e0       	ldi	r24, 0x03	; 3
- 326:	0d 90       	ld	r0, X+
- 328:	01 92       	st	Z+, r0
- 32a:	81 50       	subi	r24, 0x01	; 1
- 32c:	e1 f7       	brne	.-8      	; 0x326 <mulitpleServoTimeFix+0xc>
+ 318:	ef ed       	ldi	r30, 0xDF	; 223
+ 31a:	f0 e0       	ldi	r31, 0x00	; 0
+ 31c:	df 01       	movw	r26, r30
+ 31e:	13 97       	sbiw	r26, 0x03	; 3
+ 320:	83 e0       	ldi	r24, 0x03	; 3
+ 322:	0d 90       	ld	r0, X+
+ 324:	01 92       	st	Z+, r0
+ 326:	81 50       	subi	r24, 0x01	; 1
+ 328:	e1 f7       	brne	.-8      	; 0x322 <mulitpleServoTimeFix+0xc>
 	for(i=23;i>0;i--){
- 32e:	87 e1       	ldi	r24, 0x17	; 23
- 330:	80 93 60 00 	sts	0x0060, r24
- 334:	2c c0       	rjmp	.+88     	; 0x38e <mulitpleServoTimeFix+0x74>
+ 32a:	87 e1       	ldi	r24, 0x17	; 23
+ 32c:	80 93 60 00 	sts	0x0060, r24
+ 330:	2c c0       	rjmp	.+88     	; 0x38a <mulitpleServoTimeFix+0x74>
 		if(servos.times[i-1].timerVal == servos.times[i].timerVal){ //if the current servo[i] is equal to the next servo down
- 336:	21 2f       	mov	r18, r17
- 338:	30 e0       	ldi	r19, 0x00	; 0
- 33a:	c9 01       	movw	r24, r18
- 33c:	01 97       	sbiw	r24, 0x01	; 1
- 33e:	fc 01       	movw	r30, r24
- 340:	ee 0f       	add	r30, r30
- 342:	ff 1f       	adc	r31, r31
- 344:	ee 51       	subi	r30, 0x1E	; 30
- 346:	ff 4f       	sbci	r31, 0xFF	; 255
- 348:	60 81       	ld	r22, Z
- 34a:	71 81       	ldd	r23, Z+1	; 0x01
- 34c:	f9 01       	movw	r30, r18
- 34e:	ee 0f       	add	r30, r30
- 350:	ff 1f       	adc	r31, r31
- 352:	ee 51       	subi	r30, 0x1E	; 30
- 354:	ff 4f       	sbci	r31, 0xFF	; 255
- 356:	40 81       	ld	r20, Z
- 358:	51 81       	ldd	r21, Z+1	; 0x01
- 35a:	64 17       	cp	r22, r20
- 35c:	75 07       	cpc	r23, r21
- 35e:	a1 f4       	brne	.+40     	; 0x388 <mulitpleServoTimeFix+0x6e>
+ 332:	21 2f       	mov	r18, r17
+ 334:	30 e0       	ldi	r19, 0x00	; 0
+ 336:	c9 01       	movw	r24, r18
+ 338:	01 97       	sbiw	r24, 0x01	; 1
+ 33a:	fc 01       	movw	r30, r24
+ 33c:	ee 0f       	add	r30, r30
+ 33e:	ff 1f       	adc	r31, r31
+ 340:	ee 51       	subi	r30, 0x1E	; 30
+ 342:	ff 4f       	sbci	r31, 0xFF	; 255
+ 344:	60 81       	ld	r22, Z
+ 346:	71 81       	ldd	r23, Z+1	; 0x01
+ 348:	f9 01       	movw	r30, r18
+ 34a:	ee 0f       	add	r30, r30
+ 34c:	ff 1f       	adc	r31, r31
+ 34e:	ee 51       	subi	r30, 0x1E	; 30
+ 350:	ff 4f       	sbci	r31, 0xFF	; 255
+ 352:	40 81       	ld	r20, Z
+ 354:	51 81       	ldd	r21, Z+1	; 0x01
+ 356:	64 17       	cp	r22, r20
+ 358:	75 07       	cpc	r23, r21
+ 35a:	a1 f4       	brne	.+40     	; 0x384 <mulitpleServoTimeFix+0x6e>
 			servos.times[i].timerVal = 0;							//the current servo time goes to 0
- 360:	11 82       	std	Z+1, r1	; 0x01
- 362:	10 82       	st	Z, r1
+ 35c:	11 82       	std	Z+1, r1	; 0x01
+ 35e:	10 82       	st	Z, r1
 			servos.bus[i-1] = servos.bus[i];						//the next servo then takes the bus value of the next highest servo
- 364:	63 e0       	ldi	r22, 0x03	; 3
- 366:	70 e0       	ldi	r23, 0x00	; 0
- 368:	23 d1       	rcall	.+582    	; 0x5b0 <__mulhi3>
- 36a:	fc 01       	movw	r30, r24
- 36c:	e9 56       	subi	r30, 0x69	; 105
- 36e:	ff 4f       	sbci	r31, 0xFF	; 255
- 370:	c9 01       	movw	r24, r18
- 372:	63 e0       	ldi	r22, 0x03	; 3
- 374:	70 e0       	ldi	r23, 0x00	; 0
- 376:	1c d1       	rcall	.+568    	; 0x5b0 <__mulhi3>
- 378:	dc 01       	movw	r26, r24
- 37a:	a9 56       	subi	r26, 0x69	; 105
- 37c:	bf 4f       	sbci	r27, 0xFF	; 255
- 37e:	83 e0       	ldi	r24, 0x03	; 3
- 380:	0d 90       	ld	r0, X+
- 382:	01 92       	st	Z+, r0
- 384:	81 50       	subi	r24, 0x01	; 1
- 386:	e1 f7       	brne	.-8      	; 0x380 <mulitpleServoTimeFix+0x66>
+ 360:	63 e0       	ldi	r22, 0x03	; 3
+ 362:	70 e0       	ldi	r23, 0x00	; 0
+ 364:	2b d1       	rcall	.+598    	; 0x5bc <__mulhi3>
+ 366:	fc 01       	movw	r30, r24
+ 368:	e9 56       	subi	r30, 0x69	; 105
+ 36a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 36c:	c9 01       	movw	r24, r18
+ 36e:	63 e0       	ldi	r22, 0x03	; 3
+ 370:	70 e0       	ldi	r23, 0x00	; 0
+ 372:	24 d1       	rcall	.+584    	; 0x5bc <__mulhi3>
+ 374:	dc 01       	movw	r26, r24
+ 376:	a9 56       	subi	r26, 0x69	; 105
+ 378:	bf 4f       	sbci	r27, 0xFF	; 255
+ 37a:	83 e0       	ldi	r24, 0x03	; 3
+ 37c:	0d 90       	ld	r0, X+
+ 37e:	01 92       	st	Z+, r0
+ 380:	81 50       	subi	r24, 0x01	; 1
+ 382:	e1 f7       	brne	.-8      	; 0x37c <mulitpleServoTimeFix+0x66>
 
 //This function serves to decrease the 'unique' number of servos if there are multiple servos set to the same angle.
 void mulitpleServoTimeFix(){
 static uint8_t i;
 	servos.tempBus = servos.bus[23];
 	for(i=23;i>0;i--){
- 388:	11 50       	subi	r17, 0x01	; 1
- 38a:	10 93 60 00 	sts	0x0060, r17
- 38e:	10 91 60 00 	lds	r17, 0x0060
- 392:	11 23       	and	r17, r17
- 394:	81 f6       	brne	.-96     	; 0x336 <mulitpleServoTimeFix+0x1c>
+ 384:	11 50       	subi	r17, 0x01	; 1
+ 386:	10 93 60 00 	sts	0x0060, r17
+ 38a:	10 91 60 00 	lds	r17, 0x0060
+ 38e:	11 23       	and	r17, r17
+ 390:	81 f6       	brne	.-96     	; 0x332 <mulitpleServoTimeFix+0x1c>
 		if(servos.times[i-1].timerVal == servos.times[i].timerVal){ //if the current servo[i] is equal to the next servo down
 			servos.times[i].timerVal = 0;							//the current servo time goes to 0
 			servos.bus[i-1] = servos.bus[i];						//the next servo then takes the bus value of the next highest servo
 		}			
 	}
 }	
- 396:	1f 91       	pop	r17
- 398:	08 95       	ret
+ 392:	1f 91       	pop	r17
+ 394:	08 95       	ret
 
-0000039a <servoDataIRQ>:
+00000396 <servoDataIRQ>:
 
 
 void servoDataIRQ()
 {
 //if(bytesInBuffer < (bufferSize -2)) 
 PORTD ^= 0x02;//this will trigger a PCINT on the xmega
- 39a:	82 b3       	in	r24, 0x12	; 18
- 39c:	92 e0       	ldi	r25, 0x02	; 2
- 39e:	89 27       	eor	r24, r25
- 3a0:	82 bb       	out	0x12, r24	; 18
- 3a2:	08 95       	ret
+ 396:	82 b3       	in	r24, 0x12	; 18
+ 398:	92 e0       	ldi	r25, 0x02	; 2
+ 39a:	89 27       	eor	r24, r25
+ 39c:	82 bb       	out	0x12, r24	; 18
+ 39e:	08 95       	ret
 
-000003a4 <__vector_default>:
-		}
-		asm("nop");
+000003a0 <__vector_4>:
     }
 }
 
-ISR(BADISR_vect){
- 3a4:	1f 92       	push	r1
- 3a6:	0f 92       	push	r0
- 3a8:	0f b6       	in	r0, 0x3f	; 63
- 3aa:	0f 92       	push	r0
- 3ac:	11 24       	eor	r1, r1
-	asm("nop");
- 3ae:	00 00       	nop
-}
- 3b0:	0f 90       	pop	r0
- 3b2:	0f be       	out	0x3f, r0	; 63
- 3b4:	0f 90       	pop	r0
- 3b6:	1f 90       	pop	r1
- 3b8:	18 95       	reti
 
-000003ba <__vector_4>:
 
 ISR(TIMER1_COMPA_vect){
- 3ba:	1f 92       	push	r1
- 3bc:	0f 92       	push	r0
- 3be:	0f b6       	in	r0, 0x3f	; 63
- 3c0:	0f 92       	push	r0
- 3c2:	11 24       	eor	r1, r1
- 3c4:	8f 93       	push	r24
- 3c6:	9f 93       	push	r25
+ 3a0:	1f 92       	push	r1
+ 3a2:	0f 92       	push	r0
+ 3a4:	0f b6       	in	r0, 0x3f	; 63
+ 3a6:	0f 92       	push	r0
+ 3a8:	11 24       	eor	r1, r1
+ 3aa:	8f 93       	push	r24
+ 3ac:	9f 93       	push	r25
 	cli();
- 3c8:	f8 94       	cli
+ 3ae:	f8 94       	cli
 	if(servosEnabled){
- 3ca:	80 91 61 00 	lds	r24, 0x0061
- 3ce:	88 23       	and	r24, r24
- 3d0:	a9 f0       	breq	.+42     	; 0x3fc <__vector_4+0x42>
+ 3b0:	80 91 61 00 	lds	r24, 0x0061
+ 3b4:	88 23       	and	r24, r24
+ 3b6:	a9 f0       	breq	.+42     	; 0x3e2 <__vector_4+0x42>
 		PORTB =	mainBus[0]; 
- 3d2:	80 91 15 01 	lds	r24, 0x0115
- 3d6:	88 bb       	out	0x18, r24	; 24
+ 3b8:	80 91 15 01 	lds	r24, 0x0115
+ 3bc:	88 bb       	out	0x18, r24	; 24
 		PORTD +=DECODE0;	     
- 3d8:	82 b3       	in	r24, 0x12	; 18
- 3da:	80 5f       	subi	r24, 0xF0	; 240
- 3dc:	82 bb       	out	0x12, r24	; 18
+ 3be:	82 b3       	in	r24, 0x12	; 18
+ 3c0:	80 5f       	subi	r24, 0xF0	; 240
+ 3c2:	82 bb       	out	0x12, r24	; 18
 		PORTB =	mainBus[1]; 
- 3de:	80 91 16 01 	lds	r24, 0x0116
- 3e2:	88 bb       	out	0x18, r24	; 24
+ 3c4:	80 91 16 01 	lds	r24, 0x0116
+ 3c8:	88 bb       	out	0x18, r24	; 24
 		PORTD +=DECODE0;			
- 3e4:	82 b3       	in	r24, 0x12	; 18
- 3e6:	80 5f       	subi	r24, 0xF0	; 240
- 3e8:	82 bb       	out	0x12, r24	; 18
+ 3ca:	82 b3       	in	r24, 0x12	; 18
+ 3cc:	80 5f       	subi	r24, 0xF0	; 240
+ 3ce:	82 bb       	out	0x12, r24	; 18
 		PORTB =	mainBus[2];		
- 3ea:	80 91 17 01 	lds	r24, 0x0117
- 3ee:	88 bb       	out	0x18, r24	; 24
+ 3d0:	80 91 17 01 	lds	r24, 0x0117
+ 3d4:	88 bb       	out	0x18, r24	; 24
 		PORTD +=DECODE1;		
- 3f0:	82 b3       	in	r24, 0x12	; 18
- 3f2:	80 5e       	subi	r24, 0xE0	; 224
- 3f4:	82 bb       	out	0x12, r24	; 18
+ 3d6:	82 b3       	in	r24, 0x12	; 18
+ 3d8:	80 5e       	subi	r24, 0xE0	; 224
+ 3da:	82 bb       	out	0x12, r24	; 18
 		PORTD &= 0x0F;
- 3f6:	82 b3       	in	r24, 0x12	; 18
- 3f8:	8f 70       	andi	r24, 0x0F	; 15
- 3fa:	03 c0       	rjmp	.+6      	; 0x402 <__vector_4+0x48>
+ 3dc:	82 b3       	in	r24, 0x12	; 18
+ 3de:	8f 70       	andi	r24, 0x0F	; 15
+ 3e0:	03 c0       	rjmp	.+6      	; 0x3e8 <__vector_4+0x48>
 	}
 	else	PORTD ^=DBLED;
- 3fc:	82 b3       	in	r24, 0x12	; 18
- 3fe:	94 e0       	ldi	r25, 0x04	; 4
- 400:	89 27       	eor	r24, r25
- 402:	82 bb       	out	0x12, r24	; 18
+ 3e2:	82 b3       	in	r24, 0x12	; 18
+ 3e4:	94 e0       	ldi	r25, 0x04	; 4
+ 3e6:	89 27       	eor	r24, r25
+ 3e8:	82 bb       	out	0x12, r24	; 18
 	sei();
- 404:	78 94       	sei
+ 3ea:	78 94       	sei
 }
- 406:	9f 91       	pop	r25
- 408:	8f 91       	pop	r24
- 40a:	0f 90       	pop	r0
- 40c:	0f be       	out	0x3f, r0	; 63
- 40e:	0f 90       	pop	r0
- 410:	1f 90       	pop	r1
- 412:	18 95       	reti
+ 3ec:	9f 91       	pop	r25
+ 3ee:	8f 91       	pop	r24
+ 3f0:	0f 90       	pop	r0
+ 3f2:	0f be       	out	0x3f, r0	; 63
+ 3f4:	0f 90       	pop	r0
+ 3f6:	1f 90       	pop	r1
+ 3f8:	18 95       	reti
 
-00000414 <initializations>:
+000003fa <initializations>:
 
 void initializations(void){
 	DDRB = 0xFF;//disable all port B pins (servo pins as Outputs) for the case of wdt resets
- 414:	8f ef       	ldi	r24, 0xFF	; 255
- 416:	87 bb       	out	0x17, r24	; 23
+ 3fa:	8f ef       	ldi	r24, 0xFF	; 255
+ 3fc:	87 bb       	out	0x17, r24	; 23
 	DDRD = 0xFE;//enables every pin except the uart receive pin as an output
- 418:	8e ef       	ldi	r24, 0xFE	; 254
- 41a:	81 bb       	out	0x11, r24	; 17
+ 3fe:	8e ef       	ldi	r24, 0xFE	; 254
+ 400:	81 bb       	out	0x11, r24	; 17
 	PORTB = 0;
- 41c:	18 ba       	out	0x18, r1	; 24
+ 402:	18 ba       	out	0x18, r1	; 24
 	PORTD |= DECODE0 | DECODE1 | DECODE2;
- 41e:	82 b3       	in	r24, 0x12	; 18
- 420:	80 67       	ori	r24, 0x70	; 112
- 422:	82 bb       	out	0x12, r24	; 18
+ 404:	82 b3       	in	r24, 0x12	; 18
+ 406:	80 67       	ori	r24, 0x70	; 112
+ 408:	82 bb       	out	0x12, r24	; 18
 	PORTD &= 0x0F;
- 424:	82 b3       	in	r24, 0x12	; 18
- 426:	8f 70       	andi	r24, 0x0F	; 15
- 428:	82 bb       	out	0x12, r24	; 18
+ 40a:	82 b3       	in	r24, 0x12	; 18
+ 40c:	8f 70       	andi	r24, 0x0F	; 15
+ 40e:	82 bb       	out	0x12, r24	; 18
 	uartInit();
- 42a:	bd d0       	rcall	.+378    	; 0x5a6 <uartInit>
+ 410:	d0 d0       	rcall	.+416    	; 0x5b2 <uartInit>
 	refresh();
- 42c:	9a de       	rcall	.-716    	; 0x162 <refresh>
+ 412:	a5 de       	rcall	.-694    	; 0x15e <refresh>
 	setMasks();
- 42e:	0e de       	rcall	.-996    	; 0x4c <setMasks>
+ 414:	1b de       	rcall	.-970    	; 0x4c <setMasks>
 	seedValues();
- 430:	b6 de       	rcall	.-660    	; 0x19e <seedValues>
+ 416:	c1 de       	rcall	.-638    	; 0x19a <seedValues>
 	sort();
- 432:	cc de       	rcall	.-616    	; 0x1cc <sort>
+ 418:	d7 de       	rcall	.-594    	; 0x1c8 <sort>
 	postSortMask();
- 434:	36 df       	rcall	.-404    	; 0x2a2 <postSortMask>
+ 41a:	41 df       	rcall	.-382    	; 0x29e <postSortMask>
 	mulitpleServoTimeFix();
- 436:	71 df       	rcall	.-286    	; 0x31a <mulitpleServoTimeFix>
+ 41c:	7c df       	rcall	.-264    	; 0x316 <mulitpleServoTimeFix>
 	timer1Init();
- 438:	aa d0       	rcall	.+340    	; 0x58e <timer1Init>
+ 41e:	bd d0       	rcall	.+378    	; 0x59a <timer1Init>
 	sei();
- 43a:	78 94       	sei
+ 420:	78 94       	sei
 }
- 43c:	08 95       	ret
+ 422:	08 95       	ret
 
-0000043e <servoSignalLoop>:
+00000424 <servoSignalLoop>:
 
 void servoSignalLoop(void){
- 43e:	cf 93       	push	r28
- 440:	df 93       	push	r29
+ 424:	cf 93       	push	r28
+ 426:	df 93       	push	r29
 	do 
 		{
 			if(TCNT1>(uint16_t)*servoTimePtr){		
- 442:	2c b5       	in	r18, 0x2c	; 44
- 444:	3d b5       	in	r19, 0x2d	; 45
- 446:	a0 91 18 01 	lds	r26, 0x0118
- 44a:	b0 91 19 01 	lds	r27, 0x0119
- 44e:	8d 91       	ld	r24, X+
- 450:	9c 91       	ld	r25, X
- 452:	11 97       	sbiw	r26, 0x01	; 1
- 454:	82 17       	cp	r24, r18
- 456:	93 07       	cpc	r25, r19
- 458:	d8 f5       	brcc	.+118    	; 0x4d0 <servoSignalLoop+0x92>
+ 428:	2c b5       	in	r18, 0x2c	; 44
+ 42a:	3d b5       	in	r19, 0x2d	; 45
+ 42c:	a0 91 18 01 	lds	r26, 0x0118
+ 430:	b0 91 19 01 	lds	r27, 0x0119
+ 434:	8d 91       	ld	r24, X+
+ 436:	9c 91       	ld	r25, X
+ 438:	11 97       	sbiw	r26, 0x01	; 1
+ 43a:	82 17       	cp	r24, r18
+ 43c:	93 07       	cpc	r25, r19
+ 43e:	d8 f5       	brcc	.+118    	; 0x4b6 <servoSignalLoop+0x92>
 				if((uint16_t)*servoTimePtr != 0 && servosEnabled){
- 45a:	00 97       	sbiw	r24, 0x00	; 0
- 45c:	59 f1       	breq	.+86     	; 0x4b4 <servoSignalLoop+0x76>
- 45e:	80 91 61 00 	lds	r24, 0x0061
- 462:	88 23       	and	r24, r24
- 464:	39 f1       	breq	.+78     	; 0x4b4 <servoSignalLoop+0x76>
+ 440:	00 97       	sbiw	r24, 0x00	; 0
+ 442:	59 f1       	breq	.+86     	; 0x49a <servoSignalLoop+0x76>
+ 444:	80 91 61 00 	lds	r24, 0x0061
+ 448:	88 23       	and	r24, r24
+ 44a:	39 f1       	breq	.+78     	; 0x49a <servoSignalLoop+0x76>
 					PORTB =	*servoBusPtr++; 
- 466:	c0 91 62 00 	lds	r28, 0x0062
- 46a:	d0 91 63 00 	lds	r29, 0x0063
- 46e:	fe 01       	movw	r30, r28
- 470:	81 91       	ld	r24, Z+
- 472:	88 bb       	out	0x18, r24	; 24
- 474:	f0 93 63 00 	sts	0x0063, r31
- 478:	e0 93 62 00 	sts	0x0062, r30
+ 44c:	c0 91 62 00 	lds	r28, 0x0062
+ 450:	d0 91 63 00 	lds	r29, 0x0063
+ 454:	fe 01       	movw	r30, r28
+ 456:	81 91       	ld	r24, Z+
+ 458:	88 bb       	out	0x18, r24	; 24
+ 45a:	f0 93 63 00 	sts	0x0063, r31
+ 45e:	e0 93 62 00 	sts	0x0062, r30
 					PORTD +=DECODE0;	     
- 47c:	82 b3       	in	r24, 0x12	; 18
- 47e:	80 5f       	subi	r24, 0xF0	; 240
- 480:	82 bb       	out	0x12, r24	; 18
+ 462:	82 b3       	in	r24, 0x12	; 18
+ 464:	80 5f       	subi	r24, 0xF0	; 240
+ 466:	82 bb       	out	0x12, r24	; 18
 					PORTB =	*servoBusPtr++; 
- 482:	89 81       	ldd	r24, Y+1	; 0x01
- 484:	88 bb       	out	0x18, r24	; 24
- 486:	cf 01       	movw	r24, r30
- 488:	01 96       	adiw	r24, 0x01	; 1
- 48a:	90 93 63 00 	sts	0x0063, r25
- 48e:	80 93 62 00 	sts	0x0062, r24
+ 468:	89 81       	ldd	r24, Y+1	; 0x01
+ 46a:	88 bb       	out	0x18, r24	; 24
+ 46c:	cf 01       	movw	r24, r30
+ 46e:	01 96       	adiw	r24, 0x01	; 1
+ 470:	90 93 63 00 	sts	0x0063, r25
+ 474:	80 93 62 00 	sts	0x0062, r24
 					PORTD +=DECODE0;			
- 492:	22 b3       	in	r18, 0x12	; 18
- 494:	20 5f       	subi	r18, 0xF0	; 240
- 496:	22 bb       	out	0x12, r18	; 18
+ 478:	22 b3       	in	r18, 0x12	; 18
+ 47a:	20 5f       	subi	r18, 0xF0	; 240
+ 47c:	22 bb       	out	0x12, r18	; 18
 					PORTB =	*servoBusPtr++;		
- 498:	21 81       	ldd	r18, Z+1	; 0x01
- 49a:	28 bb       	out	0x18, r18	; 24
- 49c:	01 96       	adiw	r24, 0x01	; 1
- 49e:	90 93 63 00 	sts	0x0063, r25
- 4a2:	80 93 62 00 	sts	0x0062, r24
+ 47e:	21 81       	ldd	r18, Z+1	; 0x01
+ 480:	28 bb       	out	0x18, r18	; 24
+ 482:	01 96       	adiw	r24, 0x01	; 1
+ 484:	90 93 63 00 	sts	0x0063, r25
+ 488:	80 93 62 00 	sts	0x0062, r24
 					PORTD +=DECODE1;		
- 4a6:	82 b3       	in	r24, 0x12	; 18
- 4a8:	80 5e       	subi	r24, 0xE0	; 224
- 4aa:	82 bb       	out	0x12, r24	; 18
+ 48c:	82 b3       	in	r24, 0x12	; 18
+ 48e:	80 5e       	subi	r24, 0xE0	; 224
+ 490:	82 bb       	out	0x12, r24	; 18
 					PORTD &= 0x0F;
- 4ac:	82 b3       	in	r24, 0x12	; 18
- 4ae:	8f 70       	andi	r24, 0x0F	; 15
- 4b0:	82 bb       	out	0x12, r24	; 18
- 4b2:	09 c0       	rjmp	.+18     	; 0x4c6 <servoSignalLoop+0x88>
+ 492:	82 b3       	in	r24, 0x12	; 18
+ 494:	8f 70       	andi	r24, 0x0F	; 15
+ 496:	82 bb       	out	0x12, r24	; 18
+ 498:	09 c0       	rjmp	.+18     	; 0x4ac <servoSignalLoop+0x88>
 					servoTimePtr++;
 				}				
 				else{
 					servoBusPtr += 3;
- 4b4:	80 91 62 00 	lds	r24, 0x0062
- 4b8:	90 91 63 00 	lds	r25, 0x0063
- 4bc:	03 96       	adiw	r24, 0x03	; 3
- 4be:	90 93 63 00 	sts	0x0063, r25
- 4c2:	80 93 62 00 	sts	0x0062, r24
+ 49a:	80 91 62 00 	lds	r24, 0x0062
+ 49e:	90 91 63 00 	lds	r25, 0x0063
+ 4a2:	03 96       	adiw	r24, 0x03	; 3
+ 4a4:	90 93 63 00 	sts	0x0063, r25
+ 4a8:	80 93 62 00 	sts	0x0062, r24
 					servoTimePtr++;
- 4c6:	12 96       	adiw	r26, 0x02	; 2
- 4c8:	b0 93 19 01 	sts	0x0119, r27
- 4cc:	a0 93 18 01 	sts	0x0118, r26
+ 4ac:	12 96       	adiw	r26, 0x02	; 2
+ 4ae:	b0 93 19 01 	sts	0x0119, r27
+ 4b2:	a0 93 18 01 	sts	0x0118, r26
 				}
 			}					
 		} while (servoTimePtr <= servoTimesEnd); 
- 4d0:	80 91 18 01 	lds	r24, 0x0118
- 4d4:	90 91 19 01 	lds	r25, 0x0119
- 4d8:	21 e0       	ldi	r18, 0x01	; 1
- 4da:	80 31       	cpi	r24, 0x10	; 16
- 4dc:	92 07       	cpc	r25, r18
- 4de:	09 f0       	breq	.+2      	; 0x4e2 <servoSignalLoop+0xa4>
- 4e0:	08 f4       	brcc	.+2      	; 0x4e4 <servoSignalLoop+0xa6>
- 4e2:	af cf       	rjmp	.-162    	; 0x442 <servoSignalLoop+0x4>
+ 4b6:	80 91 18 01 	lds	r24, 0x0118
+ 4ba:	90 91 19 01 	lds	r25, 0x0119
+ 4be:	21 e0       	ldi	r18, 0x01	; 1
+ 4c0:	80 31       	cpi	r24, 0x10	; 16
+ 4c2:	92 07       	cpc	r25, r18
+ 4c4:	09 f0       	breq	.+2      	; 0x4c8 <servoSignalLoop+0xa4>
+ 4c6:	08 f4       	brcc	.+2      	; 0x4ca <servoSignalLoop+0xa6>
+ 4c8:	af cf       	rjmp	.-162    	; 0x428 <servoSignalLoop+0x4>
 }
- 4e4:	df 91       	pop	r29
- 4e6:	cf 91       	pop	r28
- 4e8:	08 95       	ret
+ 4ca:	df 91       	pop	r29
+ 4cc:	cf 91       	pop	r28
+ 4ce:	08 95       	ret
 
-000004ea <processingForNextLoop>:
+000004d0 <processingForNextLoop>:
 
 void processingForNextLoop(void)
 {
+	
 	refresh();
- 4ea:	3b de       	rcall	.-906    	; 0x162 <refresh>
+ 4d0:	46 de       	rcall	.-884    	; 0x15e <refresh>
+	
+	//this makes sure the message timeout acctually works
+	buffer[0]=0x0;
+ 4d2:	10 92 1a 01 	sts	0x011A, r1
+	buffer[1]=0x0;
+ 4d6:	10 92 1b 01 	sts	0x011B, r1
+	buffer[2]=0x0;
+ 4da:	10 92 1c 01 	sts	0x011C, r1
+	buffer[3]=0x0;
+ 4de:	10 92 1d 01 	sts	0x011D, r1
+	
 	setMasks();
- 4ec:	af dd       	rcall	.-1186   	; 0x4c <setMasks>
+ 4e2:	b4 dd       	rcall	.-1176   	; 0x4c <setMasks>
 	sort();
- 4ee:	6e de       	rcall	.-804    	; 0x1cc <sort>
+ 4e4:	71 de       	rcall	.-798    	; 0x1c8 <sort>
 	postSortMask();
- 4f0:	d8 de       	rcall	.-592    	; 0x2a2 <postSortMask>
+ 4e6:	db de       	rcall	.-586    	; 0x29e <postSortMask>
+	
 	mulitpleServoTimeFix();
- 4f2:	13 df       	rcall	.-474    	; 0x31a <mulitpleServoTimeFix>
+ 4e8:	16 df       	rcall	.-468    	; 0x316 <mulitpleServoTimeFix>
 }
- 4f4:	08 95       	ret
+ 4ea:	08 95       	ret
 
-000004f6 <testArray>:
+000004ec <testArray>:
 
 
 inline testArray(void){
 	if(buffer[0] < 50 ){
- 4f6:	e0 91 1a 01 	lds	r30, 0x011A
- 4fa:	e2 33       	cpi	r30, 0x32	; 50
- 4fc:	d0 f4       	brcc	.+52     	; 0x532 <testArray+0x3c>
+ 4ec:	e0 91 1a 01 	lds	r30, 0x011A
+ 4f0:	e2 33       	cpi	r30, 0x32	; 50
+ 4f2:	d0 f4       	brcc	.+52     	; 0x528 <testArray+0x3c>
 		if(buffer[3] == (0x80 | buffer[0]) )
- 4fe:	8e 2f       	mov	r24, r30
- 500:	80 68       	ori	r24, 0x80	; 128
- 502:	90 91 1d 01 	lds	r25, 0x011D
- 506:	98 17       	cp	r25, r24
- 508:	a1 f4       	brne	.+40     	; 0x532 <testArray+0x3c>
+ 4f4:	8e 2f       	mov	r24, r30
+ 4f6:	80 68       	ori	r24, 0x80	; 128
+ 4f8:	90 91 1d 01 	lds	r25, 0x011D
+ 4fc:	98 17       	cp	r25, r24
+ 4fe:	a1 f4       	brne	.+40     	; 0x528 <testArray+0x3c>
 		{
 			servoBuffer[buffer[0]].timerVal = (buffer[1])<<8 | buffer[2] ;	
- 50a:	f0 e0       	ldi	r31, 0x00	; 0
- 50c:	ee 0f       	add	r30, r30
- 50e:	ff 1f       	adc	r31, r31
- 510:	ec 59       	subi	r30, 0x9C	; 156
- 512:	ff 4f       	sbci	r31, 0xFF	; 255
- 514:	30 91 1b 01 	lds	r19, 0x011B
- 518:	20 e0       	ldi	r18, 0x00	; 0
- 51a:	80 91 1c 01 	lds	r24, 0x011C
- 51e:	90 e0       	ldi	r25, 0x00	; 0
- 520:	82 2b       	or	r24, r18
- 522:	93 2b       	or	r25, r19
- 524:	91 83       	std	Z+1, r25	; 0x01
- 526:	80 83       	st	Z, r24
+ 500:	f0 e0       	ldi	r31, 0x00	; 0
+ 502:	ee 0f       	add	r30, r30
+ 504:	ff 1f       	adc	r31, r31
+ 506:	ec 59       	subi	r30, 0x9C	; 156
+ 508:	ff 4f       	sbci	r31, 0xFF	; 255
+ 50a:	30 91 1b 01 	lds	r19, 0x011B
+ 50e:	20 e0       	ldi	r18, 0x00	; 0
+ 510:	80 91 1c 01 	lds	r24, 0x011C
+ 514:	90 e0       	ldi	r25, 0x00	; 0
+ 516:	82 2b       	or	r24, r18
+ 518:	93 2b       	or	r25, r19
+ 51a:	91 83       	std	Z+1, r25	; 0x01
+ 51c:	80 83       	st	Z, r24
 				wdt_reset();
- 528:	a8 95       	wdr
+ 51e:	a8 95       	wdr
 				PORTD |= DBLED;
- 52a:	92 9a       	sbi	0x12, 2	; 18
+ 520:	92 9a       	sbi	0x12, 2	; 18
 				servosEnabled = true;
- 52c:	81 e0       	ldi	r24, 0x01	; 1
- 52e:	80 93 61 00 	sts	0x0061, r24
+ 522:	81 e0       	ldi	r24, 0x01	; 1
+ 524:	80 93 61 00 	sts	0x0061, r24
 		}
 	}
 }
- 532:	08 95       	ret
+ 528:	08 95       	ret
 
-00000534 <repopulateArray>:
+0000052a <repopulateArray>:
 
 inline repopulateArray(void){
 	uint8_t i;
 	for(i=0;i<3;i++) buffer[i] = buffer[i+1];
- 534:	80 91 1b 01 	lds	r24, 0x011B
- 538:	80 93 1a 01 	sts	0x011A, r24
- 53c:	80 91 1c 01 	lds	r24, 0x011C
- 540:	80 93 1b 01 	sts	0x011B, r24
- 544:	80 91 1d 01 	lds	r24, 0x011D
- 548:	80 93 1c 01 	sts	0x011C, r24
+ 52a:	80 91 1b 01 	lds	r24, 0x011B
+ 52e:	80 93 1a 01 	sts	0x011A, r24
+ 532:	80 91 1c 01 	lds	r24, 0x011C
+ 536:	80 93 1b 01 	sts	0x011B, r24
+ 53a:	80 91 1d 01 	lds	r24, 0x011D
+ 53e:	80 93 1c 01 	sts	0x011C, r24
 	buffer[3] = UDR;
- 54c:	8c b1       	in	r24, 0x0c	; 12
- 54e:	80 93 1d 01 	sts	0x011D, r24
- 552:	08 95       	ret
+ 542:	8c b1       	in	r24, 0x0c	; 12
+ 544:	80 93 1d 01 	sts	0x011D, r24
+}
+ 548:	08 95       	ret
 
-00000554 <main>:
+0000054a <main>:
 uint8_t buffer[4];
 bool servosEnabled = false;
 
 int main(void)
 {
 	wdt_enable(WDTO_500MS);	
- 554:	2d e0       	ldi	r18, 0x0D	; 13
- 556:	88 e1       	ldi	r24, 0x18	; 24
- 558:	90 e0       	ldi	r25, 0x00	; 0
- 55a:	0f b6       	in	r0, 0x3f	; 63
- 55c:	f8 94       	cli
- 55e:	a8 95       	wdr
- 560:	81 bd       	out	0x21, r24	; 33
- 562:	0f be       	out	0x3f, r0	; 63
- 564:	21 bd       	out	0x21, r18	; 33
+ 54a:	2d e0       	ldi	r18, 0x0D	; 13
+ 54c:	88 e1       	ldi	r24, 0x18	; 24
+ 54e:	90 e0       	ldi	r25, 0x00	; 0
+ 550:	0f b6       	in	r0, 0x3f	; 63
+ 552:	f8 94       	cli
+ 554:	a8 95       	wdr
+ 556:	81 bd       	out	0x21, r24	; 33
+ 558:	0f be       	out	0x3f, r0	; 63
+ 55a:	21 bd       	out	0x21, r18	; 33
 	servosEnabled = false;
- 566:	10 92 61 00 	sts	0x0061, r1
+ 55c:	10 92 61 00 	sts	0x0061, r1
 	initializations();
- 56a:	54 df       	rcall	.-344    	; 0x414 <initializations>
+ 560:	4c df       	rcall	.-360    	; 0x3fa <initializations>
 	PORTD &= ~DBLED;
- 56c:	92 98       	cbi	0x12, 2	; 18
+ 562:	92 98       	cbi	0x12, 2	; 18
 	while(1)
     {
 		
 		servoSignalLoop();			//sends all the servo signals 
- 56e:	67 df       	rcall	.-306    	; 0x43e <servoSignalLoop>
+ 564:	5f df       	rcall	.-322    	; 0x424 <servoSignalLoop>
 		
 		processingForNextLoop();	//processes the current servoBuffer Values
- 570:	bc df       	rcall	.-136    	; 0x4ea <processingForNextLoop>
- 572:	04 c0       	rjmp	.+8      	; 0x57c <main+0x28>
+ 566:	b4 df       	rcall	.-152    	; 0x4d0 <processingForNextLoop>
+ 568:	04 c0       	rjmp	.+8      	; 0x572 <main+0x28>
 		servoDataIRQ();				//sends an interrupt request to the Xmega	
 		
 				
 		while(TCNT1>500)
 		{		
 			testArray();
- 574:	c0 df       	rcall	.-128    	; 0x4f6 <testArray>
+ 56a:	c0 df       	rcall	.-128    	; 0x4ec <testArray>
 			if(newDataExists()){
- 576:	5f 9b       	sbis	0x0b, 7	; 11
- 578:	02 c0       	rjmp	.+4      	; 0x57e <main+0x2a>
+ 56c:	5f 9b       	sbis	0x0b, 7	; 11
+ 56e:	02 c0       	rjmp	.+4      	; 0x574 <main+0x2a>
 				repopulateArray();
- 57a:	dc df       	rcall	.-72     	; 0x534 <repopulateArray>
+ 570:	dc df       	rcall	.-72     	; 0x52a <repopulateArray>
 				servoDataIRQ();
- 57c:	0e df       	rcall	.-484    	; 0x39a <servoDataIRQ>
+ 572:	11 df       	rcall	.-478    	; 0x396 <servoDataIRQ>
 		processingForNextLoop();	//processes the current servoBuffer Values
 		
 		servoDataIRQ();				//sends an interrupt request to the Xmega	
 		
 				
 		while(TCNT1>500)
- 57e:	8c b5       	in	r24, 0x2c	; 44
- 580:	9d b5       	in	r25, 0x2d	; 45
- 582:	21 e0       	ldi	r18, 0x01	; 1
- 584:	85 3f       	cpi	r24, 0xF5	; 245
- 586:	92 07       	cpc	r25, r18
- 588:	a8 f7       	brcc	.-22     	; 0x574 <main+0x20>
+ 574:	8c b5       	in	r24, 0x2c	; 44
+ 576:	9d b5       	in	r25, 0x2d	; 45
+ 578:	21 e0       	ldi	r18, 0x01	; 1
+ 57a:	85 3f       	cpi	r24, 0xF5	; 245
+ 57c:	92 07       	cpc	r25, r18
+ 57e:	a8 f7       	brcc	.-22     	; 0x56a <main+0x20>
 				repopulateArray();
 				servoDataIRQ();
 			}
 			
 		}
 		asm("nop");
- 58a:	00 00       	nop
+ 580:	00 00       	nop
     }
- 58c:	f0 cf       	rjmp	.-32     	; 0x56e <main+0x1a>
+ 582:	f0 cf       	rjmp	.-32     	; 0x564 <main+0x1a>
 
-0000058e <timer1Init>:
+00000584 <__vector_default>:
+	uint8_t i;
+	for(i=0;i<3;i++) buffer[i] = buffer[i+1];
+	buffer[3] = UDR;
+}
+
+ISR(BADISR_vect){
+ 584:	1f 92       	push	r1
+ 586:	0f 92       	push	r0
+ 588:	0f b6       	in	r0, 0x3f	; 63
+ 58a:	0f 92       	push	r0
+ 58c:	11 24       	eor	r1, r1
+	asm("nop");
+ 58e:	00 00       	nop
+ 590:	0f 90       	pop	r0
+ 592:	0f be       	out	0x3f, r0	; 63
+ 594:	0f 90       	pop	r0
+ 596:	1f 90       	pop	r1
+ 598:	18 95       	reti
+
+0000059a <timer1Init>:
  */ 
 #include "Timer.h"
 
 
 void timer1Init(void){
 	TCCR1A = 0;
- 58e:	1f bc       	out	0x2f, r1	; 47
+ 59a:	1f bc       	out	0x2f, r1	; 47
 	TCCR1B = 0x1A; //sets ICR1 as top val reg and sets the prescaler to div8 enables ctc for immediate updates to ocr1x
- 590:	8a e1       	ldi	r24, 0x1A	; 26
- 592:	8e bd       	out	0x2e, r24	; 46
+ 59c:	8a e1       	ldi	r24, 0x1A	; 26
+ 59e:	8e bd       	out	0x2e, r24	; 46
 	TIMSK = _BV(OCIE1A);
- 594:	80 e4       	ldi	r24, 0x40	; 64
- 596:	89 bf       	out	0x39, r24	; 57
+ 5a0:	80 e4       	ldi	r24, 0x40	; 64
+ 5a2:	89 bf       	out	0x39, r24	; 57
 	ICR1 = 	(F_CPU/(50*8)); //1 timer clock equals 1us period of 20ms ie 20000us	
- 598:	80 e3       	ldi	r24, 0x30	; 48
- 59a:	95 e7       	ldi	r25, 0x75	; 117
- 59c:	95 bd       	out	0x25, r25	; 37
- 59e:	84 bd       	out	0x24, r24	; 36
+ 5a4:	80 e3       	ldi	r24, 0x30	; 48
+ 5a6:	95 e7       	ldi	r25, 0x75	; 117
+ 5a8:	95 bd       	out	0x25, r25	; 37
+ 5aa:	84 bd       	out	0x24, r24	; 36
 	OCR1A = (F_CPU/(50*8));
- 5a0:	9b bd       	out	0x2b, r25	; 43
- 5a2:	8a bd       	out	0x2a, r24	; 42
- 5a4:	08 95       	ret
+ 5ac:	9b bd       	out	0x2b, r25	; 43
+ 5ae:	8a bd       	out	0x2a, r24	; 42
+ 5b0:	08 95       	ret
 
-000005a6 <uartInit>:
+000005b2 <uartInit>:
 
 #include "uart.h"
 
 void uartInit(void){
 
 UBRRH = 0;//5 = 125000, 12 = 57600
- 5a6:	12 b8       	out	0x02, r1	; 2
+ 5b2:	12 b8       	out	0x02, r1	; 2
 UBRRL = 5;
- 5a8:	85 e0       	ldi	r24, 0x05	; 5
- 5aa:	89 b9       	out	0x09, r24	; 9
+ 5b4:	85 e0       	ldi	r24, 0x05	; 5
+ 5b6:	89 b9       	out	0x09, r24	; 9
 
 UCSRB	|= _BV(RXEN) ;//holding off on tx enable as of right now it may be better to simply receive data with the tx line as a sort of flow control 
- 5ac:	54 9a       	sbi	0x0a, 4	; 10
+ 5b8:	54 9a       	sbi	0x0a, 4	; 10
 
 //buffer.head = uartBufferBegin;
 //buffer.tail = uartBufferBegin;
 
 }
- 5ae:	08 95       	ret
+ 5ba:	08 95       	ret
 
-000005b0 <__mulhi3>:
- 5b0:	55 27       	eor	r21, r21
- 5b2:	00 24       	eor	r0, r0
+000005bc <__mulhi3>:
+ 5bc:	55 27       	eor	r21, r21
+ 5be:	00 24       	eor	r0, r0
 
-000005b4 <__mulhi3_loop>:
- 5b4:	80 ff       	sbrs	r24, 0
- 5b6:	02 c0       	rjmp	.+4      	; 0x5bc <__mulhi3_skip1>
- 5b8:	06 0e       	add	r0, r22
- 5ba:	57 1f       	adc	r21, r23
+000005c0 <__mulhi3_loop>:
+ 5c0:	80 ff       	sbrs	r24, 0
+ 5c2:	02 c0       	rjmp	.+4      	; 0x5c8 <__mulhi3_skip1>
+ 5c4:	06 0e       	add	r0, r22
+ 5c6:	57 1f       	adc	r21, r23
 
-000005bc <__mulhi3_skip1>:
- 5bc:	66 0f       	add	r22, r22
- 5be:	77 1f       	adc	r23, r23
- 5c0:	61 15       	cp	r22, r1
- 5c2:	71 05       	cpc	r23, r1
- 5c4:	21 f0       	breq	.+8      	; 0x5ce <__mulhi3_exit>
- 5c6:	96 95       	lsr	r25
- 5c8:	87 95       	ror	r24
- 5ca:	00 97       	sbiw	r24, 0x00	; 0
- 5cc:	99 f7       	brne	.-26     	; 0x5b4 <__mulhi3_loop>
+000005c8 <__mulhi3_skip1>:
+ 5c8:	66 0f       	add	r22, r22
+ 5ca:	77 1f       	adc	r23, r23
+ 5cc:	61 15       	cp	r22, r1
+ 5ce:	71 05       	cpc	r23, r1
+ 5d0:	21 f0       	breq	.+8      	; 0x5da <__mulhi3_exit>
+ 5d2:	96 95       	lsr	r25
+ 5d4:	87 95       	ror	r24
+ 5d6:	00 97       	sbiw	r24, 0x00	; 0
+ 5d8:	99 f7       	brne	.-26     	; 0x5c0 <__mulhi3_loop>
 
-000005ce <__mulhi3_exit>:
- 5ce:	95 2f       	mov	r25, r21
- 5d0:	80 2d       	mov	r24, r0
- 5d2:	08 95       	ret
+000005da <__mulhi3_exit>:
+ 5da:	95 2f       	mov	r25, r21
+ 5dc:	80 2d       	mov	r24, r0
+ 5de:	08 95       	ret
 
-000005d4 <_exit>:
- 5d4:	f8 94       	cli
+000005e0 <_exit>:
+ 5e0:	f8 94       	cli
 
-000005d6 <__stop_program>:
- 5d6:	ff cf       	rjmp	.-2      	; 0x5d6 <__stop_program>
+000005e2 <__stop_program>:
+ 5e2:	ff cf       	rjmp	.-2      	; 0x5e2 <__stop_program>

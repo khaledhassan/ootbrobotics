@@ -24,12 +24,13 @@ struct Servo{
 	uint16_t	servoTime;
 	union ConFigReg{
 		uint8_t		statusReg;
-		struct Params{
-			bool servoType;		// 1 = Futaba, 0 = Hitech 
-			bool upToDate;		// 1 = servo value is current, 0 = servo value is old
-			bool enabled;		// 1 = servo is enabled, 0 servo is disabled
-			bool idleCycles[5];	//counts idle cycles (20ms) up to 25 or so which corresponds to a 2Hz refresh rate
-								//this allows for low maintenance on idle servos  				
+		struct	{
+			uint8_t idleCycles	:	5;	//counts idle cycles (20ms) up to 25 or so which corresponds to a 2Hz refresh rate
+									//this allows for low maintenance on idle servos  	
+			bool servoType	:	1;			// 1 = Futaba, 0 = Hitech 
+			bool upToDate	:	1;			// 1 = servo value is current, 0 = servo value is old
+			bool enabled	:	1;			// 1 = servo is enabled, 0 servo is disabled
+						
 		}params;
 	}configReg;		
 }servo[24];

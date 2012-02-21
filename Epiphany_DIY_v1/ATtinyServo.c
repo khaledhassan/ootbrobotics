@@ -7,6 +7,8 @@
 
 #include "ATtinyServo.h"
 
+#define servoRefresh
+
 //125000
 #define BAUD125000	1984		
 #define USART_BAUDCTRLA_125000	BAUD125000
@@ -22,8 +24,8 @@
 
 
 #define numOfServos				24					//there are 24 dedicated servo channels on the Epiphany DIY
-#define servoBufferSize			4*numOfServos+1	//each servo command takes 4 bytes: (1)servoNumber (2-3)servoTime(16-bit) and (4) the check (servoNumber | 0x80) 
-#define	servoRefreshThreshold	25					//this sets the number of cycles of the 20ms timer corresponding to a servos idle time being too long
+#define servoBufferSize			4*numOfServos+1 + 128	//each servo command takes 4 bytes: (1)servoNumber (2-3)servoTime(16-bit) and (4) the check (servoNumber | 0x80) 
+#define	servoRefreshThreshold	1					//this sets the number of cycles of the 20ms timer corresponding to a servos idle time being too long
 
 #define defaultMinimumAngleTime		600*1.5			//this corresponds to the amount of dead time corresponding to a servo's minimum angle of 0 degrees
 #define defaultMaximumAngleTime     (1500+600)*1.5	//this corresponds to the amount of time corresponding to a servo's maximum angle of 180 degrees
@@ -53,12 +55,6 @@ void ATtinyServoInit(void)
 	USARTE0.BAUDCTRLA = USART_BAUDCTRLA_125000;
 	USARTE0.BAUDCTRLB = USART_BAUDCTRLB_125000;
 
-/*	USARTE0.CTRLB = USART_CTRLB_57600;
-	USARTE0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc | USART_CHSIZE_8BIT_gc;
-	USARTE0.BAUDCTRLA = USART_BAUDCTRLA_57600;
-	USARTE0.BAUDCTRLB = USART_BAUDCTRLB_57600;
-*/	
-	
 	PORTE.PIN2CTRL = PORT_ISC_BOTHEDGES_gc | PORT_OPC_PULLDOWN_gc;
 	PORTE.INTCTRL = PORT_INT0LVL_LO_gc;
 	PORTE.INT0MASK = 0x04;	//interrupt on the pin change of PORTE6
@@ -85,18 +81,24 @@ void servo_putchar(char c,FILE *unused)
 }
 
 int servo_getchar(FILE *stream){
+uint8_t temp1;
 
 	if (servoBuffer.tail == servoBuffer.bufferEnd){
 		uint8_t temp = *servoBuffer.tail;
+		*servoBuffer.tail = 0;
 		servoBuffer.tail = servoBuffer.bufferBegin;
-		//return temp;
 		while(!(USARTE0.STATUS & USART_DREIF_bm));
 		USARTE0.DATA = temp;	
+
+
 	}
 	//else return *servoBuffer.tail++;
 	else{
 		while(!(USARTE0.STATUS & USART_DREIF_bm));
-		USARTE0.DATA = *servoBuffer.tail++;
+		USARTE0.DATA = *servoBuffer.tail;
+		temp1 = *servoBuffer.tail;
+		*servoBuffer.tail++ = 0;
+	
 	}
 }
 
@@ -114,13 +116,15 @@ uint8_t dataInServoBuffer(void){
 }
 
 
-//Occurs upon Interrupt request from the Atiny
+//Occurs upon Interrupt request from the Attiny
 ISR(PORTE_INT0_vect){	
-	//if the servoBuffer contains any data within spit out the next byte
+	cli();
 	if(dataInServoBuffer())	servo_getchar(NULL); //grabs the next byte from the servoBuffer	
+	sei();
 }
 
 ISR(TCE1_OVF_vect){
+	cli();
 	uint8_t i;		//simple increment var
 	for(i=0;i<24;i++)
 	{
@@ -130,23 +134,29 @@ ISR(TCE1_OVF_vect){
 		//if the servo is up to date increment its idle cycles at that state
 		if(servo[i].configReg.params.upToDate){
 				
+#ifdef servoRefresh
 			servo[i].configReg.statusReg++;	//the idle cycles bit field is at the bottom of the reg.  
 											//So an increment to the reg will increment the idle cycles
 											//only as long as the range of increments is kept in check ie it stays under 31	
 																							
 			//if the servo has been idle for too long set it as out of date so it can be refreshed
 			if(servo[i].configReg.statusReg & 0x1F >= servoRefreshThreshold)servo[i].configReg.params.upToDate = false;
+#endif
 		}			
 		//now if the servo is out of date we need to send its message to the servoBuffer
 		else 
 		{
-			asm("nop");
+		//print servoNumber, time high. time low, 0x80 | servoNumber
 			fprintf(&servoBufferFile,"%c%c%c%c",i, (servo[i].servoTime >>8), servo[i].servoTime, (i | 0x80));
-			servo[i].configReg.statusReg = 0xC0;	//this will clear the idleCyclesCount, set the servo as upToDate and preserve the enabled bit.
+			servo[i].configReg.statusReg = 0xC0 + i;	//this will clear the idleCyclesCount, set the servo as upToDate and preserve the enabled bit.
+		//	servo[i].configReg.params.upToDate = true;
+		//	servo[i].configReg.params.enabled = true;
 		}
 		
 	}
-	asm("nop");
+	
+	sei();
+	
 }
 
 void disableServo(uint8_t servoNumber){

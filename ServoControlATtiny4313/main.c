@@ -55,9 +55,7 @@ int main(void)
     }
 }
 
-ISR(BADISR_vect){
-	asm("nop");
-}
+
 
 ISR(TIMER1_COMPA_vect){
 	cli();
@@ -115,10 +113,19 @@ void servoSignalLoop(void){
 
 void processingForNextLoop(void)
 {
+	
 	refresh();
+	
+	//this makes sure the message timeout acctually works
+	buffer[0]=0x0;
+	buffer[1]=0x0;
+	buffer[2]=0x0;
+	buffer[3]=0x0;
+	
 	setMasks();
 	sort();
 	postSortMask();
+	
 	mulitpleServoTimeFix();
 }
 
@@ -139,4 +146,8 @@ inline repopulateArray(void){
 	uint8_t i;
 	for(i=0;i<3;i++) buffer[i] = buffer[i+1];
 	buffer[3] = UDR;
+}
+
+ISR(BADISR_vect){
+	asm("nop");
 }
