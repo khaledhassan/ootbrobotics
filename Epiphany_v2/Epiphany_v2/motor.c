@@ -7,13 +7,13 @@
 
 #include "motor.h"
 
-extern motorControl1_t motor1 = {&TCF0.CCA,&PORTJ};
-extern motorControl2_t motor2 = {&TCF0.CCB,&PORTJ};
-extern motorControl3_t motor3 = {&TCF0.CCC,&PORTJ};
-extern motorControl4_t motor4 = {&TCF0.CCD,&PORTJ};
+extern motorControl1_t motor1 = {&TCF0.CCA,&PORTK.OUT};
+extern motorControl2_t motor2 = {&TCF0.CCB,&PORTK.OUT};
+extern motorControl3_t motor3 = {&TCF0.CCC,&PORTK.OUT};
+extern motorControl4_t motor4 = {&TCF0.CCD,&PORTK.OUT};
 	
-extern motorControl1HP_t hpMotor1 = {&TCF0.CCA,	&TCF0.CCB, &PORTJ};
-extern motorControl2HP_t hpMotor2 = {&TCF0.CCC,	&TCF0.CCD, &PORTJ};
+extern motorControl1HP_t hpMotor1 = {&TCF0.CCA,	&TCF0.CCB, &PORTK.OUT};
+extern motorControl2HP_t hpMotor2 = {&TCF0.CCC,	&TCF0.CCD, &PORTK.OUT};
 	
 	
 void motorInit()
@@ -27,6 +27,8 @@ void motorInit()
 	motor2.ctrlReg->direction = MOTOR_DIR_NEUTRAL;
 	motor3.ctrlReg->direction = MOTOR_DIR_NEUTRAL;
 	motor4.ctrlReg->direction = MOTOR_DIR_NEUTRAL;
+	
+	PORTK.DIRSET = 0xFF;	
 	
 	PORTF.DIRSET = 0x0F;
 }

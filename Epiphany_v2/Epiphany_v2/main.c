@@ -13,6 +13,7 @@
 #include "ATtinyServo.h"
 #include "uart.h"
 #include "adc.h"
+#include "motor.h"
 
 
 int main(void)
@@ -21,13 +22,10 @@ int main(void)
 	adcInit(&ADCA);
 	ATtinyServoInit();
 	usartInit(&USARTC0,115200);
-	PORTC.DIRSET =0x08; 
 	sei();
-	uint8_t i,j;
 	while(1)
     {	
-
-					
+	
 	}
 
 
