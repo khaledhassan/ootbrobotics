@@ -28,7 +28,7 @@
 #define	servoRefreshThreshold	1					//this sets the number of cycles of the 20ms timer corresponding to a servos idle time being too long
 
 #define defaultMinimumAngleTime		600*1.5			//this corresponds to the amount of dead time corresponding to a servo's minimum angle of 0 degrees
-#define defaultMaximumAngleTime     (1500+600)*1.5	//this corresponds to the amount of time corresponding to a servo's maximum angle of 180 degrees
+#define defaultMaximumAngleTime     (1500+900)*1.5	//this corresponds to the amount of time corresponding to a servo's maximum angle of 180 degrees
 #define timerTicksPerDegree				15			//how many ticks in the ATiny's timer corresponding to 1 degree of angular displacement at the servo
 
 FILE	servoBufferFile = FDEV_SETUP_STREAM(servo_putchar,NULL,_FDEV_SETUP_WRITE);

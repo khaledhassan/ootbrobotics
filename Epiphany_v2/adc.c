@@ -20,29 +20,29 @@ void adcInit(ADC_t	*adcModule)
 	adcModule->CH3.CTRL = ADC_CH_INPUTMODE_SINGLEENDED_gc;
 	
 	adcModule->CTRLA = ADC_CH3START_bm | ADC_CH2START_bm | ADC_CH1START_bm | ADC_CH0START_bm | ADC_ENABLE_bm; //enable adc and all its channels
-	adcModule->CTRLB = ADC_FREERUN_bm;//set to freerun and unsigned mode
-	adcModule->EVCTRL = ADC_SWEEP_0123_gc;//sweep all channels	
+	adcModule->CTRLB = ADC_CONMODE_bm | ADC_FREERUN_bm;//set to freerun and signed mode
+	adcModule->EVCTRL = ADC_SWEEP_0123_gc;//sweel all channels	
 }
 
-void adcChannelMux(ADC_t *adcModule, uint8_t channelNum, uint8_t inputPin)
+void adcChannelMux(ADC_t *adcModule, volatile uint8_t channelNum, uint8_t inputPin)
 {
 	
 	switch(channelNum)
 	{
 		case(0):
-			adcModule->CH0.MUXCTRL = inputPin & 0x7;
+			adcModule->CH0.MUXCTRL = (inputPin & 0x7)<<3;
 		break;
 		
 		case(1):
-			adcModule->CH1.MUXCTRL = inputPin & 0x7;
+			adcModule->CH1.MUXCTRL = (inputPin & 0x7)<<3;
 		break;
 		
 		case(2):
-			adcModule->CH2.MUXCTRL = inputPin & 0x7;
+			adcModule->CH2.MUXCTRL = (inputPin & 0x7)<<3;
 		break;
 		
 		case(3):
-			adcModule->CH3.MUXCTRL = inputPin & 0x7;
+			adcModule->CH3.MUXCTRL = (inputPin & 0x7)<<3;
 		break;
 	}
 }
