@@ -20,8 +20,11 @@ void adcInit(ADC_t	*adcModule)
 	adcModule->CH3.CTRL = ADC_CH_INPUTMODE_SINGLEENDED_gc;
 	
 	adcModule->CTRLA = ADC_CH3START_bm | ADC_CH2START_bm | ADC_CH1START_bm | ADC_CH0START_bm | ADC_ENABLE_bm; //enable adc and all its channels
-	adcModule->CTRLB = ADC_CONMODE_bm | ADC_FREERUN_bm;//set to freerun and signed mode
+	adcModule->CTRLB = ADC_FREERUN_bm;//set to freerun
 	adcModule->EVCTRL = ADC_SWEEP_0123_gc;//sweel all channels	
+	adcModule->PRESCALER = ADC_PRESCALER_DIV128_gc;
+	
+	adcModule->REFCTRL = ADC_REFSEL_VCC_gc | ADC_BANDGAP_bm | ADC_TEMPREF_bm;
 }
 
 void adcChannelMux(ADC_t *adcModule, volatile uint8_t channelNum, uint8_t inputPin)
