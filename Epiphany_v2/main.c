@@ -5,29 +5,16 @@
  *  Author: Tim
  */ 
 
-#include <avr/io.h>
-#include <util/delay.h>
-#include <math.h>
-
-#include "clock.h"
-#include "ATtinyServo.h"
-#include "uart.h"
-#include "adc.h"
-#include "motor.h"
-
+#include "Epiphany.h"
 
 int main(void)
 {
-	clockInit();
-	adcInit(&ADCA);
-	ATtinyServoInit();
-	usartInit(&USARTC0,115200);
-	sei();
+	
+	setup();
+	
 	while(1)
     {	
-	
+		loop();
 	}
-
-
 
 }

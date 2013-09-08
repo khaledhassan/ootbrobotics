@@ -15,7 +15,10 @@
 #include <avr/interrupt.h>
 
 
-#define bufferSizeRx	64
+#define bufferSize	64
+
+#define PORT_USARTTX0_msk	0x08
+#define PORT_USARTTX1_msk	0x80
 
 
 //1200
@@ -101,24 +104,30 @@ typedef struct{
 	uint8_t *bufferEnd;
 	uint8_t *head;
 	uint8_t *tail;
-	uint8_t data[bufferSizeRx];
-}bufRx_t;
+	uint8_t data[bufferSize];
+}buf_t;
 
-bufRx_t bufRxC0,
-		bufRxC1,
-		bufRxD0,
-		bufRxD1,
-		bufRxE1,
-		bufRxF0,
-		bufRxF1;
+buf_t	bufRxC0,bufTxC0,
+		bufRxC1,bufTxC1,
+		bufRxD0,bufTxD0,
+		bufRxD1,bufTxD1,
+		bufRxE1,bufTxE1,
+		bufRxF0,bufTxF0,
+		bufRxF1,bufTxF1;
 		
 
 void usartInit(USART_t *uart, long baud);//inilization routine for uart modules.  uart = &USARTxn where x is C-F n is 0-1
 
-void usart_putchar(USART_t *usart, char c);
-uint8_t usart_getchar(bufRx_t *buffer);
-void usartStore(bufRx_t *buffer, char c);
-uint8_t dataInBuf(bufRx_t *buffer);
+static inline void usbInit(long baud){ usartInit(&USARTC0,baud);}
+static inline void xbeeInit(long baud){ usartInit(&USARTE1,baud);}
+	
+
+void usart_putc(USART_t *usart, buf_t *buffer, char c);
+uint8_t usart_getc(buf_t *buffer);
+void usart_Put(USART_t *usart, buf_t *buffer, uint8_t *packet,uint16_t packetLength);
+uint8_t bufferRead(buf_t *buffer);
+void bufferWrite(buf_t *buffer, char c);
+uint8_t dataInBuf(buf_t *buffer);
 
 static inline uint8_t dataInBufC0(){ return	dataInBuf(&bufRxC0);}
 static inline uint8_t dataInBufC1(){ return	dataInBuf(&bufRxC1);}
@@ -128,21 +137,21 @@ static inline uint8_t dataInBufE1(){ return	dataInBuf(&bufRxE1);}
 static inline uint8_t dataInBufF0(){ return	dataInBuf(&bufRxF0);}
 static inline uint8_t dataInBufF1(){ return	dataInBuf(&bufRxF1);}
 
-static inline void usartC0_putchar(char c){	usart_putchar(&USARTC0,c);}
-static inline void usartC1_putchar(char c){	usart_putchar(&USARTC1,c);}
-static inline void usartD0_putchar(char c){	usart_putchar(&USARTD0,c);}
-static inline void usartD1_putchar(char c){	usart_putchar(&USARTD1,c);}
-static inline void usartE1_putchar(char c){	usart_putchar(&USARTE1,c);}
-static inline void usartF0_putchar(char c){	usart_putchar(&USARTF0,c);}
-static inline void usartF1_putchar(char c){	usart_putchar(&USARTF1,c);}
+static inline void usartC0_putc(char c){usart_putc(&USARTC0,&bufTxC0,c);}
+static inline void usartC1_putc(char c){usart_putc(&USARTC1,&bufTxC1,c);}
+static inline void usartD0_putc(char c){usart_putc(&USARTD0,&bufTxD0,c);}
+static inline void usartD1_putc(char c){usart_putc(&USARTD1,&bufTxD1,c);}
+static inline void usartE1_putc(char c){usart_putc(&USARTE1,&bufTxE1,c);}
+static inline void usartF0_putc(char c){usart_putc(&USARTF0,&bufTxF0,c);}
+static inline void usartF1_putc(char c){usart_putc(&USARTF1,&bufTxF1,c);}
 
-static inline uint8_t usartC0_getchar(){ return usart_getchar(&bufRxC0);}
-static inline uint8_t usartC1_getchar(){ return usart_getchar(&bufRxC1);}
-static inline uint8_t usartD0_getchar(){ return usart_getchar(&bufRxD0);}
-static inline uint8_t usartD1_getchar(){ return usart_getchar(&bufRxD1);}
-static inline uint8_t usartE1_getchar(){ return usart_getchar(&bufRxE1);}
-static inline uint8_t usartF0_getchar(){ return usart_getchar(&bufRxF0);}
-static inline uint8_t usartF1_getchar(){ return usart_getchar(&bufRxF1);}
+static inline uint8_t usartC0_getc(){ return usart_getc(&bufRxC0);}
+static inline uint8_t usartC1_getc(){ return usart_getc(&bufRxC1);}
+static inline uint8_t usartD0_getc(){ return usart_getc(&bufRxD0);}
+static inline uint8_t usartD1_getc(){ return usart_getc(&bufRxD1);}
+static inline uint8_t usartE1_getc(){ return usart_getc(&bufRxE1);}
+static inline uint8_t usartF0_getc(){ return usart_getc(&bufRxF0);}
+static inline uint8_t usartF1_getc(){ return usart_getc(&bufRxF1);}
 
 FILE usartC0_str;
 FILE usartC1_str;
@@ -157,6 +166,9 @@ FILE usartF1_str;
 
 #define USB_str		usartC0_str
 #define Xbee_str	usartE1_str
-#define Servo_str	usartE0_str
+
+#define dataInBufUSB()	dataInBufC0()
+#define dataInBufXbee()	dataInBufE1()
+
 
 #endif /* UART_H_ */

@@ -10,9 +10,20 @@
 #define ADC_H_
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 
-void adcInit(ADC_t	*adcModule);
-void adcChannelMux(ADC_t *adcModule, uint8_t channelNum, uint8_t inputPin);
-uint16_t analogRead(ADC_t *adcModule, uint8_t channelNum);
+volatile int16_t adc_data[8][16];
+
+volatile struct cntRegs
+{
+	uint8_t	CNT			:4;
+	uint8_t	reserved	:4;
+}adcCnt[8];
+
+uint16_t filterData(int16_t *data);
+
+void adcInit();
+
+uint16_t analogRead(uint8_t pinNum);
 
 #endif /* ADCOPT_H_ */

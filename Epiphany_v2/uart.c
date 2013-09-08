@@ -6,88 +6,230 @@
  */ 
 #include "uart.h"
 
-
-bufRx_t			bufRxC0 = {&bufRxC0.data[0],&bufRxC0.data[bufferSizeRx-1],&bufRxC0.data[0],&bufRxC0.data[0],0},
-				bufRxC1 = {&bufRxC1.data[0],&bufRxC1.data[bufferSizeRx-1],&bufRxC1.data[0],&bufRxC1.data[0],0},
-				bufRxD0 = {&bufRxD0.data[0],&bufRxD0.data[bufferSizeRx-1],&bufRxD0.data[0],&bufRxD0.data[0],0},
-				bufRxD1 = {&bufRxD1.data[0],&bufRxD1.data[bufferSizeRx-1],&bufRxD1.data[0],&bufRxD1.data[0],0},
-				bufRxE1 = {&bufRxE1.data[0],&bufRxE1.data[bufferSizeRx-1],&bufRxE1.data[0],&bufRxE1.data[0],0},
-				bufRxF0 = {&bufRxF0.data[0],&bufRxF0.data[bufferSizeRx-1],&bufRxF0.data[0],&bufRxF0.data[0],0},				
-				bufRxF1 = {&bufRxF1.data[0],&bufRxF1.data[bufferSizeRx-1],&bufRxF1.data[0],&bufRxF1.data[0],0};
+buf_t	bufRxC0 = {&bufRxC0.data[0],&bufRxC0.data[bufferSize-1],&bufRxC0.data[0],&bufRxC0.data[0],0},
+		bufTxC0 = {&bufTxC0.data[0],&bufTxC0.data[bufferSize-1],&bufTxC0.data[0],&bufTxC0.data[0],0},
+				
+		bufRxC1 = {&bufRxC1.data[0],&bufRxC1.data[bufferSize-1],&bufRxC1.data[0],&bufRxC1.data[0],0},
+		bufTxC1 = {&bufTxC1.data[0],&bufTxC1.data[bufferSize-1],&bufTxC1.data[0],&bufTxC1.data[0],0},
+				
+		bufRxD0 = {&bufRxD0.data[0],&bufRxD0.data[bufferSize-1],&bufRxD0.data[0],&bufRxD0.data[0],0},
+		bufTxD0 = {&bufTxD0.data[0],&bufTxD0.data[bufferSize-1],&bufTxD0.data[0],&bufTxD0.data[0],0},
+				
+		bufRxD1 = {&bufRxD1.data[0],&bufRxD1.data[bufferSize-1],&bufRxD1.data[0],&bufRxD1.data[0],0},
+		bufTxD1 = {&bufTxD1.data[0],&bufTxD1.data[bufferSize-1],&bufTxD1.data[0],&bufTxD1.data[0],0},
+				
+		bufRxE1 = {&bufRxE1.data[0],&bufRxE1.data[bufferSize-1],&bufRxE1.data[0],&bufRxE1.data[0],0},
+		bufTxE1 = {&bufTxE1.data[0],&bufTxE1.data[bufferSize-1],&bufTxE1.data[0],&bufTxE1.data[0],0},
+				
+		bufRxF0 = {&bufRxF0.data[0],&bufRxF0.data[bufferSize-1],&bufRxF0.data[0],&bufRxF0.data[0],0},				
+		bufTxF0 = {&bufTxF0.data[0],&bufTxF0.data[bufferSize-1],&bufTxF0.data[0],&bufTxF0.data[0],0},
+				
+		bufRxF1 = {&bufRxF1.data[0],&bufRxF1.data[bufferSize-1],&bufRxF1.data[0],&bufRxF1.data[0],0},
+		bufTxF1 = {&bufTxF1.data[0],&bufTxF1.data[bufferSize-1],&bufTxF1.data[0],&bufTxF1.data[0],0};
 
 //sets up all of the streams
-FILE usartC0_str = FDEV_SETUP_STREAM(usartC0_putchar, usartC0_getchar, _FDEV_SETUP_RW);
+FILE usartC0_str = FDEV_SETUP_STREAM(usartC0_putc, usartC0_getc, _FDEV_SETUP_RW);
 
-FILE usartC1_str = FDEV_SETUP_STREAM(usartC1_putchar, usartC1_getchar, _FDEV_SETUP_RW);
+FILE usartC1_str = FDEV_SETUP_STREAM(usartC1_putc, usartC1_getc, _FDEV_SETUP_RW);
 
-FILE usartD0_str = FDEV_SETUP_STREAM(usartD0_putchar, usartD0_getchar, _FDEV_SETUP_RW);
+FILE usartD0_str = FDEV_SETUP_STREAM(usartD0_putc, usartD0_getc, _FDEV_SETUP_RW);
 
-FILE usartD1_str = FDEV_SETUP_STREAM(usartD1_putchar, usartD1_getchar, _FDEV_SETUP_RW);
+FILE usartD1_str = FDEV_SETUP_STREAM(usartD1_putc, usartD1_getc, _FDEV_SETUP_RW);
 
-FILE usartE1_str = FDEV_SETUP_STREAM(usartE1_putchar, usartE1_getchar, _FDEV_SETUP_RW);
+FILE usartE1_str = FDEV_SETUP_STREAM(usartE1_putc, usartE1_getc, _FDEV_SETUP_RW);
 
-FILE usartF0_str = FDEV_SETUP_STREAM(usartF0_putchar, usartF0_getchar, _FDEV_SETUP_RW);
+FILE usartF0_str = FDEV_SETUP_STREAM(usartF0_putc, usartF0_getc, _FDEV_SETUP_RW);
 
-FILE usartF1_str = FDEV_SETUP_STREAM(usartF1_putchar, usartF1_getchar, _FDEV_SETUP_RW);
-
+FILE usartF1_str = FDEV_SETUP_STREAM(usartF1_putc, usartF1_getc, _FDEV_SETUP_RW);
 
 //these functions are used for outputing data from the uarts
 
-void usart_putchar(USART_t *usart, char c)
+void usart_putc(USART_t *usart, buf_t *buffer, char c)
 {
-	while(!(usart->STATUS & USART_DREIF_bm));
-	usart->DATA = c;
+	cli();
+	bufferWrite((buf_t *)buffer,c);
+	usart->CTRLA &= ~USART_DREINTLVL_gm;
+	usart->CTRLA |= USART_DREINTLVL_LO_gc;	//setting this bit should cause the DRE interrupt to be triggered
+	sei();
 }
 
-uint8_t usart_getchar(bufRx_t *buffer){	
+uint8_t usart_getc(buf_t *buffer)
+{
+	uint8_t temp;
+	cli();
+	temp = bufferRead((buf_t *) buffer);
+	sei();
+	return temp;
+}
+
+void usart_Put(USART_t *usart, buf_t *buffer, uint8_t *packet,uint16_t packetLength)
+{
+	cli();
+	uint16_t i;
+	for(i=0;i<packetLength;i++)
+	{
+		bufferWrite((buf_t *)buffer,packet[i]);
+	}
+	usart->CTRLA &= ~USART_DREINTLVL_gm;
+	usart->CTRLA |= USART_DREINTLVL_LO_gc;	//setting this bit should cause the DRE interrupt to be triggered
+	sei();
+}
+
+uint8_t bufferRead(buf_t *buffer){
 	if (buffer->tail == buffer->bufferEnd){
 		uint8_t temp = *buffer->tail;
 		buffer->tail = buffer->bufferBegin;
 		return temp;
 	}
-	else return *buffer->tail++;
+	else
+	{
+		return *buffer->tail++;
+	}
 }
 
-void usartStore(bufRx_t *buffer, char c){
+void bufferWrite(buf_t *buffer, char c){
 	if(buffer->head == buffer->bufferEnd){
 		*buffer->head = c;
-		buffer->head = buffer->bufferBegin;	
-	}		
+		buffer->head = buffer->bufferBegin;
+	}
 	else *buffer->head++ = c;
 }
 
-uint8_t dataInBuf(bufRx_t *buffer){
+uint8_t dataInBuf(buf_t *buffer){
 	if(buffer->head == buffer->tail) return 0;	//no data to be read
 	else return 1;	
 }
 
 ISR(USARTC0_RXC_vect){
-	usartStore(&bufRxC0,USARTC0.DATA);
+	bufferWrite(&bufRxC0,USARTC0.DATA);
 }
 ISR(USARTC1_RXC_vect){
-	usartStore(&bufRxC1,USARTC1.DATA);
+	bufferWrite(&bufRxC1,USARTC1.DATA);
 }
 ISR(USARTD0_RXC_vect){
-	usartStore(&bufRxD0,USARTD0.DATA);
+	bufferWrite(&bufRxD0,USARTD0.DATA);
 }
 ISR(USARTD1_RXC_vect){
-	usartStore(&bufRxD1,USARTD1.DATA);
+	bufferWrite(&bufRxD1,USARTD1.DATA);
 }
 ISR(USARTE1_RXC_vect){
-	usartStore(&bufRxE1,USARTE1.DATA);
+	bufferWrite(&bufRxE1,USARTE1.DATA);
 }
 ISR(USARTF0_RXC_vect){
-	usartStore(&bufRxF0,USARTF0.DATA);
+	bufferWrite(&bufRxF0,USARTF0.DATA);
 }
 ISR(USARTF1_RXC_vect){
-	usartStore(&bufRxF1,USARTF1.DATA);
+	bufferWrite(&bufRxF1,USARTF1.DATA);
+}
+
+ISR(USARTC0_DRE_vect)
+{
+	cli();
+	if(dataInBuf(&bufTxC0))
+	{
+		USARTC0.DATA = bufferRead(&bufTxC0);		//this is used to send packets of data in quick bursts
+	}
+	else USARTC0.CTRLA &= ~USART_DREINTLVL_gm;
+	sei();
+}
+
+ISR(USARTC1_DRE_vect)
+{
+	cli();
+	if(dataInBuf(&bufTxC1))
+	{
+		USARTC1.DATA = bufferRead(&bufTxC1);		//this is used to send packets of data in quick bursts
+	}
+	else USARTC1.CTRLA &= ~USART_DREINTLVL_gm;
+	sei();
+}
+
+ISR(USARTD0_DRE_vect)
+{
+	cli();
+	if(dataInBuf(&bufTxD0))
+	{
+		USARTD0.DATA = bufferRead(&bufTxD0);		//this is used to send packets of data in quick bursts
+	}
+	else USARTD0.CTRLA &= ~USART_DREINTLVL_gm;
+	sei();
+}
+
+ISR(USARTD1_DRE_vect)
+{
+	cli();
+	if(dataInBuf(&bufTxD1))
+	{
+		USARTD1.DATA = bufferRead(&bufTxD1);		//this is used to send packets of data in quick bursts
+	}
+	else USARTD1.CTRLA &= ~USART_DREINTLVL_gm;
+	sei();
+}
+
+ISR(USARTE1_DRE_vect)
+{
+	cli();
+	if(dataInBuf(&bufTxE1))
+	{
+		USARTE1.DATA = bufferRead(&bufTxE1);		//this is used to send packets of data in quick bursts
+	}
+	else USARTE1.CTRLA &= ~USART_DREINTLVL_gm;
+	sei();
+}
+
+ISR(USARTF0_DRE_vect)
+{
+	cli();
+	if(dataInBuf(&bufTxF0))
+	{
+		USARTF0.DATA = bufferRead(&bufTxF0);		//this is used to send packets of data in quick bursts
+	}
+	else USARTF0.CTRLA &= ~USART_DREINTLVL_gm;
+	sei();
+}
+
+ISR(USARTF1_DRE_vect)
+{
+	cli();
+	if(dataInBuf(&bufTxF1))
+	{
+		USARTF1.DATA = bufferRead(&bufTxF1);		//this is used to send packets of data in quick bursts
+	}
+	else USARTF1.CTRLA &= ~USART_DREINTLVL_gm;
+	sei();
 }
 
 
 //initialization functions for the uarts
 void usartInit(USART_t *usart, long baud)
 {
-	PMIC.CTRL |= PMIC_MEDLVLEX_bm;	
+	switch((uint16_t)usart)
+	{
+		case ((uint16_t)&USARTC0):
+			PORTC.DIRSET = PORT_USARTTX0_msk;
+		break;
+		case ((uint16_t)&USARTC1):
+			PORTC.DIRSET = PORT_USARTTX1_msk;
+		break;
+		case ((uint16_t)&USARTD0):
+			PORTD.DIRSET = PORT_USARTTX0_msk;
+		break;
+		case ((uint16_t)&USARTD1):
+			PORTD.DIRSET = PORT_USARTTX1_msk;
+		break;
+		case ((uint16_t)&USARTE1):
+			PORTE.DIRSET = PORT_USARTTX1_msk;
+		break;
+		case ((uint16_t)&USARTF0):
+			PORTF.DIRSET = PORT_USARTTX0_msk;
+		break;
+		case ((uint16_t)&USARTF1):
+			PORTF.DIRSET = PORT_USARTTX1_msk;
+		break;
+		
+	}
+	
+	PMIC.CTRL |= PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;	
 		usart->CTRLA |= USART_RXCINTLVL_MED_gc;
 	switch(baud){
 		case (1200):
