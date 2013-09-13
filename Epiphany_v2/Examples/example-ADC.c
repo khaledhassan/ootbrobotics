@@ -1,11 +1,30 @@
 /*
- * example4.c
- *
- * Created: 8/29/2013 1:05:36 AM
- *  Author: Tim
+   example-ADC.c
+ 
+   To run this example
+ 
+   1)	locate the solution explorer window, 
+ 		If it is not displayed, you can find 
+ 		it via "View/Solution Explorer" 
+ 		or Ctrl + Alt + L
+   
+   2)	Right click on your project file which 
+ 		has a default name of "renameMe.c".  
+		Select properties form the window. 
+		There will be an item labeled Build Action
+		select none instead of compile
+	
+	3)	follow the same process as step 2 for 
+		This file however instead of selection
+		none, select compile. 
+		
+	***	Note when you are finished with the example 
+		you should set it's build action to none, and
+		set your project file back to compile 
+		
  */ 
 
-#include "Epiphany.h"
+#include "../Epiphany.h"
 
 uint8_t usbData;
 int8_t pNumber = 0;

@@ -1,4 +1,5 @@
-example4.d example4.o: .././example4.c .././Epiphany.h \
+Examples/example-USB-Serial.d Examples/example-USB-Serial.o: \
+ ../Examples/example-USB-Serial.c ../Examples/../Epiphany.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/avr/io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/avr/sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/inttypes.h \
@@ -17,15 +18,16 @@ example4.d example4.o: .././example4.c .././Epiphany.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/stdio.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/include/stdarg.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/include/stddef.h \
- .././clock.h .././utility.h \
+ ../Examples/../clock.h ../Examples/../utility.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/avr/pgmspace.h \
- .././adc.h .././ATtinyServo.h \
+ ../Examples/../adc.h ../Examples/../ATtinyServo.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/include/stdbool.h \
- .././lcd.h .././motor.h .././RTC.h .././uart.h \
+ ../Examples/../lcd.h ../Examples/../motor.h ../Examples/../RTC.h \
+ ../Examples/../uart.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/ctype.h
 
-.././Epiphany.h:
+../Examples/../Epiphany.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/avr/io.h:
 
@@ -63,26 +65,26 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/include/stddef.h:
 
-.././clock.h:
+../Examples/../clock.h:
 
-.././utility.h:
+../Examples/../utility.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/avr/pgmspace.h:
 
-.././adc.h:
+../Examples/../adc.h:
 
-.././ATtinyServo.h:
+../Examples/../ATtinyServo.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/stdlib.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/include/stdbool.h:
 
-.././lcd.h:
+../Examples/../lcd.h:
 
-.././motor.h:
+../Examples/../motor.h:
 
-.././RTC.h:
+../Examples/../RTC.h:
 
-.././uart.h:
+../Examples/../uart.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.2.939\avr8-gnu-toolchain\bin\../lib/gcc/avr/4.7.2/../../../../avr/include/ctype.h:

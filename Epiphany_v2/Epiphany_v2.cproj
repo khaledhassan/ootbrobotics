@@ -187,18 +187,18 @@
     <Compile Include="Epiphany.h">
       <SubType>compile</SubType>
     </Compile>
-    <None Include="example1.c">
+    <None Include="Examples\example-Blink.c">
       <SubType>compile</SubType>
     </None>
-    <None Include="example2.c">
+    <None Include="Examples\example-LED-Switch.c">
       <SubType>compile</SubType>
     </None>
-    <None Include="example3.c">
+    <None Include="Examples\example-USB-Serial.c">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="example4.c">
+    <None Include="Examples\example-ADC.c">
       <SubType>compile</SubType>
-    </Compile>
+    </None>
     <Compile Include="lcd.c">
       <SubType>compile</SubType>
     </Compile>
@@ -212,6 +212,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="motor.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="renameMe.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="RTC.c">
@@ -232,6 +235,9 @@
     <Compile Include="utility.h">
       <SubType>compile</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Examples" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

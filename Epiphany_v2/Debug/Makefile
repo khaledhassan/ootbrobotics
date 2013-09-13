@@ -31,7 +31,8 @@ OUTPUT_FILE_DEP:=
 LIB_DEP:=
 
 # Every subdirectory with source files must be described here
-SUBDIRS := 
+SUBDIRS :=  \
+../Examples
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -39,10 +40,10 @@ C_SRCS +=  \
 ../adc.c \
 ../ATtinyServo.c \
 ../clock.c \
-../example4.c \
 ../lcd.c \
 ../main.c \
 ../motor.c \
+../renameMe.c \
 ../RTC.c \
 ../uart.c \
 ../utility.c
@@ -58,10 +59,10 @@ OBJS +=  \
 adc.o \
 ATtinyServo.o \
 clock.o \
-example4.o \
 lcd.o \
 main.o \
 motor.o \
+renameMe.o \
 RTC.o \
 uart.o \
 utility.o
@@ -70,10 +71,10 @@ OBJS_AS_ARGS +=  \
 adc.o \
 ATtinyServo.o \
 clock.o \
-example4.o \
 lcd.o \
 main.o \
 motor.o \
+renameMe.o \
 RTC.o \
 uart.o \
 utility.o
@@ -82,10 +83,10 @@ C_DEPS +=  \
 adc.d \
 ATtinyServo.d \
 clock.d \
-example4.d \
 lcd.d \
 main.d \
 motor.d \
+renameMe.d \
 RTC.d \
 uart.d \
 utility.d
@@ -94,10 +95,10 @@ C_DEPS_AS_ARGS +=  \
 adc.d \
 ATtinyServo.d \
 clock.d \
-example4.d \
 lcd.d \
 main.d \
 motor.d \
+renameMe.d \
 RTC.d \
 uart.d \
 utility.d
