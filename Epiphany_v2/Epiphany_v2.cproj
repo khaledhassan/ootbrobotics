@@ -18,7 +18,8 @@
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
-    <OverrideVtorValue>exception_table</OverrideVtorValue>
+    <OverrideVtorValue>
+    </OverrideVtorValue>
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <AsfVersion>3.1.3</AsfVersion>
     <avrtoolinterface>PDI</avrtoolinterface>
@@ -187,18 +188,6 @@
     <Compile Include="Epiphany.h">
       <SubType>compile</SubType>
     </Compile>
-    <None Include="Examples\example-Blink.c">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="Examples\example-LED-Switch.c">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="Examples\example-USB-Serial.c">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="Examples\example-ADC.c">
-      <SubType>compile</SubType>
-    </None>
     <Compile Include="lcd.c">
       <SubType>compile</SubType>
     </Compile>

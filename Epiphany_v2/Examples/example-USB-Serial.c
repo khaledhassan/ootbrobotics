@@ -34,7 +34,8 @@ void setup()
 	clockInit();
 	
 	//initialize the uart connected to the USB interface
-	usbInit(115200);		
+	usbInit(115200);
+	sei();		
 }
 
 void loop()
