@@ -23,7 +23,7 @@ void adcInit()
 					
 	ADCA.REFCTRL =		ADC_REFSEL_VCC_gc;			//utilize the vref of vcc/1.6 = 2.0625 V
 	
-	ADCA.PRESCALER =	ADC_PRESCALER_DIV32_gc;		//ADC will be clocked at 1MHz
+	ADCA.PRESCALER =	ADC_PRESCALER_DIV512_gc;		
 	
 	//set all the adc channels to be single ended inputs	
 	ADCA.CH0.CTRL =		ADC_CH_INPUTMODE_SINGLEENDED_gc;
@@ -63,7 +63,7 @@ void adcInit()
 	
 	ADCB.REFCTRL =		ADC_REFSEL_VCC_gc;			//utilize the vref of vcc/1.6 = 2.0625 V
 	
-	ADCB.PRESCALER =	ADC_PRESCALER_DIV32_gc;		//ADC will be clocked at 1MHz
+	ADCB.PRESCALER =	ADC_PRESCALER_DIV512_gc;		
 	
 	//set all the adc channels to be single ended inputs
 	ADCB.CH0.CTRL =		ADC_CH_INPUTMODE_SINGLEENDED_gc;

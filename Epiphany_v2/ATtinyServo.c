@@ -147,7 +147,12 @@ ISR(TCE1_OVF_vect){
 		else 
 		{
 		//print servoNumber, time high. time low, 0x80 | servoNumber
-			fprintf(&servoBufferFile,"%c%c%c%c",i, (servo[i].servoTime >>8), servo[i].servoTime, (i | 0x80));
+			//fprintf(&servoBufferFile,"%c%c%c%c",i, (servo[i].servoTime >>8), servo[i].servoTime, (i | 0x80));
+			storeServo(i);
+			storeServo(servo[i].servoTime >>8);
+			storeServo(servo[i].servoTime);
+			storeServo(i | 0x80);
+			
 			servo[i].configReg.statusReg = 0xC0 + i;	//this will clear the idleCyclesCount, set the servo as upToDate and preserve the enabled bit.
 		//	servo[i].configReg.params.upToDate = true;
 		//	servo[i].configReg.params.enabled = true;
